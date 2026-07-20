@@ -1,0 +1,52 @@
+{
+    "endpoint": "POST|/api/auth/logout",
+    "method": "POST",
+    "url": "/api/auth/logout",
+    "timestamp": "2025-11-23 05:37:24",
+    "success": true,
+    "status_code": 200,
+    "response_time_ms": 467.21,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 84|sjOPmo6KDO5gXHoprydeMi5EUV6Q24Xtd9qYG4OU940c2fc8",
+            "X-User-IID": "1"
+        },
+        "payload": [],
+        "url": "http://localhost:8001/api/auth/logout?iid=1"
+    },
+    "response": {
+        "status_code": 200,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Sun, 23 Nov 2025 05:37:24 GMT",
+                "Sun, 23 Nov 2025 05:37:24 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "success": true,
+            "message": "User logged out successfully"
+        },
+        "raw_body": "{\"success\":true,\"message\":\"User logged out successfully\"}"
+    },
+    "error": null
+}

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(code-review)",
+      "Skill(code-review:*)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"---tsc exit: $?\")",
+      "Bash(npm run *)"
+    ]
+  }
+}

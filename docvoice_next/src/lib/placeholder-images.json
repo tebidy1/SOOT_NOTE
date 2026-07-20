@@ -1,0 +1,22 @@
+{
+  "placeholderImages": [
+    {
+      "id": "onboarding-tracking",
+      "description": "A person tracking a package on their phone.",
+      "imageUrl": "https://images.unsplash.com/photo-1604138290658-2bc80c707bbf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwYWNrYWdlJTIwdHJhY2tpbmd8ZW58MHx8fHwxNzY5MzQ0ODM2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "package tracking"
+    },
+    {
+      "id": "onboarding-scheduling",
+      "description": "A person scheduling a delivery on a calendar.",
+      "imageUrl": "https://images.unsplash.com/photo-1598546937882-4fa25fa29418?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkZWxpdmVyeSUyMHNjaGVkdWxlfGVufDB8fHx8MTc2OTM0NDgzNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "delivery schedule"
+    },
+    {
+      "id": "onboarding-safe-delivery",
+      "description": "A package left safely at a front door.",
+      "imageUrl": "https://images.unsplash.com/photo-1766234538697-6b33f97ed86a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwYWNrYWdlJTIwZG9vcnN0ZXB8ZW58MHx8fHwxNzY5MzExNjM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "package doorstep"
+    }
+  ]
+}

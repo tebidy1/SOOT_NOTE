@@ -1,0 +1,1514 @@
+{
+    "last_updated": "2025-11-24 16:05:57",
+    "tested_endpoints": [
+        "GET|/api/companies/",
+        "POST|/api/companies/",
+        "GET|/api/users/",
+        "POST|/api/users/",
+        "GET|/api/users/online",
+        "GET|/api/channels/",
+        "GET|/api/channels/{id}/members",
+        "PATCH|/api/channels/{id}/mark-read",
+        "GET|/api/channels/{id}/messages",
+        "GET|/api/messages/",
+        "POST|/api/messages/",
+        "GET|/api/messages/starred",
+        "GET|/api/messages/starred/count",
+        "GET|/api/messages/{id}/starred",
+        "POST|/api/direct-messages/",
+        "PATCH|/api/direct-messages/{id}/read",
+        "GET|/api/reactions/message/{messageId}",
+        "PATCH|/api/notifications/{id}/read",
+        "GET|/api/channel-notifications/channel/{channelId}/unread-count",
+        "POST|/api/drawings/",
+        "POST|/api/tickets/",
+        "POST|/api/projects/",
+        "POST|/api/saved-views/",
+        "POST|/api/auth/register",
+        "GET|/api/users/{id}",
+        "DELETE|/api/users/{id}",
+        "GET|/api/companies/{id}",
+        "DELETE|/api/companies/{id}",
+        "GET|/api/auth/user",
+        "GET|/api/auth/profile",
+        "PUT|/api/auth/profile",
+        "GET|/api/companies",
+        "GET|/api/user",
+        "POST|/api/auth/logout",
+        "GET|/api/test/profile",
+        "GET|/api/test/companies",
+        "GET|/api/test/users",
+        "GET|/api/test/channels",
+        "GET|/api/users",
+        "GET|/api/channels",
+        "GET|/api/messages",
+        "GET|/api/messages/threads",
+        "GET|/api/direct-messages",
+        "GET|/api/direct-messages/conversation/{userId}",
+        "GET|/api/direct-messages/unread-count",
+        "GET|/api/notifications",
+        "GET|/api/notifications/mentions",
+        "GET|/api/notifications/unread-count",
+        "PATCH|/api/notifications/mark-all-read",
+        "GET|/api/drawings",
+        "GET|/api/drawings/{id}",
+        "DELETE|/api/drawings/{id}",
+        "GET|/api/drawings/{id}/revisions",
+        "GET|/api/drawings/{id}/layers",
+        "GET|/api/drawings/{id}/pins",
+        "GET|/api/tickets",
+        "GET|/api/tickets/{id}",
+        "DELETE|/api/tickets/{id}",
+        "GET|/api/disciplines",
+        "GET|/api/floors",
+        "GET|/api/projects",
+        "GET|/api/projects/{id}",
+        "DELETE|/api/projects/{id}",
+        "GET|/api/saved-views",
+        "GET|/api/saved-views/{id}",
+        "DELETE|/api/saved-views/{id}",
+        "GET|/api/mentions",
+        "GET|/api/mentions/unread-count",
+        "GET|/api/mentions/channel/{channelId}",
+        "GET|/api/mentions/message/{messageId}",
+        "GET|/companies",
+        "GET|/users",
+        "GET|/channels",
+        "GET|/mentions",
+        "GET|/user",
+        "GET|/api/disciplines/{id}",
+        "DELETE|/api/disciplines/{id}",
+        "GET|/api/floors/{id}",
+        "DELETE|/api/floors/{id}",
+        "GET|/api/channels/{id}",
+        "PUT|/api/channels/{id}",
+        "DELETE|/api/channels/{id}",
+        "GET|/api/messages/{id}",
+        "DELETE|/api/messages/{id}"
+    ],
+    "failed_endpoints": [
+        {
+            "endpoint": "POST|/api/auth/change-password",
+            "timestamp": "2025-11-24 16:02:00",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "POST|/api/auth/login-by-id",
+            "timestamp": "2025-11-24 16:02:01",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/companies/{id}",
+            "timestamp": "2025-11-24 16:02:22",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "POST|/api/companies/find",
+            "timestamp": "2025-11-24 16:02:27",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/users/{id}",
+            "timestamp": "2025-11-24 16:02:42",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "PATCH|/api/users/{id}/role",
+            "timestamp": "2025-11-24 16:02:46",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        "POST|/api/channels/",
+        {
+            "endpoint": "GET|/api/channels/{id}",
+            "timestamp": "2025-11-24 15:59:14",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/channels/{id}",
+            "timestamp": "2025-11-24 15:59:16",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/channels/{id}",
+            "timestamp": "2025-11-24 15:59:18",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/channels/{id}/members",
+            "timestamp": "2025-11-24 16:03:04",
+            "error": {
+                "status_code": 403,
+                "error": "Status: 403"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/channels/{id}/members/{userId}",
+            "timestamp": "2025-11-24 16:03:06",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages/{id}",
+            "timestamp": "2025-11-24 15:59:46",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/messages/{id}",
+            "timestamp": "2025-11-24 16:03:24",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/messages/{id}",
+            "timestamp": "2025-11-24 15:59:50",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages/{id}/thread",
+            "timestamp": "2025-11-24 16:03:27",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "POST|/api/messages/{id}/favorite",
+            "timestamp": "2025-11-24 16:03:35",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        "GET|/api/direct-messages/",
+        {
+            "endpoint": "GET|/api/direct-messages/conversation/{userId}",
+            "timestamp": "2025-11-24 16:00:07",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/direct-messages/unread-count",
+            "timestamp": "2025-11-24 16:00:08",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/direct-messages/{id}",
+            "timestamp": "2025-11-24 16:03:50",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/direct-messages/{id}",
+            "timestamp": "2025-11-24 16:03:51",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/direct-messages/{id}",
+            "timestamp": "2025-11-24 16:03:54",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "POST|/api/reactions/toggle",
+            "timestamp": "2025-11-24 16:03:59",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        "GET|/api/notifications/",
+        {
+            "endpoint": "GET|/api/notifications/mentions",
+            "timestamp": "2025-11-24 16:00:22",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/notifications/unread-count",
+            "timestamp": "2025-11-24 16:00:24",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "PATCH|/api/notifications/mark-all-read",
+            "timestamp": "2025-11-24 16:00:28",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        "GET|/api/drawings/",
+        {
+            "endpoint": "POST|/api/drawings/upload",
+            "timestamp": "2025-11-24 16:04:11",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/drawings/{id}",
+            "timestamp": "2025-11-24 16:00:37",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/drawings/{id}",
+            "timestamp": "2025-11-24 16:04:14",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/drawings/{id}",
+            "timestamp": "2025-11-24 16:00:41",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/drawings/{id}/revisions",
+            "timestamp": "2025-11-24 16:00:48",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/drawings/{id}/revisions",
+            "timestamp": "2025-11-24 16:04:18",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "PATCH|/api/drawings/revisions/{id}/status",
+            "timestamp": "2025-11-24 16:04:20",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/drawings/{id}/layers",
+            "timestamp": "2025-11-24 16:00:54",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/drawings/{id}/layers",
+            "timestamp": "2025-11-24 16:04:22",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/drawings/layers/{id}",
+            "timestamp": "2025-11-24 16:04:24",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/drawings/layers/{id}",
+            "timestamp": "2025-11-24 16:04:25",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "GET|/api/drawings/{id}/pins",
+            "timestamp": "2025-11-24 16:01:01",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/drawings/{id}/pins",
+            "timestamp": "2025-11-24 16:04:27",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/drawings/pins/{id}",
+            "timestamp": "2025-11-24 16:04:29",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/drawings/pins/{id}",
+            "timestamp": "2025-11-24 16:04:31",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        "GET|/api/tickets/",
+        {
+            "endpoint": "POST|/api/tickets/bulk-update",
+            "timestamp": "2025-11-24 16:04:36",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/tickets/{id}",
+            "timestamp": "2025-11-24 16:04:37",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/tickets/{id}",
+            "timestamp": "2025-11-24 16:04:38",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/tickets/{id}",
+            "timestamp": "2025-11-24 16:01:27",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        "GET|/api/disciplines/",
+        "POST|/api/disciplines/",
+        {
+            "endpoint": "GET|/api/disciplines/{id}",
+            "timestamp": "2025-11-24 16:04:43",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/disciplines/{id}",
+            "timestamp": "2025-11-24 16:04:44",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/disciplines/{id}",
+            "timestamp": "2025-11-24 16:04:45",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        "GET|/api/floors/",
+        "POST|/api/floors/",
+        {
+            "endpoint": "GET|/api/floors/{id}",
+            "timestamp": "2025-11-24 16:04:49",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/floors/{id}",
+            "timestamp": "2025-11-24 16:04:50",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/floors/{id}",
+            "timestamp": "2025-11-24 16:04:51",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        "GET|/api/projects/",
+        {
+            "endpoint": "GET|/api/projects/{id}",
+            "timestamp": "2025-11-24 03:10:06",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/projects/{id}",
+            "timestamp": "2025-11-24 16:04:56",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/projects/{id}",
+            "timestamp": "2025-11-24 03:10:08",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "POST|/api/projects/{id}/members",
+            "timestamp": "2025-11-24 16:04:58",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        "GET|/api/saved-views/",
+        {
+            "endpoint": "GET|/api/saved-views/{id}",
+            "timestamp": "2025-11-24 16:05:04",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/saved-views/{id}",
+            "timestamp": "2025-11-24 16:05:05",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/saved-views/{id}",
+            "timestamp": "2025-11-24 16:05:06",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "POST|/api/files/upload",
+            "timestamp": "2025-11-24 16:05:07",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "POST|/api/push/subscribe",
+            "timestamp": "2025-11-24 16:05:09",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "POST|/api/push/unsubscribe",
+            "timestamp": "2025-11-24 16:05:10",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "POST|/api/push/test",
+            "timestamp": "2025-11-24 16:05:13",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        "GET|/api/mentions/",
+        {
+            "endpoint": "GET|/api/mentions/unread-count",
+            "timestamp": "2025-11-24 02:51:14",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/mentions/channel/{channelId}",
+            "timestamp": "2025-11-24 02:51:15",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/mentions/message/{messageId}",
+            "timestamp": "2025-11-24 02:51:16",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        "GET|/api/search/",
+        "POST|/api/admin/register",
+        "POST|/api/admin/login",
+        "POST|/api/admin/logout",
+        "POST|/api/admin/logout-all",
+        "GET|/api/admin/profile",
+        "PUT|/api/admin/profile",
+        "POST|/api/admin/change-password",
+        "POST|/api/driver/register",
+        "POST|/api/driver/login",
+        "POST|/api/driver/logout",
+        "POST|/api/driver/logout-all",
+        "GET|/api/driver/profile",
+        "PUT|/api/driver/profile",
+        "POST|/api/driver/change-password",
+        {
+            "endpoint": "POST|/api/auth/logout-all",
+            "timestamp": "2025-11-23 05:37:25",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/companies",
+            "timestamp": "2025-11-24 16:02:14",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "POST|/api/users",
+            "timestamp": "2025-11-24 16:02:32",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "POST|/api/channels",
+            "timestamp": "2025-11-24 16:02:52",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "POST|/api/messages",
+            "timestamp": "2025-11-24 16:03:16",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "POST|/api/auth/register",
+            "timestamp": "2025-11-24 02:40:43",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "POST|/api/auth/login",
+            "timestamp": "2025-11-24 16:01:50",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/auth/user",
+            "timestamp": "2025-11-24 02:40:44",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/auth/profile",
+            "timestamp": "2025-11-24 02:40:44",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "PUT|/api/auth/profile",
+            "timestamp": "2025-11-24 02:40:45",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/test/profile",
+            "timestamp": "2025-11-24 02:40:46",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/test/companies",
+            "timestamp": "2025-11-24 02:40:46",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/test/users",
+            "timestamp": "2025-11-24 02:40:46",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/test/channels",
+            "timestamp": "2025-11-24 02:40:47",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/companies",
+            "timestamp": "2025-11-24 02:40:47",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/companies/{id}",
+            "timestamp": "2025-11-24 03:07:43",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/companies/{id}",
+            "timestamp": "2025-11-24 15:58:53",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "GET|/api/users",
+            "timestamp": "2025-11-24 02:40:50",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/users/online",
+            "timestamp": "2025-11-24 02:40:51",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/users/{id}",
+            "timestamp": "2025-11-24 02:40:51",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "DELETE|/api/users/{id}",
+            "timestamp": "2025-11-24 02:40:52",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "GET|/api/channels",
+            "timestamp": "2025-11-24 15:59:09",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/channels/{id}/members",
+            "timestamp": "2025-11-24 16:03:02",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "PATCH|/api/channels/{id}/mark-read",
+            "timestamp": "2025-11-24 15:59:29",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/channels/{id}/messages",
+            "timestamp": "2025-11-24 15:59:32",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages",
+            "timestamp": "2025-11-24 15:59:34",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages/starred",
+            "timestamp": "2025-11-24 15:59:38",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages/starred/count",
+            "timestamp": "2025-11-24 15:59:39",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages/threads",
+            "timestamp": "2025-11-24 15:59:41",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages/{id}/replies",
+            "timestamp": "2025-11-24 16:03:30",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "GET|/api/messages/{id}/starred",
+            "timestamp": "2025-11-24 15:59:58",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/direct-messages",
+            "timestamp": "2025-11-24 16:00:03",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/direct-messages",
+            "timestamp": "2025-11-24 16:03:43",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "PATCH|/api/direct-messages/{id}/read",
+            "timestamp": "2025-11-24 16:00:15",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/reactions/message/{messageId}",
+            "timestamp": "2025-11-24 16:00:18",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/notifications",
+            "timestamp": "2025-11-24 16:00:21",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "PATCH|/api/notifications/{id}/read",
+            "timestamp": "2025-11-24 16:00:26",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/channel-notifications/channel/{channelId}/unread-count",
+            "timestamp": "2025-11-24 16:00:29",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/drawings",
+            "timestamp": "2025-11-24 16:00:31",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/drawings",
+            "timestamp": "2025-11-24 16:04:09",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/tickets",
+            "timestamp": "2025-11-24 16:01:14",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/tickets",
+            "timestamp": "2025-11-24 16:04:35",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/disciplines",
+            "timestamp": "2025-11-24 16:01:29",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/disciplines",
+            "timestamp": "2025-11-24 16:04:42",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/floors",
+            "timestamp": "2025-11-24 16:01:38",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/floors",
+            "timestamp": "2025-11-24 16:04:48",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/projects",
+            "timestamp": "2025-11-24 02:50:56",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/projects",
+            "timestamp": "2025-11-24 16:04:54",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/saved-views",
+            "timestamp": "2025-11-24 02:51:00",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "POST|/api/saved-views",
+            "timestamp": "2025-11-24 16:05:02",
+            "error": {
+                "status_code": 422,
+                "error": "Status: 422"
+            }
+        },
+        {
+            "endpoint": "GET|/api/mentions",
+            "timestamp": "2025-11-24 02:51:12",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/api/search",
+            "timestamp": "2025-11-24 16:05:19",
+            "error": {
+                "status_code": 500,
+                "error": "Status: 500"
+            }
+        },
+        {
+            "endpoint": "GET|/companies",
+            "timestamp": "2025-11-24 02:51:20",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/users",
+            "timestamp": "2025-11-24 02:51:21",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/channels",
+            "timestamp": "2025-11-24 02:51:22",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/",
+            "timestamp": "2025-11-24 16:05:23",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/api/user",
+            "timestamp": "2025-11-24 02:40:43",
+            "error": {
+                "status_code": 0,
+                "error": "Status: 0"
+            }
+        },
+        {
+            "endpoint": "POST|/",
+            "timestamp": "2025-11-24 16:05:23",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}",
+            "timestamp": "2025-11-24 16:05:24",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/{id}",
+            "timestamp": "2025-11-24 16:05:25",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "DELETE|/{id}",
+            "timestamp": "2025-11-24 16:05:25",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/find",
+            "timestamp": "2025-11-24 16:05:26",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/online",
+            "timestamp": "2025-11-24 16:05:26",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PATCH|/{id}/role",
+            "timestamp": "2025-11-24 16:05:27",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/members",
+            "timestamp": "2025-11-24 16:05:28",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/{id}/members",
+            "timestamp": "2025-11-24 16:05:28",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "DELETE|/{id}/members/{userId}",
+            "timestamp": "2025-11-24 16:05:29",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PATCH|/{id}/mark-read",
+            "timestamp": "2025-11-24 16:05:29",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/messages",
+            "timestamp": "2025-11-24 16:05:30",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/starred",
+            "timestamp": "2025-11-24 16:05:30",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/starred/count",
+            "timestamp": "2025-11-24 16:05:31",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/threads",
+            "timestamp": "2025-11-24 16:05:31",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/thread",
+            "timestamp": "2025-11-24 16:05:31",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/replies",
+            "timestamp": "2025-11-24 16:05:32",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/{id}/favorite",
+            "timestamp": "2025-11-24 16:05:32",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/starred",
+            "timestamp": "2025-11-24 16:05:33",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/conversation/{userId}",
+            "timestamp": "2025-11-24 16:05:33",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/unread-count",
+            "timestamp": "2025-11-24 16:05:34",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PATCH|/{id}/read",
+            "timestamp": "2025-11-24 16:05:34",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/toggle",
+            "timestamp": "2025-11-24 16:05:35",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/message/{messageId}",
+            "timestamp": "2025-11-24 16:05:36",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PATCH|/mark-all-read",
+            "timestamp": "2025-11-24 16:05:37",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/channel/{channelId}/unread-count",
+            "timestamp": "2025-11-24 16:05:38",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/upload",
+            "timestamp": "2025-11-24 16:05:38",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/revisions",
+            "timestamp": "2025-11-24 16:05:39",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/{id}/revisions",
+            "timestamp": "2025-11-24 16:05:39",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PATCH|/revisions/{id}/status",
+            "timestamp": "2025-11-24 16:05:40",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/layers",
+            "timestamp": "2025-11-24 16:05:40",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/{id}/layers",
+            "timestamp": "2025-11-24 16:05:41",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/layers/{id}",
+            "timestamp": "2025-11-24 16:05:42",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "DELETE|/layers/{id}",
+            "timestamp": "2025-11-24 16:05:43",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/{id}/pins",
+            "timestamp": "2025-11-24 16:05:43",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/{id}/pins",
+            "timestamp": "2025-11-24 16:05:44",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/pins/{id}",
+            "timestamp": "2025-11-24 16:05:45",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "DELETE|/pins/{id}",
+            "timestamp": "2025-11-24 16:05:46",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/bulk-update",
+            "timestamp": "2025-11-24 16:05:46",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/subscribe",
+            "timestamp": "2025-11-24 16:05:47",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/unsubscribe",
+            "timestamp": "2025-11-24 16:05:47",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/test",
+            "timestamp": "2025-11-24 16:05:48",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/channel/{channelId}",
+            "timestamp": "2025-11-24 16:05:50",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/register",
+            "timestamp": "2025-11-24 16:05:50",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/login",
+            "timestamp": "2025-11-24 16:05:51",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/logout",
+            "timestamp": "2025-11-24 16:05:52",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/logout-all",
+            "timestamp": "2025-11-24 16:05:53",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/profile",
+            "timestamp": "2025-11-24 16:05:54",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "PUT|/profile",
+            "timestamp": "2025-11-24 16:05:55",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/change-password",
+            "timestamp": "2025-11-24 16:05:55",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "POST|/login-by-id",
+            "timestamp": "2025-11-24 16:05:57",
+            "error": {
+                "status_code": 404,
+                "error": "Status: 404"
+            }
+        },
+        {
+            "endpoint": "GET|/mentions",
+            "timestamp": "2025-11-24 02:51:49",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        },
+        {
+            "endpoint": "GET|/user",
+            "timestamp": "2025-11-24 02:52:40",
+            "error": {
+                "status_code": 401,
+                "error": "Status: 401"
+            }
+        }
+    ],
+    "total_endpoints": 173,
+    "tested_count": 84,
+    "failed_count": 201,
+    "pending_count": 94
+}

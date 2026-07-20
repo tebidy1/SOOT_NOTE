@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "SoutNote | صوت نوت",
+  "version": "1.0.0",
+  "description": "Medical voice recording, transcription, and form filling assistant",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs",
+    "notifications",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_title": "SoutNote"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "options_page": "index.html",
+  "background": {
+    "service_worker": "background/index.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/index.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "public/icons/icon.svg",
+    "32": "public/icons/icon.svg",
+    "48": "public/icons/icon.svg",
+    "128": "public/icons/icon.svg"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://assets9.lottiefiles.com https://lottie.host https://*.lottiefiles.com https://docapi.sootnote.com wss://docapi.sootnote.com https://*.oci.oraclecloud.com wss://*.oci.oraclecloud.com;"
+  }
+}

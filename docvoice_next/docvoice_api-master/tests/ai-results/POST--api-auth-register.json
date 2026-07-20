@@ -1,0 +1,77 @@
+{
+    "endpoint": "POST|/api/auth/register",
+    "method": "POST",
+    "url": "/api/auth/register",
+    "timestamp": "2025-11-24 16:01:44",
+    "success": true,
+    "status_code": 201,
+    "response_time_ms": 3349.53,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 128|53H53k0DyQDvzCOfvJO5ZG9kRA79vpSwdF4T7p9n9bab300d",
+            "X-User-IID": "1"
+        },
+        "payload": {
+            "name": "Test User",
+            "email": "test1764000104@example.com",
+            "password": "password123",
+            "password_confirmation": "password123"
+        },
+        "url": "http://localhost:8001/api/auth/register?iid=1"
+    },
+    "response": {
+        "status_code": 201,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Mon, 24 Nov 2025 16:01:47 GMT",
+                "Mon, 24 Nov 2025 16:01:47 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "success": true,
+            "message": "User registered successfully",
+            "user": {
+                "role": "member",
+                "status": "active",
+                "name": "Test User",
+                "email": "test1764000104@example.com",
+                "company_id": 20,
+                "updated_at": "2025-11-24T16:01:47.000000Z",
+                "created_at": "2025-11-24T16:01:47.000000Z",
+                "id": 57,
+                "company": {
+                    "id": 20,
+                    "name": "Test User Company",
+                    "domain": null,
+                    "invitation_code": null,
+                    "plan_type": "basic",
+                    "created_at": "2025-11-24T16:01:46.000000Z",
+                    "updated_at": "2025-11-24T16:01:46.000000Z"
+                }
+            },
+            "token": "129|AaGHGfg6VhZDLf87HC50BxZUPgEpRYLGfLCs7Rxqbad3596b"
+        },
+        "raw_body": "{\"success\":true,\"message\":\"User registered successfully\",\"user\":{\"role\":\"member\",\"status\":\"active\",\"name\":\"Test User\",\"email\":\"test1764000104@example.com\",\"company_id\":20,\"updated_at\":\"2025-11-24T16:01:47.000000Z\",\"created_at\":\"2025-11-24T16:01:47.000000Z\",\"id\":57,\"company\":{\"id\":20,\"name\":\"Test User Company\",\"domain\":null,\"invitation_code\":null,\"plan_type\":\"basic\",\"created_at\":\"2025-11-24T16:01:46.000000Z\",\"updated_at\":\"2025-11-24T16:01:46.000000Z\"}},\"token\":\"129|AaGHGfg6VhZDLf87HC50BxZUPgEpRYLGfLCs7Rxqbad3596b\"}"
+    },
+    "error": null
+}

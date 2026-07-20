@@ -1,0 +1,4102 @@
+{
+    "timestamp": "2025-11-16 16:20:49",
+    "total_endpoints": 169,
+    "endpoints": [
+        {
+            "method": "GET",
+            "uri": "api/user",
+            "full_uri": "/api/user",
+            "name": null,
+            "action": "Closure",
+            "middleware": [
+                "api",
+                "auth:sanctum"
+            ],
+            "controller": null,
+            "controller_method": null,
+            "identifier": "GET|/api/user"
+        },
+        {
+            "method": "POST",
+            "uri": "api/auth/logout",
+            "full_uri": "/api/auth/logout",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserAuthController@logout",
+            "middleware": [
+                "api",
+                "api",
+                "auth:sanctum"
+            ],
+            "controller": null,
+            "controller_method": "logout",
+            "identifier": "POST|/api/auth/logout"
+        },
+        {
+            "method": "POST",
+            "uri": "api/auth/logout-all",
+            "full_uri": "/api/auth/logout-all",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserAuthController@logoutAll",
+            "middleware": [
+                "api",
+                "api",
+                "auth:sanctum"
+            ],
+            "controller": null,
+            "controller_method": "logoutAll",
+            "identifier": "POST|/api/auth/logout-all"
+        },
+        {
+            "method": "GET",
+            "uri": "api/auth/user",
+            "full_uri": "/api/auth/user",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserAuthController@profile",
+            "middleware": [
+                "api",
+                "api",
+                "auth:sanctum"
+            ],
+            "controller": null,
+            "controller_method": "profile",
+            "identifier": "GET|/api/auth/user"
+        },
+        {
+            "method": "GET",
+            "uri": "api/auth/profile",
+            "full_uri": "/api/auth/profile",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserAuthController@profile",
+            "middleware": [
+                "api",
+                "api",
+                "auth:sanctum"
+            ],
+            "controller": null,
+            "controller_method": "profile",
+            "identifier": "GET|/api/auth/profile"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/auth/profile",
+            "full_uri": "/api/auth/profile",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserAuthController@updateProfile",
+            "middleware": [
+                "api",
+                "api",
+                "auth:sanctum"
+            ],
+            "controller": null,
+            "controller_method": "updateProfile",
+            "identifier": "PUT|/api/auth/profile"
+        },
+        {
+            "method": "POST",
+            "uri": "api/auth/change-password",
+            "full_uri": "/api/auth/change-password",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserAuthController@changePassword",
+            "middleware": [
+                "api",
+                "api",
+                "auth:sanctum"
+            ],
+            "controller": null,
+            "controller_method": "changePassword",
+            "identifier": "POST|/api/auth/change-password"
+        },
+        {
+            "method": "POST",
+            "uri": "api/auth/login-by-id",
+            "full_uri": "/api/auth/login-by-id",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserAuthController@loginById",
+            "middleware": [
+                "api",
+                "api"
+            ],
+            "controller": null,
+            "controller_method": "loginById",
+            "identifier": "POST|/api/auth/login-by-id"
+        },
+        {
+            "method": "GET",
+            "uri": "api/test/profile",
+            "full_uri": "/api/test/profile",
+            "name": null,
+            "action": "Closure",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": null,
+            "identifier": "GET|/api/test/profile"
+        },
+        {
+            "method": "GET",
+            "uri": "api/test/companies",
+            "full_uri": "/api/test/companies",
+            "name": null,
+            "action": "App\\Http\\Controllers\\CompanyController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/test/companies"
+        },
+        {
+            "method": "GET",
+            "uri": "api/test/users",
+            "full_uri": "/api/test/users",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/test/users"
+        },
+        {
+            "method": "GET",
+            "uri": "api/test/channels",
+            "full_uri": "/api/test/channels",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/test/channels"
+        },
+        {
+            "method": "GET",
+            "uri": "api/companies",
+            "full_uri": "/api/companies",
+            "name": null,
+            "action": "App\\Http\\Controllers\\CompanyController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/companies"
+        },
+        {
+            "method": "POST",
+            "uri": "api/companies",
+            "full_uri": "/api/companies",
+            "name": null,
+            "action": "App\\Http\\Controllers\\CompanyController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/companies"
+        },
+        {
+            "method": "GET",
+            "uri": "api/companies/{id}",
+            "full_uri": "/api/companies/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\CompanyController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/companies/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/companies/{id}",
+            "full_uri": "/api/companies/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\CompanyController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/companies/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/companies/{id}",
+            "full_uri": "/api/companies/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\CompanyController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/companies/{id}"
+        },
+        {
+            "method": "POST",
+            "uri": "api/companies/find",
+            "full_uri": "/api/companies/find",
+            "name": null,
+            "action": "App\\Http\\Controllers\\CompanyController@find",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "find",
+            "identifier": "POST|/api/companies/find"
+        },
+        {
+            "method": "GET",
+            "uri": "api/users",
+            "full_uri": "/api/users",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/users"
+        },
+        {
+            "method": "POST",
+            "uri": "api/users",
+            "full_uri": "/api/users",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/users"
+        },
+        {
+            "method": "GET",
+            "uri": "api/users/online",
+            "full_uri": "/api/users/online",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@online",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "online",
+            "identifier": "GET|/api/users/online"
+        },
+        {
+            "method": "GET",
+            "uri": "api/users/{id}",
+            "full_uri": "/api/users/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/users/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/users/{id}",
+            "full_uri": "/api/users/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/users/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/users/{id}",
+            "full_uri": "/api/users/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/users/{id}"
+        },
+        {
+            "method": "PATCH",
+            "uri": "api/users/{id}/role",
+            "full_uri": "/api/users/{id}/role",
+            "name": null,
+            "action": "App\\Http\\Controllers\\UserController@updateRole",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "updateRole",
+            "identifier": "PATCH|/api/users/{id}/role"
+        },
+        {
+            "method": "GET",
+            "uri": "api/channels",
+            "full_uri": "/api/channels",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/channels"
+        },
+        {
+            "method": "POST",
+            "uri": "api/channels",
+            "full_uri": "/api/channels",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/channels"
+        },
+        {
+            "method": "GET",
+            "uri": "api/channels/{id}",
+            "full_uri": "/api/channels/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/channels/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/channels/{id}",
+            "full_uri": "/api/channels/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/channels/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/channels/{id}",
+            "full_uri": "/api/channels/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/channels/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/channels/{id}/members",
+            "full_uri": "/api/channels/{id}/members",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@members",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "members",
+            "identifier": "GET|/api/channels/{id}/members"
+        },
+        {
+            "method": "POST",
+            "uri": "api/channels/{id}/members",
+            "full_uri": "/api/channels/{id}/members",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@addMember",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "addMember",
+            "identifier": "POST|/api/channels/{id}/members"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/channels/{id}/members/{userId}",
+            "full_uri": "/api/channels/{id}/members/{userId}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelController@removeMember",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "removeMember",
+            "identifier": "DELETE|/api/channels/{id}/members/{userId}"
+        },
+        {
+            "method": "PATCH",
+            "uri": "api/channels/{id}/mark-read",
+            "full_uri": "/api/channels/{id}/mark-read",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelNotificationController@markAsRead",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "markAsRead",
+            "identifier": "PATCH|/api/channels/{id}/mark-read"
+        },
+        {
+            "method": "GET",
+            "uri": "api/channels/{id}/messages",
+            "full_uri": "/api/channels/{id}/messages",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@byChannel",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "byChannel",
+            "identifier": "GET|/api/channels/{id}/messages"
+        },
+        {
+            "method": "GET",
+            "uri": "api/messages",
+            "full_uri": "/api/messages",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/messages"
+        },
+        {
+            "method": "POST",
+            "uri": "api/messages",
+            "full_uri": "/api/messages",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/messages"
+        },
+        {
+            "method": "GET",
+            "uri": "api/messages/starred",
+            "full_uri": "/api/messages/starred",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@getStarredMessages",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "getStarredMessages",
+            "identifier": "GET|/api/messages/starred"
+        },
+        {
+            "method": "GET",
+            "uri": "api/messages/starred/count",
+            "full_uri": "/api/messages/starred/count",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@getStarredCount",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "getStarredCount",
+            "identifier": "GET|/api/messages/starred/count"
+        },
+        {
+            "method": "GET",
+            "uri": "api/messages/{id}",
+            "full_uri": "/api/messages/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/messages/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/messages/{id}",
+            "full_uri": "/api/messages/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/messages/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/messages/{id}",
+            "full_uri": "/api/messages/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/messages/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/messages/{id}/thread",
+            "full_uri": "/api/messages/{id}/thread",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@thread",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "thread",
+            "identifier": "GET|/api/messages/{id}/thread"
+        },
+        {
+            "method": "POST",
+            "uri": "api/messages/{id}/favorite",
+            "full_uri": "/api/messages/{id}/favorite",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@toggleFavorite",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "toggleFavorite",
+            "identifier": "POST|/api/messages/{id}/favorite"
+        },
+        {
+            "method": "GET",
+            "uri": "api/messages/{id}/starred",
+            "full_uri": "/api/messages/{id}/starred",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MessageController@checkStarred",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "checkStarred",
+            "identifier": "GET|/api/messages/{id}/starred"
+        },
+        {
+            "method": "GET",
+            "uri": "api/direct-messages",
+            "full_uri": "/api/direct-messages",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/direct-messages"
+        },
+        {
+            "method": "POST",
+            "uri": "api/direct-messages",
+            "full_uri": "/api/direct-messages",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/direct-messages"
+        },
+        {
+            "method": "GET",
+            "uri": "api/direct-messages/conversation/{userId}",
+            "full_uri": "/api/direct-messages/conversation/{userId}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@conversation",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "conversation",
+            "identifier": "GET|/api/direct-messages/conversation/{userId}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/direct-messages/unread-count",
+            "full_uri": "/api/direct-messages/unread-count",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@unreadCount",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "unreadCount",
+            "identifier": "GET|/api/direct-messages/unread-count"
+        },
+        {
+            "method": "GET",
+            "uri": "api/direct-messages/{id}",
+            "full_uri": "/api/direct-messages/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/direct-messages/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/direct-messages/{id}",
+            "full_uri": "/api/direct-messages/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/direct-messages/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/direct-messages/{id}",
+            "full_uri": "/api/direct-messages/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/direct-messages/{id}"
+        },
+        {
+            "method": "PATCH",
+            "uri": "api/direct-messages/{id}/read",
+            "full_uri": "/api/direct-messages/{id}/read",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DirectMessageController@markAsRead",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "markAsRead",
+            "identifier": "PATCH|/api/direct-messages/{id}/read"
+        },
+        {
+            "method": "POST",
+            "uri": "api/reactions/toggle",
+            "full_uri": "/api/reactions/toggle",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ReactionController@toggle",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "toggle",
+            "identifier": "POST|/api/reactions/toggle"
+        },
+        {
+            "method": "GET",
+            "uri": "api/reactions/message/{messageId}",
+            "full_uri": "/api/reactions/message/{messageId}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ReactionController@getMessageReactions",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "getMessageReactions",
+            "identifier": "GET|/api/reactions/message/{messageId}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/notifications",
+            "full_uri": "/api/notifications",
+            "name": null,
+            "action": "App\\Http\\Controllers\\NotificationController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/notifications"
+        },
+        {
+            "method": "GET",
+            "uri": "api/notifications/mentions",
+            "full_uri": "/api/notifications/mentions",
+            "name": null,
+            "action": "App\\Http\\Controllers\\NotificationController@getMentionsNotifications",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "getMentionsNotifications",
+            "identifier": "GET|/api/notifications/mentions"
+        },
+        {
+            "method": "GET",
+            "uri": "api/notifications/unread-count",
+            "full_uri": "/api/notifications/unread-count",
+            "name": null,
+            "action": "App\\Http\\Controllers\\NotificationController@unreadCount",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "unreadCount",
+            "identifier": "GET|/api/notifications/unread-count"
+        },
+        {
+            "method": "PATCH",
+            "uri": "api/notifications/{id}/read",
+            "full_uri": "/api/notifications/{id}/read",
+            "name": null,
+            "action": "App\\Http\\Controllers\\NotificationController@markAsRead",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "markAsRead",
+            "identifier": "PATCH|/api/notifications/{id}/read"
+        },
+        {
+            "method": "PATCH",
+            "uri": "api/notifications/mark-all-read",
+            "full_uri": "/api/notifications/mark-all-read",
+            "name": null,
+            "action": "App\\Http\\Controllers\\NotificationController@markAllAsRead",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "markAllAsRead",
+            "identifier": "PATCH|/api/notifications/mark-all-read"
+        },
+        {
+            "method": "GET",
+            "uri": "api/channel-notifications/channel/{channelId}/unread-count",
+            "full_uri": "/api/channel-notifications/channel/{channelId}/unread-count",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ChannelNotificationController@unreadCount",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "unreadCount",
+            "identifier": "GET|/api/channel-notifications/channel/{channelId}/unread-count"
+        },
+        {
+            "method": "GET",
+            "uri": "api/drawings",
+            "full_uri": "/api/drawings",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DrawingController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/drawings"
+        },
+        {
+            "method": "POST",
+            "uri": "api/drawings",
+            "full_uri": "/api/drawings",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DrawingController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/drawings"
+        },
+        {
+            "method": "POST",
+            "uri": "api/drawings/upload",
+            "full_uri": "/api/drawings/upload",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DrawingController@upload",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "upload",
+            "identifier": "POST|/api/drawings/upload"
+        },
+        {
+            "method": "GET",
+            "uri": "api/drawings/{id}",
+            "full_uri": "/api/drawings/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DrawingController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/drawings/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/drawings/{id}",
+            "full_uri": "/api/drawings/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DrawingController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/drawings/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/drawings/{id}",
+            "full_uri": "/api/drawings/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DrawingController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/drawings/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/drawings/{id}/revisions",
+            "full_uri": "/api/drawings/{id}/revisions",
+            "name": null,
+            "action": "App\\Http\\Controllers\\RevisionController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/drawings/{id}/revisions"
+        },
+        {
+            "method": "POST",
+            "uri": "api/drawings/{id}/revisions",
+            "full_uri": "/api/drawings/{id}/revisions",
+            "name": null,
+            "action": "App\\Http\\Controllers\\RevisionController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/drawings/{id}/revisions"
+        },
+        {
+            "method": "PATCH",
+            "uri": "api/drawings/revisions/{id}/status",
+            "full_uri": "/api/drawings/revisions/{id}/status",
+            "name": null,
+            "action": "App\\Http\\Controllers\\RevisionController@updateStatus",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "updateStatus",
+            "identifier": "PATCH|/api/drawings/revisions/{id}/status"
+        },
+        {
+            "method": "GET",
+            "uri": "api/drawings/{id}/layers",
+            "full_uri": "/api/drawings/{id}/layers",
+            "name": null,
+            "action": "App\\Http\\Controllers\\LayerController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/drawings/{id}/layers"
+        },
+        {
+            "method": "POST",
+            "uri": "api/drawings/{id}/layers",
+            "full_uri": "/api/drawings/{id}/layers",
+            "name": null,
+            "action": "App\\Http\\Controllers\\LayerController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/drawings/{id}/layers"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/drawings/layers/{id}",
+            "full_uri": "/api/drawings/layers/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\LayerController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/drawings/layers/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/drawings/layers/{id}",
+            "full_uri": "/api/drawings/layers/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\LayerController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/drawings/layers/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/drawings/{id}/pins",
+            "full_uri": "/api/drawings/{id}/pins",
+            "name": null,
+            "action": "App\\Http\\Controllers\\PinController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/drawings/{id}/pins"
+        },
+        {
+            "method": "POST",
+            "uri": "api/drawings/{id}/pins",
+            "full_uri": "/api/drawings/{id}/pins",
+            "name": null,
+            "action": "App\\Http\\Controllers\\PinController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/drawings/{id}/pins"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/drawings/pins/{id}",
+            "full_uri": "/api/drawings/pins/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\PinController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/drawings/pins/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/drawings/pins/{id}",
+            "full_uri": "/api/drawings/pins/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\PinController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/drawings/pins/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/tickets",
+            "full_uri": "/api/tickets",
+            "name": null,
+            "action": "App\\Http\\Controllers\\TicketController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/tickets"
+        },
+        {
+            "method": "POST",
+            "uri": "api/tickets",
+            "full_uri": "/api/tickets",
+            "name": null,
+            "action": "App\\Http\\Controllers\\TicketController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/tickets"
+        },
+        {
+            "method": "POST",
+            "uri": "api/tickets/bulk-update",
+            "full_uri": "/api/tickets/bulk-update",
+            "name": null,
+            "action": "App\\Http\\Controllers\\TicketController@bulkUpdate",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "bulkUpdate",
+            "identifier": "POST|/api/tickets/bulk-update"
+        },
+        {
+            "method": "GET",
+            "uri": "api/tickets/{id}",
+            "full_uri": "/api/tickets/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\TicketController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/tickets/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/tickets/{id}",
+            "full_uri": "/api/tickets/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\TicketController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/tickets/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/tickets/{id}",
+            "full_uri": "/api/tickets/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\TicketController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/tickets/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/disciplines",
+            "full_uri": "/api/disciplines",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DisciplineController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/disciplines"
+        },
+        {
+            "method": "POST",
+            "uri": "api/disciplines",
+            "full_uri": "/api/disciplines",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DisciplineController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/disciplines"
+        },
+        {
+            "method": "GET",
+            "uri": "api/disciplines/{id}",
+            "full_uri": "/api/disciplines/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DisciplineController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/disciplines/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/disciplines/{id}",
+            "full_uri": "/api/disciplines/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DisciplineController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/disciplines/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/disciplines/{id}",
+            "full_uri": "/api/disciplines/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\DisciplineController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/disciplines/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/floors",
+            "full_uri": "/api/floors",
+            "name": null,
+            "action": "App\\Http\\Controllers\\FloorController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/floors"
+        },
+        {
+            "method": "POST",
+            "uri": "api/floors",
+            "full_uri": "/api/floors",
+            "name": null,
+            "action": "App\\Http\\Controllers\\FloorController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/floors"
+        },
+        {
+            "method": "GET",
+            "uri": "api/floors/{id}",
+            "full_uri": "/api/floors/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\FloorController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/floors/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/floors/{id}",
+            "full_uri": "/api/floors/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\FloorController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/floors/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/floors/{id}",
+            "full_uri": "/api/floors/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\FloorController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/floors/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/projects",
+            "full_uri": "/api/projects",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ProjectController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/projects"
+        },
+        {
+            "method": "POST",
+            "uri": "api/projects",
+            "full_uri": "/api/projects",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ProjectController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/projects"
+        },
+        {
+            "method": "GET",
+            "uri": "api/projects/{id}",
+            "full_uri": "/api/projects/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ProjectController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/projects/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/projects/{id}",
+            "full_uri": "/api/projects/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ProjectController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/projects/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/projects/{id}",
+            "full_uri": "/api/projects/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ProjectController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/projects/{id}"
+        },
+        {
+            "method": "POST",
+            "uri": "api/projects/{id}/members",
+            "full_uri": "/api/projects/{id}/members",
+            "name": null,
+            "action": "App\\Http\\Controllers\\ProjectController@addMember",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "addMember",
+            "identifier": "POST|/api/projects/{id}/members"
+        },
+        {
+            "method": "GET",
+            "uri": "api/saved-views",
+            "full_uri": "/api/saved-views",
+            "name": null,
+            "action": "App\\Http\\Controllers\\SavedViewController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/saved-views"
+        },
+        {
+            "method": "POST",
+            "uri": "api/saved-views",
+            "full_uri": "/api/saved-views",
+            "name": null,
+            "action": "App\\Http\\Controllers\\SavedViewController@store",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "store",
+            "identifier": "POST|/api/saved-views"
+        },
+        {
+            "method": "GET",
+            "uri": "api/saved-views/{id}",
+            "full_uri": "/api/saved-views/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\SavedViewController@show",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "show",
+            "identifier": "GET|/api/saved-views/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "api/saved-views/{id}",
+            "full_uri": "/api/saved-views/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\SavedViewController@update",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "update",
+            "identifier": "PUT|/api/saved-views/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "api/saved-views/{id}",
+            "full_uri": "/api/saved-views/{id}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\SavedViewController@destroy",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "destroy",
+            "identifier": "DELETE|/api/saved-views/{id}"
+        },
+        {
+            "method": "POST",
+            "uri": "api/files/upload",
+            "full_uri": "/api/files/upload",
+            "name": null,
+            "action": "App\\Http\\Controllers\\FileUploadController@upload",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "upload",
+            "identifier": "POST|/api/files/upload"
+        },
+        {
+            "method": "POST",
+            "uri": "api/push/subscribe",
+            "full_uri": "/api/push/subscribe",
+            "name": null,
+            "action": "App\\Http\\Controllers\\PushNotificationController@subscribe",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "subscribe",
+            "identifier": "POST|/api/push/subscribe"
+        },
+        {
+            "method": "POST",
+            "uri": "api/push/unsubscribe",
+            "full_uri": "/api/push/unsubscribe",
+            "name": null,
+            "action": "App\\Http\\Controllers\\PushNotificationController@unsubscribe",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "unsubscribe",
+            "identifier": "POST|/api/push/unsubscribe"
+        },
+        {
+            "method": "POST",
+            "uri": "api/push/test",
+            "full_uri": "/api/push/test",
+            "name": null,
+            "action": "App\\Http\\Controllers\\PushNotificationController@sendTest",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "sendTest",
+            "identifier": "POST|/api/push/test"
+        },
+        {
+            "method": "GET",
+            "uri": "api/mentions",
+            "full_uri": "/api/mentions",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MentionController@index",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "index",
+            "identifier": "GET|/api/mentions"
+        },
+        {
+            "method": "GET",
+            "uri": "api/mentions/unread-count",
+            "full_uri": "/api/mentions/unread-count",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MentionController@unreadCount",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "unreadCount",
+            "identifier": "GET|/api/mentions/unread-count"
+        },
+        {
+            "method": "GET",
+            "uri": "api/mentions/channel/{channelId}",
+            "full_uri": "/api/mentions/channel/{channelId}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MentionController@getChannelMentions",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "getChannelMentions",
+            "identifier": "GET|/api/mentions/channel/{channelId}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/mentions/message/{messageId}",
+            "full_uri": "/api/mentions/message/{messageId}",
+            "name": null,
+            "action": "App\\Http\\Controllers\\MentionController@getMessageMentions",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "getMessageMentions",
+            "identifier": "GET|/api/mentions/message/{messageId}"
+        },
+        {
+            "method": "GET",
+            "uri": "api/search",
+            "full_uri": "/api/search",
+            "name": null,
+            "action": "App\\Http\\Controllers\\SearchController@search",
+            "middleware": [
+                "api",
+                "auth.by.iid"
+            ],
+            "controller": null,
+            "controller_method": "search",
+            "identifier": "GET|/api/search"
+        },
+        {
+            "method": "GET",
+            "uri": "/companies",
+            "full_uri": "/companies",
+            "controller": "App\\Http\\Controllers\\CompanyController",
+            "controller_method": "class, 'index'",
+            "identifier": "GET|/companies"
+        },
+        {
+            "method": "GET",
+            "uri": "/users",
+            "full_uri": "/users",
+            "controller": "App\\Http\\Controllers\\UserController",
+            "controller_method": "class, 'index'",
+            "identifier": "GET|/users"
+        },
+        {
+            "method": "GET",
+            "uri": "/channels",
+            "full_uri": "/channels",
+            "controller": "App\\Http\\Controllers\\ChannelController",
+            "controller_method": "class, 'index'",
+            "identifier": "GET|/channels"
+        },
+        {
+            "method": "GET",
+            "uri": "/",
+            "full_uri": "/",
+            "controller": "App\\Http\\Controllers\\CompanyController",
+            "controller_method": "class, 'index'",
+            "identifier": "GET|/"
+        },
+        {
+            "method": "POST",
+            "uri": "/",
+            "full_uri": "/",
+            "controller": "App\\Http\\Controllers\\CompanyController",
+            "controller_method": "class, 'store'",
+            "identifier": "POST|/"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}",
+            "full_uri": "/{id}",
+            "controller": "App\\Http\\Controllers\\CompanyController",
+            "controller_method": "class, 'show'",
+            "identifier": "GET|/{id}"
+        },
+        {
+            "method": "PUT",
+            "uri": "/{id}",
+            "full_uri": "/{id}",
+            "controller": "App\\Http\\Controllers\\CompanyController",
+            "controller_method": "class, 'update'",
+            "identifier": "PUT|/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "/{id}",
+            "full_uri": "/{id}",
+            "controller": "App\\Http\\Controllers\\CompanyController",
+            "controller_method": "class, 'destroy'",
+            "identifier": "DELETE|/{id}"
+        },
+        {
+            "method": "POST",
+            "uri": "/find",
+            "full_uri": "/find",
+            "controller": "App\\Http\\Controllers\\CompanyController",
+            "controller_method": "class, 'find'",
+            "identifier": "POST|/find"
+        },
+        {
+            "method": "GET",
+            "uri": "/online",
+            "full_uri": "/online",
+            "controller": "App\\Http\\Controllers\\UserController",
+            "controller_method": "class, 'online'",
+            "identifier": "GET|/online"
+        },
+        {
+            "method": "PATCH",
+            "uri": "/{id}/role",
+            "full_uri": "/{id}/role",
+            "controller": "App\\Http\\Controllers\\UserController",
+            "controller_method": "class, 'updateRole'",
+            "identifier": "PATCH|/{id}/role"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}/members",
+            "full_uri": "/{id}/members",
+            "controller": "App\\Http\\Controllers\\ChannelController",
+            "controller_method": "class, 'members'",
+            "identifier": "GET|/{id}/members"
+        },
+        {
+            "method": "POST",
+            "uri": "/{id}/members",
+            "full_uri": "/{id}/members",
+            "controller": "App\\Http\\Controllers\\ChannelController",
+            "controller_method": "class, 'addMember'",
+            "identifier": "POST|/{id}/members"
+        },
+        {
+            "method": "DELETE",
+            "uri": "/{id}/members/{userId}",
+            "full_uri": "/{id}/members/{userId}",
+            "controller": "App\\Http\\Controllers\\ChannelController",
+            "controller_method": "class, 'removeMember'",
+            "identifier": "DELETE|/{id}/members/{userId}"
+        },
+        {
+            "method": "PATCH",
+            "uri": "/{id}/mark-read",
+            "full_uri": "/{id}/mark-read",
+            "controller": "App\\Http\\Controllers\\ChannelNotificationController",
+            "controller_method": "class, 'markAsRead'",
+            "identifier": "PATCH|/{id}/mark-read"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}/messages",
+            "full_uri": "/{id}/messages",
+            "controller": "App\\Http\\Controllers\\MessageController",
+            "controller_method": "class, 'byChannel'",
+            "identifier": "GET|/{id}/messages"
+        },
+        {
+            "method": "GET",
+            "uri": "/starred",
+            "full_uri": "/starred",
+            "controller": "App\\Http\\Controllers\\MessageController",
+            "controller_method": "class, 'getStarredMessages'",
+            "identifier": "GET|/starred"
+        },
+        {
+            "method": "GET",
+            "uri": "/starred/count",
+            "full_uri": "/starred/count",
+            "controller": "App\\Http\\Controllers\\MessageController",
+            "controller_method": "class, 'getStarredCount'",
+            "identifier": "GET|/starred/count"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}/thread",
+            "full_uri": "/{id}/thread",
+            "controller": "App\\Http\\Controllers\\MessageController",
+            "controller_method": "class, 'thread'",
+            "identifier": "GET|/{id}/thread"
+        },
+        {
+            "method": "POST",
+            "uri": "/{id}/favorite",
+            "full_uri": "/{id}/favorite",
+            "controller": "App\\Http\\Controllers\\MessageController",
+            "controller_method": "class, 'toggleFavorite'",
+            "identifier": "POST|/{id}/favorite"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}/starred",
+            "full_uri": "/{id}/starred",
+            "controller": "App\\Http\\Controllers\\MessageController",
+            "controller_method": "class, 'checkStarred'",
+            "identifier": "GET|/{id}/starred"
+        },
+        {
+            "method": "GET",
+            "uri": "/conversation/{userId}",
+            "full_uri": "/conversation/{userId}",
+            "controller": "App\\Http\\Controllers\\DirectMessageController",
+            "controller_method": "class, 'conversation'",
+            "identifier": "GET|/conversation/{userId}"
+        },
+        {
+            "method": "GET",
+            "uri": "/unread-count",
+            "full_uri": "/unread-count",
+            "controller": "App\\Http\\Controllers\\DirectMessageController",
+            "controller_method": "class, 'unreadCount'",
+            "identifier": "GET|/unread-count"
+        },
+        {
+            "method": "PATCH",
+            "uri": "/{id}/read",
+            "full_uri": "/{id}/read",
+            "controller": "App\\Http\\Controllers\\DirectMessageController",
+            "controller_method": "class, 'markAsRead'",
+            "identifier": "PATCH|/{id}/read"
+        },
+        {
+            "method": "POST",
+            "uri": "/toggle",
+            "full_uri": "/toggle",
+            "controller": "App\\Http\\Controllers\\ReactionController",
+            "controller_method": "class, 'toggle'",
+            "identifier": "POST|/toggle"
+        },
+        {
+            "method": "GET",
+            "uri": "/message/{messageId}",
+            "full_uri": "/message/{messageId}",
+            "controller": "App\\Http\\Controllers\\ReactionController",
+            "controller_method": "class, 'getMessageReactions'",
+            "identifier": "GET|/message/{messageId}"
+        },
+        {
+            "method": "GET",
+            "uri": "/mentions",
+            "full_uri": "/mentions",
+            "controller": "App\\Http\\Controllers\\NotificationController",
+            "controller_method": "class, 'getMentionsNotifications'",
+            "identifier": "GET|/mentions"
+        },
+        {
+            "method": "PATCH",
+            "uri": "/mark-all-read",
+            "full_uri": "/mark-all-read",
+            "controller": "App\\Http\\Controllers\\NotificationController",
+            "controller_method": "class, 'markAllAsRead'",
+            "identifier": "PATCH|/mark-all-read"
+        },
+        {
+            "method": "GET",
+            "uri": "/channel/{channelId}/unread-count",
+            "full_uri": "/channel/{channelId}/unread-count",
+            "controller": "App\\Http\\Controllers\\ChannelNotificationController",
+            "controller_method": "class, 'unreadCount'",
+            "identifier": "GET|/channel/{channelId}/unread-count"
+        },
+        {
+            "method": "POST",
+            "uri": "/upload",
+            "full_uri": "/upload",
+            "controller": "App\\Http\\Controllers\\DrawingController",
+            "controller_method": "class, 'upload'",
+            "identifier": "POST|/upload"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}/revisions",
+            "full_uri": "/{id}/revisions",
+            "controller": "App\\Http\\Controllers\\RevisionController",
+            "controller_method": "class, 'index'",
+            "identifier": "GET|/{id}/revisions"
+        },
+        {
+            "method": "POST",
+            "uri": "/{id}/revisions",
+            "full_uri": "/{id}/revisions",
+            "controller": "App\\Http\\Controllers\\RevisionController",
+            "controller_method": "class, 'store'",
+            "identifier": "POST|/{id}/revisions"
+        },
+        {
+            "method": "PATCH",
+            "uri": "/revisions/{id}/status",
+            "full_uri": "/revisions/{id}/status",
+            "controller": "App\\Http\\Controllers\\RevisionController",
+            "controller_method": "class, 'updateStatus'",
+            "identifier": "PATCH|/revisions/{id}/status"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}/layers",
+            "full_uri": "/{id}/layers",
+            "controller": "App\\Http\\Controllers\\LayerController",
+            "controller_method": "class, 'index'",
+            "identifier": "GET|/{id}/layers"
+        },
+        {
+            "method": "POST",
+            "uri": "/{id}/layers",
+            "full_uri": "/{id}/layers",
+            "controller": "App\\Http\\Controllers\\LayerController",
+            "controller_method": "class, 'store'",
+            "identifier": "POST|/{id}/layers"
+        },
+        {
+            "method": "PUT",
+            "uri": "/layers/{id}",
+            "full_uri": "/layers/{id}",
+            "controller": "App\\Http\\Controllers\\LayerController",
+            "controller_method": "class, 'update'",
+            "identifier": "PUT|/layers/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "/layers/{id}",
+            "full_uri": "/layers/{id}",
+            "controller": "App\\Http\\Controllers\\LayerController",
+            "controller_method": "class, 'destroy'",
+            "identifier": "DELETE|/layers/{id}"
+        },
+        {
+            "method": "GET",
+            "uri": "/{id}/pins",
+            "full_uri": "/{id}/pins",
+            "controller": "App\\Http\\Controllers\\PinController",
+            "controller_method": "class, 'index'",
+            "identifier": "GET|/{id}/pins"
+        },
+        {
+            "method": "POST",
+            "uri": "/{id}/pins",
+            "full_uri": "/{id}/pins",
+            "controller": "App\\Http\\Controllers\\PinController",
+            "controller_method": "class, 'store'",
+            "identifier": "POST|/{id}/pins"
+        },
+        {
+            "method": "PUT",
+            "uri": "/pins/{id}",
+            "full_uri": "/pins/{id}",
+            "controller": "App\\Http\\Controllers\\PinController",
+            "controller_method": "class, 'update'",
+            "identifier": "PUT|/pins/{id}"
+        },
+        {
+            "method": "DELETE",
+            "uri": "/pins/{id}",
+            "full_uri": "/pins/{id}",
+            "controller": "App\\Http\\Controllers\\PinController",
+            "controller_method": "class, 'destroy'",
+            "identifier": "DELETE|/pins/{id}"
+        },
+        {
+            "method": "POST",
+            "uri": "/bulk-update",
+            "full_uri": "/bulk-update",
+            "controller": "App\\Http\\Controllers\\TicketController",
+            "controller_method": "class, 'bulkUpdate'",
+            "identifier": "POST|/bulk-update"
+        },
+        {
+            "method": "POST",
+            "uri": "/subscribe",
+            "full_uri": "/subscribe",
+            "controller": "App\\Http\\Controllers\\PushNotificationController",
+            "controller_method": "class, 'subscribe'",
+            "identifier": "POST|/subscribe"
+        },
+        {
+            "method": "POST",
+            "uri": "/unsubscribe",
+            "full_uri": "/unsubscribe",
+            "controller": "App\\Http\\Controllers\\PushNotificationController",
+            "controller_method": "class, 'unsubscribe'",
+            "identifier": "POST|/unsubscribe"
+        },
+        {
+            "method": "POST",
+            "uri": "/test",
+            "full_uri": "/test",
+            "controller": "App\\Http\\Controllers\\PushNotificationController",
+            "controller_method": "class, 'sendTest'",
+            "identifier": "POST|/test"
+        },
+        {
+            "method": "GET",
+            "uri": "/channel/{channelId}",
+            "full_uri": "/channel/{channelId}",
+            "controller": "App\\Http\\Controllers\\MentionController",
+            "controller_method": "class, 'getChannelMentions'",
+            "identifier": "GET|/channel/{channelId}"
+        },
+        {
+            "method": "POST",
+            "uri": "/register",
+            "full_uri": "/register",
+            "controller": "AdminAuthController",
+            "controller_method": "class, 'register'",
+            "identifier": "POST|/register"
+        },
+        {
+            "method": "POST",
+            "uri": "/login",
+            "full_uri": "/login",
+            "controller": "AdminAuthController",
+            "controller_method": "class, 'login'",
+            "identifier": "POST|/login"
+        },
+        {
+            "method": "POST",
+            "uri": "/logout",
+            "full_uri": "/logout",
+            "controller": "AdminAuthController",
+            "controller_method": "class, 'logout'",
+            "identifier": "POST|/logout"
+        },
+        {
+            "method": "POST",
+            "uri": "/logout-all",
+            "full_uri": "/logout-all",
+            "controller": "AdminAuthController",
+            "controller_method": "class, 'logoutAll'",
+            "identifier": "POST|/logout-all"
+        },
+        {
+            "method": "GET",
+            "uri": "/profile",
+            "full_uri": "/profile",
+            "controller": "AdminAuthController",
+            "controller_method": "class, 'profile'",
+            "identifier": "GET|/profile"
+        },
+        {
+            "method": "PUT",
+            "uri": "/profile",
+            "full_uri": "/profile",
+            "controller": "AdminAuthController",
+            "controller_method": "class, 'updateProfile'",
+            "identifier": "PUT|/profile"
+        },
+        {
+            "method": "POST",
+            "uri": "/change-password",
+            "full_uri": "/change-password",
+            "controller": "AdminAuthController",
+            "controller_method": "class, 'changePassword'",
+            "identifier": "POST|/change-password"
+        },
+        {
+            "method": "GET",
+            "uri": "/user",
+            "full_uri": "/user",
+            "controller": "UserAuthController",
+            "controller_method": "class, 'profile'",
+            "identifier": "GET|/user"
+        },
+        {
+            "method": "POST",
+            "uri": "/login-by-id",
+            "full_uri": "/login-by-id",
+            "controller": "UserAuthController",
+            "controller_method": "class, 'loginById'",
+            "identifier": "POST|/login-by-id"
+        }
+    ],
+    "by_method": {
+        "GET": [
+            {
+                "method": "GET",
+                "uri": "api/user",
+                "full_uri": "/api/user",
+                "name": null,
+                "action": "Closure",
+                "middleware": [
+                    "api",
+                    "auth:sanctum"
+                ],
+                "controller": null,
+                "controller_method": null,
+                "identifier": "GET|/api/user"
+            },
+            {
+                "method": "GET",
+                "uri": "api/auth/user",
+                "full_uri": "/api/auth/user",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserAuthController@profile",
+                "middleware": [
+                    "api",
+                    "api",
+                    "auth:sanctum"
+                ],
+                "controller": null,
+                "controller_method": "profile",
+                "identifier": "GET|/api/auth/user"
+            },
+            {
+                "method": "GET",
+                "uri": "api/auth/profile",
+                "full_uri": "/api/auth/profile",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserAuthController@profile",
+                "middleware": [
+                    "api",
+                    "api",
+                    "auth:sanctum"
+                ],
+                "controller": null,
+                "controller_method": "profile",
+                "identifier": "GET|/api/auth/profile"
+            },
+            {
+                "method": "GET",
+                "uri": "api/test/profile",
+                "full_uri": "/api/test/profile",
+                "name": null,
+                "action": "Closure",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": null,
+                "identifier": "GET|/api/test/profile"
+            },
+            {
+                "method": "GET",
+                "uri": "api/test/companies",
+                "full_uri": "/api/test/companies",
+                "name": null,
+                "action": "App\\Http\\Controllers\\CompanyController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/test/companies"
+            },
+            {
+                "method": "GET",
+                "uri": "api/test/users",
+                "full_uri": "/api/test/users",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/test/users"
+            },
+            {
+                "method": "GET",
+                "uri": "api/test/channels",
+                "full_uri": "/api/test/channels",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/test/channels"
+            },
+            {
+                "method": "GET",
+                "uri": "api/companies",
+                "full_uri": "/api/companies",
+                "name": null,
+                "action": "App\\Http\\Controllers\\CompanyController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/companies"
+            },
+            {
+                "method": "GET",
+                "uri": "api/companies/{id}",
+                "full_uri": "/api/companies/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\CompanyController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/companies/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/users",
+                "full_uri": "/api/users",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/users"
+            },
+            {
+                "method": "GET",
+                "uri": "api/users/online",
+                "full_uri": "/api/users/online",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@online",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "online",
+                "identifier": "GET|/api/users/online"
+            },
+            {
+                "method": "GET",
+                "uri": "api/users/{id}",
+                "full_uri": "/api/users/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/users/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/channels",
+                "full_uri": "/api/channels",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/channels"
+            },
+            {
+                "method": "GET",
+                "uri": "api/channels/{id}",
+                "full_uri": "/api/channels/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/channels/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/channels/{id}/members",
+                "full_uri": "/api/channels/{id}/members",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@members",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "members",
+                "identifier": "GET|/api/channels/{id}/members"
+            },
+            {
+                "method": "GET",
+                "uri": "api/channels/{id}/messages",
+                "full_uri": "/api/channels/{id}/messages",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@byChannel",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "byChannel",
+                "identifier": "GET|/api/channels/{id}/messages"
+            },
+            {
+                "method": "GET",
+                "uri": "api/messages",
+                "full_uri": "/api/messages",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/messages"
+            },
+            {
+                "method": "GET",
+                "uri": "api/messages/starred",
+                "full_uri": "/api/messages/starred",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@getStarredMessages",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "getStarredMessages",
+                "identifier": "GET|/api/messages/starred"
+            },
+            {
+                "method": "GET",
+                "uri": "api/messages/starred/count",
+                "full_uri": "/api/messages/starred/count",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@getStarredCount",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "getStarredCount",
+                "identifier": "GET|/api/messages/starred/count"
+            },
+            {
+                "method": "GET",
+                "uri": "api/messages/{id}",
+                "full_uri": "/api/messages/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/messages/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/messages/{id}/thread",
+                "full_uri": "/api/messages/{id}/thread",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@thread",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "thread",
+                "identifier": "GET|/api/messages/{id}/thread"
+            },
+            {
+                "method": "GET",
+                "uri": "api/messages/{id}/starred",
+                "full_uri": "/api/messages/{id}/starred",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@checkStarred",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "checkStarred",
+                "identifier": "GET|/api/messages/{id}/starred"
+            },
+            {
+                "method": "GET",
+                "uri": "api/direct-messages",
+                "full_uri": "/api/direct-messages",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/direct-messages"
+            },
+            {
+                "method": "GET",
+                "uri": "api/direct-messages/conversation/{userId}",
+                "full_uri": "/api/direct-messages/conversation/{userId}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@conversation",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "conversation",
+                "identifier": "GET|/api/direct-messages/conversation/{userId}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/direct-messages/unread-count",
+                "full_uri": "/api/direct-messages/unread-count",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@unreadCount",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "unreadCount",
+                "identifier": "GET|/api/direct-messages/unread-count"
+            },
+            {
+                "method": "GET",
+                "uri": "api/direct-messages/{id}",
+                "full_uri": "/api/direct-messages/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/direct-messages/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/reactions/message/{messageId}",
+                "full_uri": "/api/reactions/message/{messageId}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ReactionController@getMessageReactions",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "getMessageReactions",
+                "identifier": "GET|/api/reactions/message/{messageId}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/notifications",
+                "full_uri": "/api/notifications",
+                "name": null,
+                "action": "App\\Http\\Controllers\\NotificationController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/notifications"
+            },
+            {
+                "method": "GET",
+                "uri": "api/notifications/mentions",
+                "full_uri": "/api/notifications/mentions",
+                "name": null,
+                "action": "App\\Http\\Controllers\\NotificationController@getMentionsNotifications",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "getMentionsNotifications",
+                "identifier": "GET|/api/notifications/mentions"
+            },
+            {
+                "method": "GET",
+                "uri": "api/notifications/unread-count",
+                "full_uri": "/api/notifications/unread-count",
+                "name": null,
+                "action": "App\\Http\\Controllers\\NotificationController@unreadCount",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "unreadCount",
+                "identifier": "GET|/api/notifications/unread-count"
+            },
+            {
+                "method": "GET",
+                "uri": "api/channel-notifications/channel/{channelId}/unread-count",
+                "full_uri": "/api/channel-notifications/channel/{channelId}/unread-count",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelNotificationController@unreadCount",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "unreadCount",
+                "identifier": "GET|/api/channel-notifications/channel/{channelId}/unread-count"
+            },
+            {
+                "method": "GET",
+                "uri": "api/drawings",
+                "full_uri": "/api/drawings",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DrawingController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/drawings"
+            },
+            {
+                "method": "GET",
+                "uri": "api/drawings/{id}",
+                "full_uri": "/api/drawings/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DrawingController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/drawings/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/drawings/{id}/revisions",
+                "full_uri": "/api/drawings/{id}/revisions",
+                "name": null,
+                "action": "App\\Http\\Controllers\\RevisionController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/drawings/{id}/revisions"
+            },
+            {
+                "method": "GET",
+                "uri": "api/drawings/{id}/layers",
+                "full_uri": "/api/drawings/{id}/layers",
+                "name": null,
+                "action": "App\\Http\\Controllers\\LayerController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/drawings/{id}/layers"
+            },
+            {
+                "method": "GET",
+                "uri": "api/drawings/{id}/pins",
+                "full_uri": "/api/drawings/{id}/pins",
+                "name": null,
+                "action": "App\\Http\\Controllers\\PinController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/drawings/{id}/pins"
+            },
+            {
+                "method": "GET",
+                "uri": "api/tickets",
+                "full_uri": "/api/tickets",
+                "name": null,
+                "action": "App\\Http\\Controllers\\TicketController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/tickets"
+            },
+            {
+                "method": "GET",
+                "uri": "api/tickets/{id}",
+                "full_uri": "/api/tickets/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\TicketController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/tickets/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/disciplines",
+                "full_uri": "/api/disciplines",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DisciplineController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/disciplines"
+            },
+            {
+                "method": "GET",
+                "uri": "api/disciplines/{id}",
+                "full_uri": "/api/disciplines/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DisciplineController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/disciplines/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/floors",
+                "full_uri": "/api/floors",
+                "name": null,
+                "action": "App\\Http\\Controllers\\FloorController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/floors"
+            },
+            {
+                "method": "GET",
+                "uri": "api/floors/{id}",
+                "full_uri": "/api/floors/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\FloorController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/floors/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/projects",
+                "full_uri": "/api/projects",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ProjectController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/projects"
+            },
+            {
+                "method": "GET",
+                "uri": "api/projects/{id}",
+                "full_uri": "/api/projects/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ProjectController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/projects/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/saved-views",
+                "full_uri": "/api/saved-views",
+                "name": null,
+                "action": "App\\Http\\Controllers\\SavedViewController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/saved-views"
+            },
+            {
+                "method": "GET",
+                "uri": "api/saved-views/{id}",
+                "full_uri": "/api/saved-views/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\SavedViewController@show",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "show",
+                "identifier": "GET|/api/saved-views/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/mentions",
+                "full_uri": "/api/mentions",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MentionController@index",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "index",
+                "identifier": "GET|/api/mentions"
+            },
+            {
+                "method": "GET",
+                "uri": "api/mentions/unread-count",
+                "full_uri": "/api/mentions/unread-count",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MentionController@unreadCount",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "unreadCount",
+                "identifier": "GET|/api/mentions/unread-count"
+            },
+            {
+                "method": "GET",
+                "uri": "api/mentions/channel/{channelId}",
+                "full_uri": "/api/mentions/channel/{channelId}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MentionController@getChannelMentions",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "getChannelMentions",
+                "identifier": "GET|/api/mentions/channel/{channelId}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/mentions/message/{messageId}",
+                "full_uri": "/api/mentions/message/{messageId}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MentionController@getMessageMentions",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "getMessageMentions",
+                "identifier": "GET|/api/mentions/message/{messageId}"
+            },
+            {
+                "method": "GET",
+                "uri": "api/search",
+                "full_uri": "/api/search",
+                "name": null,
+                "action": "App\\Http\\Controllers\\SearchController@search",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "search",
+                "identifier": "GET|/api/search"
+            },
+            {
+                "method": "GET",
+                "uri": "/companies",
+                "full_uri": "/companies",
+                "controller": "App\\Http\\Controllers\\CompanyController",
+                "controller_method": "class, 'index'",
+                "identifier": "GET|/companies"
+            },
+            {
+                "method": "GET",
+                "uri": "/users",
+                "full_uri": "/users",
+                "controller": "App\\Http\\Controllers\\UserController",
+                "controller_method": "class, 'index'",
+                "identifier": "GET|/users"
+            },
+            {
+                "method": "GET",
+                "uri": "/channels",
+                "full_uri": "/channels",
+                "controller": "App\\Http\\Controllers\\ChannelController",
+                "controller_method": "class, 'index'",
+                "identifier": "GET|/channels"
+            },
+            {
+                "method": "GET",
+                "uri": "/",
+                "full_uri": "/",
+                "controller": "App\\Http\\Controllers\\CompanyController",
+                "controller_method": "class, 'index'",
+                "identifier": "GET|/"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}",
+                "full_uri": "/{id}",
+                "controller": "App\\Http\\Controllers\\CompanyController",
+                "controller_method": "class, 'show'",
+                "identifier": "GET|/{id}"
+            },
+            {
+                "method": "GET",
+                "uri": "/online",
+                "full_uri": "/online",
+                "controller": "App\\Http\\Controllers\\UserController",
+                "controller_method": "class, 'online'",
+                "identifier": "GET|/online"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}/members",
+                "full_uri": "/{id}/members",
+                "controller": "App\\Http\\Controllers\\ChannelController",
+                "controller_method": "class, 'members'",
+                "identifier": "GET|/{id}/members"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}/messages",
+                "full_uri": "/{id}/messages",
+                "controller": "App\\Http\\Controllers\\MessageController",
+                "controller_method": "class, 'byChannel'",
+                "identifier": "GET|/{id}/messages"
+            },
+            {
+                "method": "GET",
+                "uri": "/starred",
+                "full_uri": "/starred",
+                "controller": "App\\Http\\Controllers\\MessageController",
+                "controller_method": "class, 'getStarredMessages'",
+                "identifier": "GET|/starred"
+            },
+            {
+                "method": "GET",
+                "uri": "/starred/count",
+                "full_uri": "/starred/count",
+                "controller": "App\\Http\\Controllers\\MessageController",
+                "controller_method": "class, 'getStarredCount'",
+                "identifier": "GET|/starred/count"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}/thread",
+                "full_uri": "/{id}/thread",
+                "controller": "App\\Http\\Controllers\\MessageController",
+                "controller_method": "class, 'thread'",
+                "identifier": "GET|/{id}/thread"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}/starred",
+                "full_uri": "/{id}/starred",
+                "controller": "App\\Http\\Controllers\\MessageController",
+                "controller_method": "class, 'checkStarred'",
+                "identifier": "GET|/{id}/starred"
+            },
+            {
+                "method": "GET",
+                "uri": "/conversation/{userId}",
+                "full_uri": "/conversation/{userId}",
+                "controller": "App\\Http\\Controllers\\DirectMessageController",
+                "controller_method": "class, 'conversation'",
+                "identifier": "GET|/conversation/{userId}"
+            },
+            {
+                "method": "GET",
+                "uri": "/unread-count",
+                "full_uri": "/unread-count",
+                "controller": "App\\Http\\Controllers\\DirectMessageController",
+                "controller_method": "class, 'unreadCount'",
+                "identifier": "GET|/unread-count"
+            },
+            {
+                "method": "GET",
+                "uri": "/message/{messageId}",
+                "full_uri": "/message/{messageId}",
+                "controller": "App\\Http\\Controllers\\ReactionController",
+                "controller_method": "class, 'getMessageReactions'",
+                "identifier": "GET|/message/{messageId}"
+            },
+            {
+                "method": "GET",
+                "uri": "/mentions",
+                "full_uri": "/mentions",
+                "controller": "App\\Http\\Controllers\\NotificationController",
+                "controller_method": "class, 'getMentionsNotifications'",
+                "identifier": "GET|/mentions"
+            },
+            {
+                "method": "GET",
+                "uri": "/channel/{channelId}/unread-count",
+                "full_uri": "/channel/{channelId}/unread-count",
+                "controller": "App\\Http\\Controllers\\ChannelNotificationController",
+                "controller_method": "class, 'unreadCount'",
+                "identifier": "GET|/channel/{channelId}/unread-count"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}/revisions",
+                "full_uri": "/{id}/revisions",
+                "controller": "App\\Http\\Controllers\\RevisionController",
+                "controller_method": "class, 'index'",
+                "identifier": "GET|/{id}/revisions"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}/layers",
+                "full_uri": "/{id}/layers",
+                "controller": "App\\Http\\Controllers\\LayerController",
+                "controller_method": "class, 'index'",
+                "identifier": "GET|/{id}/layers"
+            },
+            {
+                "method": "GET",
+                "uri": "/{id}/pins",
+                "full_uri": "/{id}/pins",
+                "controller": "App\\Http\\Controllers\\PinController",
+                "controller_method": "class, 'index'",
+                "identifier": "GET|/{id}/pins"
+            },
+            {
+                "method": "GET",
+                "uri": "/channel/{channelId}",
+                "full_uri": "/channel/{channelId}",
+                "controller": "App\\Http\\Controllers\\MentionController",
+                "controller_method": "class, 'getChannelMentions'",
+                "identifier": "GET|/channel/{channelId}"
+            },
+            {
+                "method": "GET",
+                "uri": "/profile",
+                "full_uri": "/profile",
+                "controller": "AdminAuthController",
+                "controller_method": "class, 'profile'",
+                "identifier": "GET|/profile"
+            },
+            {
+                "method": "GET",
+                "uri": "/user",
+                "full_uri": "/user",
+                "controller": "UserAuthController",
+                "controller_method": "class, 'profile'",
+                "identifier": "GET|/user"
+            }
+        ],
+        "POST": [
+            {
+                "method": "POST",
+                "uri": "api/auth/logout",
+                "full_uri": "/api/auth/logout",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserAuthController@logout",
+                "middleware": [
+                    "api",
+                    "api",
+                    "auth:sanctum"
+                ],
+                "controller": null,
+                "controller_method": "logout",
+                "identifier": "POST|/api/auth/logout"
+            },
+            {
+                "method": "POST",
+                "uri": "api/auth/logout-all",
+                "full_uri": "/api/auth/logout-all",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserAuthController@logoutAll",
+                "middleware": [
+                    "api",
+                    "api",
+                    "auth:sanctum"
+                ],
+                "controller": null,
+                "controller_method": "logoutAll",
+                "identifier": "POST|/api/auth/logout-all"
+            },
+            {
+                "method": "POST",
+                "uri": "api/auth/change-password",
+                "full_uri": "/api/auth/change-password",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserAuthController@changePassword",
+                "middleware": [
+                    "api",
+                    "api",
+                    "auth:sanctum"
+                ],
+                "controller": null,
+                "controller_method": "changePassword",
+                "identifier": "POST|/api/auth/change-password"
+            },
+            {
+                "method": "POST",
+                "uri": "api/auth/login-by-id",
+                "full_uri": "/api/auth/login-by-id",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserAuthController@loginById",
+                "middleware": [
+                    "api",
+                    "api"
+                ],
+                "controller": null,
+                "controller_method": "loginById",
+                "identifier": "POST|/api/auth/login-by-id"
+            },
+            {
+                "method": "POST",
+                "uri": "api/companies",
+                "full_uri": "/api/companies",
+                "name": null,
+                "action": "App\\Http\\Controllers\\CompanyController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/companies"
+            },
+            {
+                "method": "POST",
+                "uri": "api/companies/find",
+                "full_uri": "/api/companies/find",
+                "name": null,
+                "action": "App\\Http\\Controllers\\CompanyController@find",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "find",
+                "identifier": "POST|/api/companies/find"
+            },
+            {
+                "method": "POST",
+                "uri": "api/users",
+                "full_uri": "/api/users",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/users"
+            },
+            {
+                "method": "POST",
+                "uri": "api/channels",
+                "full_uri": "/api/channels",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/channels"
+            },
+            {
+                "method": "POST",
+                "uri": "api/channels/{id}/members",
+                "full_uri": "/api/channels/{id}/members",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@addMember",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "addMember",
+                "identifier": "POST|/api/channels/{id}/members"
+            },
+            {
+                "method": "POST",
+                "uri": "api/messages",
+                "full_uri": "/api/messages",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/messages"
+            },
+            {
+                "method": "POST",
+                "uri": "api/messages/{id}/favorite",
+                "full_uri": "/api/messages/{id}/favorite",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@toggleFavorite",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "toggleFavorite",
+                "identifier": "POST|/api/messages/{id}/favorite"
+            },
+            {
+                "method": "POST",
+                "uri": "api/direct-messages",
+                "full_uri": "/api/direct-messages",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/direct-messages"
+            },
+            {
+                "method": "POST",
+                "uri": "api/reactions/toggle",
+                "full_uri": "/api/reactions/toggle",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ReactionController@toggle",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "toggle",
+                "identifier": "POST|/api/reactions/toggle"
+            },
+            {
+                "method": "POST",
+                "uri": "api/drawings",
+                "full_uri": "/api/drawings",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DrawingController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/drawings"
+            },
+            {
+                "method": "POST",
+                "uri": "api/drawings/upload",
+                "full_uri": "/api/drawings/upload",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DrawingController@upload",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "upload",
+                "identifier": "POST|/api/drawings/upload"
+            },
+            {
+                "method": "POST",
+                "uri": "api/drawings/{id}/revisions",
+                "full_uri": "/api/drawings/{id}/revisions",
+                "name": null,
+                "action": "App\\Http\\Controllers\\RevisionController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/drawings/{id}/revisions"
+            },
+            {
+                "method": "POST",
+                "uri": "api/drawings/{id}/layers",
+                "full_uri": "/api/drawings/{id}/layers",
+                "name": null,
+                "action": "App\\Http\\Controllers\\LayerController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/drawings/{id}/layers"
+            },
+            {
+                "method": "POST",
+                "uri": "api/drawings/{id}/pins",
+                "full_uri": "/api/drawings/{id}/pins",
+                "name": null,
+                "action": "App\\Http\\Controllers\\PinController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/drawings/{id}/pins"
+            },
+            {
+                "method": "POST",
+                "uri": "api/tickets",
+                "full_uri": "/api/tickets",
+                "name": null,
+                "action": "App\\Http\\Controllers\\TicketController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/tickets"
+            },
+            {
+                "method": "POST",
+                "uri": "api/tickets/bulk-update",
+                "full_uri": "/api/tickets/bulk-update",
+                "name": null,
+                "action": "App\\Http\\Controllers\\TicketController@bulkUpdate",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "bulkUpdate",
+                "identifier": "POST|/api/tickets/bulk-update"
+            },
+            {
+                "method": "POST",
+                "uri": "api/disciplines",
+                "full_uri": "/api/disciplines",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DisciplineController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/disciplines"
+            },
+            {
+                "method": "POST",
+                "uri": "api/floors",
+                "full_uri": "/api/floors",
+                "name": null,
+                "action": "App\\Http\\Controllers\\FloorController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/floors"
+            },
+            {
+                "method": "POST",
+                "uri": "api/projects",
+                "full_uri": "/api/projects",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ProjectController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/projects"
+            },
+            {
+                "method": "POST",
+                "uri": "api/projects/{id}/members",
+                "full_uri": "/api/projects/{id}/members",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ProjectController@addMember",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "addMember",
+                "identifier": "POST|/api/projects/{id}/members"
+            },
+            {
+                "method": "POST",
+                "uri": "api/saved-views",
+                "full_uri": "/api/saved-views",
+                "name": null,
+                "action": "App\\Http\\Controllers\\SavedViewController@store",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "store",
+                "identifier": "POST|/api/saved-views"
+            },
+            {
+                "method": "POST",
+                "uri": "api/files/upload",
+                "full_uri": "/api/files/upload",
+                "name": null,
+                "action": "App\\Http\\Controllers\\FileUploadController@upload",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "upload",
+                "identifier": "POST|/api/files/upload"
+            },
+            {
+                "method": "POST",
+                "uri": "api/push/subscribe",
+                "full_uri": "/api/push/subscribe",
+                "name": null,
+                "action": "App\\Http\\Controllers\\PushNotificationController@subscribe",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "subscribe",
+                "identifier": "POST|/api/push/subscribe"
+            },
+            {
+                "method": "POST",
+                "uri": "api/push/unsubscribe",
+                "full_uri": "/api/push/unsubscribe",
+                "name": null,
+                "action": "App\\Http\\Controllers\\PushNotificationController@unsubscribe",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "unsubscribe",
+                "identifier": "POST|/api/push/unsubscribe"
+            },
+            {
+                "method": "POST",
+                "uri": "api/push/test",
+                "full_uri": "/api/push/test",
+                "name": null,
+                "action": "App\\Http\\Controllers\\PushNotificationController@sendTest",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "sendTest",
+                "identifier": "POST|/api/push/test"
+            },
+            {
+                "method": "POST",
+                "uri": "/",
+                "full_uri": "/",
+                "controller": "App\\Http\\Controllers\\CompanyController",
+                "controller_method": "class, 'store'",
+                "identifier": "POST|/"
+            },
+            {
+                "method": "POST",
+                "uri": "/find",
+                "full_uri": "/find",
+                "controller": "App\\Http\\Controllers\\CompanyController",
+                "controller_method": "class, 'find'",
+                "identifier": "POST|/find"
+            },
+            {
+                "method": "POST",
+                "uri": "/{id}/members",
+                "full_uri": "/{id}/members",
+                "controller": "App\\Http\\Controllers\\ChannelController",
+                "controller_method": "class, 'addMember'",
+                "identifier": "POST|/{id}/members"
+            },
+            {
+                "method": "POST",
+                "uri": "/{id}/favorite",
+                "full_uri": "/{id}/favorite",
+                "controller": "App\\Http\\Controllers\\MessageController",
+                "controller_method": "class, 'toggleFavorite'",
+                "identifier": "POST|/{id}/favorite"
+            },
+            {
+                "method": "POST",
+                "uri": "/toggle",
+                "full_uri": "/toggle",
+                "controller": "App\\Http\\Controllers\\ReactionController",
+                "controller_method": "class, 'toggle'",
+                "identifier": "POST|/toggle"
+            },
+            {
+                "method": "POST",
+                "uri": "/upload",
+                "full_uri": "/upload",
+                "controller": "App\\Http\\Controllers\\DrawingController",
+                "controller_method": "class, 'upload'",
+                "identifier": "POST|/upload"
+            },
+            {
+                "method": "POST",
+                "uri": "/{id}/revisions",
+                "full_uri": "/{id}/revisions",
+                "controller": "App\\Http\\Controllers\\RevisionController",
+                "controller_method": "class, 'store'",
+                "identifier": "POST|/{id}/revisions"
+            },
+            {
+                "method": "POST",
+                "uri": "/{id}/layers",
+                "full_uri": "/{id}/layers",
+                "controller": "App\\Http\\Controllers\\LayerController",
+                "controller_method": "class, 'store'",
+                "identifier": "POST|/{id}/layers"
+            },
+            {
+                "method": "POST",
+                "uri": "/{id}/pins",
+                "full_uri": "/{id}/pins",
+                "controller": "App\\Http\\Controllers\\PinController",
+                "controller_method": "class, 'store'",
+                "identifier": "POST|/{id}/pins"
+            },
+            {
+                "method": "POST",
+                "uri": "/bulk-update",
+                "full_uri": "/bulk-update",
+                "controller": "App\\Http\\Controllers\\TicketController",
+                "controller_method": "class, 'bulkUpdate'",
+                "identifier": "POST|/bulk-update"
+            },
+            {
+                "method": "POST",
+                "uri": "/subscribe",
+                "full_uri": "/subscribe",
+                "controller": "App\\Http\\Controllers\\PushNotificationController",
+                "controller_method": "class, 'subscribe'",
+                "identifier": "POST|/subscribe"
+            },
+            {
+                "method": "POST",
+                "uri": "/unsubscribe",
+                "full_uri": "/unsubscribe",
+                "controller": "App\\Http\\Controllers\\PushNotificationController",
+                "controller_method": "class, 'unsubscribe'",
+                "identifier": "POST|/unsubscribe"
+            },
+            {
+                "method": "POST",
+                "uri": "/test",
+                "full_uri": "/test",
+                "controller": "App\\Http\\Controllers\\PushNotificationController",
+                "controller_method": "class, 'sendTest'",
+                "identifier": "POST|/test"
+            },
+            {
+                "method": "POST",
+                "uri": "/register",
+                "full_uri": "/register",
+                "controller": "AdminAuthController",
+                "controller_method": "class, 'register'",
+                "identifier": "POST|/register"
+            },
+            {
+                "method": "POST",
+                "uri": "/login",
+                "full_uri": "/login",
+                "controller": "AdminAuthController",
+                "controller_method": "class, 'login'",
+                "identifier": "POST|/login"
+            },
+            {
+                "method": "POST",
+                "uri": "/logout",
+                "full_uri": "/logout",
+                "controller": "AdminAuthController",
+                "controller_method": "class, 'logout'",
+                "identifier": "POST|/logout"
+            },
+            {
+                "method": "POST",
+                "uri": "/logout-all",
+                "full_uri": "/logout-all",
+                "controller": "AdminAuthController",
+                "controller_method": "class, 'logoutAll'",
+                "identifier": "POST|/logout-all"
+            },
+            {
+                "method": "POST",
+                "uri": "/change-password",
+                "full_uri": "/change-password",
+                "controller": "AdminAuthController",
+                "controller_method": "class, 'changePassword'",
+                "identifier": "POST|/change-password"
+            },
+            {
+                "method": "POST",
+                "uri": "/login-by-id",
+                "full_uri": "/login-by-id",
+                "controller": "UserAuthController",
+                "controller_method": "class, 'loginById'",
+                "identifier": "POST|/login-by-id"
+            }
+        ],
+        "PUT": [
+            {
+                "method": "PUT",
+                "uri": "api/auth/profile",
+                "full_uri": "/api/auth/profile",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserAuthController@updateProfile",
+                "middleware": [
+                    "api",
+                    "api",
+                    "auth:sanctum"
+                ],
+                "controller": null,
+                "controller_method": "updateProfile",
+                "identifier": "PUT|/api/auth/profile"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/companies/{id}",
+                "full_uri": "/api/companies/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\CompanyController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/companies/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/users/{id}",
+                "full_uri": "/api/users/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/users/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/channels/{id}",
+                "full_uri": "/api/channels/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/channels/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/messages/{id}",
+                "full_uri": "/api/messages/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/messages/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/direct-messages/{id}",
+                "full_uri": "/api/direct-messages/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/direct-messages/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/drawings/{id}",
+                "full_uri": "/api/drawings/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DrawingController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/drawings/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/drawings/layers/{id}",
+                "full_uri": "/api/drawings/layers/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\LayerController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/drawings/layers/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/drawings/pins/{id}",
+                "full_uri": "/api/drawings/pins/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\PinController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/drawings/pins/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/tickets/{id}",
+                "full_uri": "/api/tickets/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\TicketController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/tickets/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/disciplines/{id}",
+                "full_uri": "/api/disciplines/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DisciplineController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/disciplines/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/floors/{id}",
+                "full_uri": "/api/floors/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\FloorController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/floors/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/projects/{id}",
+                "full_uri": "/api/projects/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ProjectController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/projects/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "api/saved-views/{id}",
+                "full_uri": "/api/saved-views/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\SavedViewController@update",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "update",
+                "identifier": "PUT|/api/saved-views/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "/{id}",
+                "full_uri": "/{id}",
+                "controller": "App\\Http\\Controllers\\CompanyController",
+                "controller_method": "class, 'update'",
+                "identifier": "PUT|/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "/layers/{id}",
+                "full_uri": "/layers/{id}",
+                "controller": "App\\Http\\Controllers\\LayerController",
+                "controller_method": "class, 'update'",
+                "identifier": "PUT|/layers/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "/pins/{id}",
+                "full_uri": "/pins/{id}",
+                "controller": "App\\Http\\Controllers\\PinController",
+                "controller_method": "class, 'update'",
+                "identifier": "PUT|/pins/{id}"
+            },
+            {
+                "method": "PUT",
+                "uri": "/profile",
+                "full_uri": "/profile",
+                "controller": "AdminAuthController",
+                "controller_method": "class, 'updateProfile'",
+                "identifier": "PUT|/profile"
+            }
+        ],
+        "DELETE": [
+            {
+                "method": "DELETE",
+                "uri": "api/companies/{id}",
+                "full_uri": "/api/companies/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\CompanyController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/companies/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/users/{id}",
+                "full_uri": "/api/users/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/users/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/channels/{id}",
+                "full_uri": "/api/channels/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/channels/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/channels/{id}/members/{userId}",
+                "full_uri": "/api/channels/{id}/members/{userId}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelController@removeMember",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "removeMember",
+                "identifier": "DELETE|/api/channels/{id}/members/{userId}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/messages/{id}",
+                "full_uri": "/api/messages/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\MessageController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/messages/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/direct-messages/{id}",
+                "full_uri": "/api/direct-messages/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/direct-messages/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/drawings/{id}",
+                "full_uri": "/api/drawings/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DrawingController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/drawings/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/drawings/layers/{id}",
+                "full_uri": "/api/drawings/layers/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\LayerController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/drawings/layers/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/drawings/pins/{id}",
+                "full_uri": "/api/drawings/pins/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\PinController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/drawings/pins/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/tickets/{id}",
+                "full_uri": "/api/tickets/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\TicketController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/tickets/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/disciplines/{id}",
+                "full_uri": "/api/disciplines/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DisciplineController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/disciplines/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/floors/{id}",
+                "full_uri": "/api/floors/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\FloorController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/floors/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/projects/{id}",
+                "full_uri": "/api/projects/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ProjectController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/projects/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "api/saved-views/{id}",
+                "full_uri": "/api/saved-views/{id}",
+                "name": null,
+                "action": "App\\Http\\Controllers\\SavedViewController@destroy",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "destroy",
+                "identifier": "DELETE|/api/saved-views/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "/{id}",
+                "full_uri": "/{id}",
+                "controller": "App\\Http\\Controllers\\CompanyController",
+                "controller_method": "class, 'destroy'",
+                "identifier": "DELETE|/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "/{id}/members/{userId}",
+                "full_uri": "/{id}/members/{userId}",
+                "controller": "App\\Http\\Controllers\\ChannelController",
+                "controller_method": "class, 'removeMember'",
+                "identifier": "DELETE|/{id}/members/{userId}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "/layers/{id}",
+                "full_uri": "/layers/{id}",
+                "controller": "App\\Http\\Controllers\\LayerController",
+                "controller_method": "class, 'destroy'",
+                "identifier": "DELETE|/layers/{id}"
+            },
+            {
+                "method": "DELETE",
+                "uri": "/pins/{id}",
+                "full_uri": "/pins/{id}",
+                "controller": "App\\Http\\Controllers\\PinController",
+                "controller_method": "class, 'destroy'",
+                "identifier": "DELETE|/pins/{id}"
+            }
+        ],
+        "PATCH": [
+            {
+                "method": "PATCH",
+                "uri": "api/users/{id}/role",
+                "full_uri": "/api/users/{id}/role",
+                "name": null,
+                "action": "App\\Http\\Controllers\\UserController@updateRole",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "updateRole",
+                "identifier": "PATCH|/api/users/{id}/role"
+            },
+            {
+                "method": "PATCH",
+                "uri": "api/channels/{id}/mark-read",
+                "full_uri": "/api/channels/{id}/mark-read",
+                "name": null,
+                "action": "App\\Http\\Controllers\\ChannelNotificationController@markAsRead",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "markAsRead",
+                "identifier": "PATCH|/api/channels/{id}/mark-read"
+            },
+            {
+                "method": "PATCH",
+                "uri": "api/direct-messages/{id}/read",
+                "full_uri": "/api/direct-messages/{id}/read",
+                "name": null,
+                "action": "App\\Http\\Controllers\\DirectMessageController@markAsRead",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "markAsRead",
+                "identifier": "PATCH|/api/direct-messages/{id}/read"
+            },
+            {
+                "method": "PATCH",
+                "uri": "api/notifications/{id}/read",
+                "full_uri": "/api/notifications/{id}/read",
+                "name": null,
+                "action": "App\\Http\\Controllers\\NotificationController@markAsRead",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "markAsRead",
+                "identifier": "PATCH|/api/notifications/{id}/read"
+            },
+            {
+                "method": "PATCH",
+                "uri": "api/notifications/mark-all-read",
+                "full_uri": "/api/notifications/mark-all-read",
+                "name": null,
+                "action": "App\\Http\\Controllers\\NotificationController@markAllAsRead",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "markAllAsRead",
+                "identifier": "PATCH|/api/notifications/mark-all-read"
+            },
+            {
+                "method": "PATCH",
+                "uri": "api/drawings/revisions/{id}/status",
+                "full_uri": "/api/drawings/revisions/{id}/status",
+                "name": null,
+                "action": "App\\Http\\Controllers\\RevisionController@updateStatus",
+                "middleware": [
+                    "api",
+                    "auth.by.iid"
+                ],
+                "controller": null,
+                "controller_method": "updateStatus",
+                "identifier": "PATCH|/api/drawings/revisions/{id}/status"
+            },
+            {
+                "method": "PATCH",
+                "uri": "/{id}/role",
+                "full_uri": "/{id}/role",
+                "controller": "App\\Http\\Controllers\\UserController",
+                "controller_method": "class, 'updateRole'",
+                "identifier": "PATCH|/{id}/role"
+            },
+            {
+                "method": "PATCH",
+                "uri": "/{id}/mark-read",
+                "full_uri": "/{id}/mark-read",
+                "controller": "App\\Http\\Controllers\\ChannelNotificationController",
+                "controller_method": "class, 'markAsRead'",
+                "identifier": "PATCH|/{id}/mark-read"
+            },
+            {
+                "method": "PATCH",
+                "uri": "/{id}/read",
+                "full_uri": "/{id}/read",
+                "controller": "App\\Http\\Controllers\\DirectMessageController",
+                "controller_method": "class, 'markAsRead'",
+                "identifier": "PATCH|/{id}/read"
+            },
+            {
+                "method": "PATCH",
+                "uri": "/mark-all-read",
+                "full_uri": "/mark-all-read",
+                "controller": "App\\Http\\Controllers\\NotificationController",
+                "controller_method": "class, 'markAllAsRead'",
+                "identifier": "PATCH|/mark-all-read"
+            },
+            {
+                "method": "PATCH",
+                "uri": "/revisions/{id}/status",
+                "full_uri": "/revisions/{id}/status",
+                "controller": "App\\Http\\Controllers\\RevisionController",
+                "controller_method": "class, 'updateStatus'",
+                "identifier": "PATCH|/revisions/{id}/status"
+            }
+        ]
+    }
+}

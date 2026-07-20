@@ -1,0 +1,109 @@
+{
+    "endpoint": "GET|/api/tickets/{id}",
+    "method": "GET",
+    "url": "/api/tickets/{id}",
+    "timestamp": "2025-11-23 05:44:49",
+    "success": true,
+    "status_code": 200,
+    "response_time_ms": 500.32,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 87|L1bXSi0P55hWWIJMd3fPLry5qKMGGDCHYr5WaUFw6f3a3db5",
+            "X-User-IID": "1"
+        },
+        "payload": [],
+        "url": "http://localhost:8001/api/tickets/1?iid=1"
+    },
+    "response": {
+        "status_code": 200,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Sun, 23 Nov 2025 05:44:50 GMT",
+                "Sun, 23 Nov 2025 05:44:50 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "status": true,
+            "code": 200,
+            "message": "Resource retrieved successfully",
+            "payload": {
+                "id": 1,
+                "company_id": 1,
+                "title": "Test Ticket 127",
+                "description": "Test ticket description",
+                "type": "RFI",
+                "status": "open",
+                "priority": "medium",
+                "drawing_id": null,
+                "discipline_id": null,
+                "pin_id": null,
+                "layer_id": null,
+                "assigned_to": null,
+                "created_by": {
+                    "id": 2,
+                    "name": "admin dev",
+                    "email": "admin2@gmail.com",
+                    "email_verified_at": null,
+                    "created_at": "2025-11-13T17:38:08.000000Z",
+                    "updated_at": "2025-11-13T17:38:08.000000Z",
+                    "company_id": 3,
+                    "profile_image_url": null,
+                    "status": "active",
+                    "is_online": false,
+                    "settings": null,
+                    "last_seen": null,
+                    "role": "company_manager",
+                    "deleted_at": null
+                },
+                "reporter": {
+                    "id": 2,
+                    "name": "admin dev",
+                    "email": "admin2@gmail.com",
+                    "email_verified_at": null,
+                    "created_at": "2025-11-13T17:38:08.000000Z",
+                    "updated_at": "2025-11-13T17:38:08.000000Z",
+                    "company_id": 3,
+                    "profile_image_url": null,
+                    "status": "active",
+                    "is_online": false,
+                    "settings": null,
+                    "last_seen": null,
+                    "role": "company_manager",
+                    "deleted_at": null
+                },
+                "channel_id": null,
+                "sla_hours": null,
+                "due_date": null,
+                "tags": [],
+                "created_at": "2025-11-16T08:35:54.000000Z",
+                "updated_at": "2025-11-16T08:35:54.000000Z",
+                "company": null,
+                "drawing": null,
+                "discipline": null,
+                "channel": null
+            }
+        },
+        "raw_body": "{\"status\":true,\"code\":200,\"message\":\"Resource retrieved successfully\",\"payload\":{\"id\":1,\"company_id\":1,\"title\":\"Test Ticket 127\",\"description\":\"Test ticket description\",\"type\":\"RFI\",\"status\":\"open\",\"priority\":\"medium\",\"drawing_id\":null,\"discipline_id\":null,\"pin_id\":null,\"layer_id\":null,\"assigned_to\":null,\"created_by\":{\"id\":2,\"name\":\"admin dev\",\"email\":\"admin2@gmail.com\",\"email_verified_at\":null,\"created_at\":\"2025-11-13T17:38:08.000000Z\",\"updated_at\":\"2025-11-13T17:38:08.000000Z\",\"company_id\":3,\"profile_image_url\":null,\"status\":\"active\",\"is_online\":false,\"settings\":null,\"last_seen\":null,\"role\":\"company_manager\",\"deleted_at\":null},\"reporter\":{\"id\":2,\"name\":\"admin dev\",\"email\":\"admin2@gmail.com\",\"email_verified_at\":null,\"created_at\":\"2025-11-13T17:38:08.000000Z\",\"updated_at\":\"2025-11-13T17:38:08.000000Z\",\"company_id\":3,\"profile_image_url\":null,\"status\":\"active\",\"is_online\":false,\"settings\":null,\"last_seen\":null,\"role\":\"company_manager\",\"deleted_at\":null},\"channel_id\":null,\"sla_hours\":null,\"due_date\":null,\"tags\":[],\"created_at\":\"2025-11-16T08:35:54.000000Z\",\"updated_at\":\"2025-11-16T08:35:54.000000Z\",\"company\":null,\"drawing\":null,\"discipline\":null,\"channel\":null}}"
+    },
+    "error": null
+}

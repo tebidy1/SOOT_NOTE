@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار API المهام</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 15px; margin: 5px; background: #007cba; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #005a87; }
+        .result { margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 3px; white-space: pre-wrap; }
+        input, textarea { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 3px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>اختبار API المهام - assigned_to</h1>
+
+    <div class="test-section">
+        <h2>إنشاء مهمة جديدة مع assigned_to</h2>
+        <label>العنوان:</label>
+        <input type="text" id="title" value="مهمة اختبار" placeholder="عنوان المهمة">
+
+        <label>الوصف:</label>
+        <textarea id="description" placeholder="وصف المهمة">وصف المهمة</textarea>
+
+        <label>معرف الخطة:</label>
+        <input type="number" id="plan_id" value="1" placeholder="معرف الخطة">
+
+        <label>الحالة:</label>
+        <input type="text" id="status" value="pending" placeholder="الحالة">
+
+        <label>المستخدمين المعينين (مفصولة بفواصل):</label>
+        <input type="text" id="assigned_to" value="6,7" placeholder="6,7">
+
+        <label>تاريخ الاستحقاق:</label>
+        <input type="date" id="due_date" value="2025-09-30">
+
+        <label>الأولوية:</label>
+        <select id="priority">
+            <option value="low">منخفضة</option>
+            <option value="medium" selected>متوسطة</option>
+            <option value="high">عالية</option>
+            <option value="urgent">عاجلة</option>
+        </select>
+
+        <button onclick="createTask()">إنشاء المهمة</button>
+        <div id="createResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>جلب المهام</h2>
+        <button onclick="getTasks()">جلب جميع المهام</button>
+        <div id="tasksResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>جلب مهمة محددة</h2>
+        <label>معرف المهمة:</label>
+        <input type="number" id="task_id" value="1" placeholder="معرف المهمة">
+        <button onclick="getTask()">جلب المهمة</button>
+        <div id="taskResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+
+        async function createTask() {
+            const data = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                plan_id: document.getElementById('plan_id').value,
+                status: document.getElementById('status').value,
+                assigned_to: document.getElementById('assigned_to').value,
+                due_date: document.getElementById('due_date').value,
+                priority: document.getElementById('priority').value,
+                completed: false
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/tasks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                document.getElementById('createResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('createResult').textContent = 'خطأ: ' + error.message;
+            }
+        }
+
+        async function getTasks() {
+            try {
+                const response = await fetch(`${API_BASE}/tasks`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                document.getElementById('tasksResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('tasksResult').textContent = 'خطأ: ' + error.message;
+            }
+        }
+
+        async function getTask() {
+            const taskId = document.getElementById('task_id').value;
+            try {
+                const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                document.getElementById('taskResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('taskResult').textContent = 'خطأ: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

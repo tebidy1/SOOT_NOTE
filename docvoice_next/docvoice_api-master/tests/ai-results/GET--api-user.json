@@ -1,0 +1,64 @@
+{
+    "endpoint": "GET|/api/user",
+    "method": "GET",
+    "url": "/api/user",
+    "timestamp": "2025-11-24 16:01:42",
+    "success": true,
+    "status_code": 200,
+    "response_time_ms": 1575.41,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 128|53H53k0DyQDvzCOfvJO5ZG9kRA79vpSwdF4T7p9n9bab300d",
+            "X-User-IID": "1"
+        },
+        "payload": [],
+        "url": "http://localhost:8001/api/user?iid=1"
+    },
+    "response": {
+        "status_code": 200,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Mon, 24 Nov 2025 16:01:44 GMT",
+                "Mon, 24 Nov 2025 16:01:44 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "id": 1,
+            "name": "Test User",
+            "email": "test@example.com",
+            "email_verified_at": null,
+            "created_at": "2025-11-24T16:01:27.000000Z",
+            "updated_at": "2025-11-24T16:01:27.000000Z",
+            "company_id": 8,
+            "profile_image_url": null,
+            "status": "active",
+            "is_online": false,
+            "settings": null,
+            "last_seen": null,
+            "role": "admin",
+            "deleted_at": null
+        },
+        "raw_body": "{\"id\":1,\"name\":\"Test User\",\"email\":\"test@example.com\",\"email_verified_at\":null,\"created_at\":\"2025-11-24T16:01:27.000000Z\",\"updated_at\":\"2025-11-24T16:01:27.000000Z\",\"company_id\":8,\"profile_image_url\":null,\"status\":\"active\",\"is_online\":false,\"settings\":null,\"last_seen\":null,\"role\":\"admin\",\"deleted_at\":null}"
+    },
+    "error": null
+}
