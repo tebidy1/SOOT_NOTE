@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "soutnote-pwa",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "docvoice_next/extension-master", "run", "dev:pwa", "--", "--host", "--port", "5174"],
+      "port": 5174,
+      "url": "http://localhost:5174"
+    }
+  ]
+}
