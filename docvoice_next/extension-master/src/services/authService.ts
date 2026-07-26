@@ -87,6 +87,30 @@ class AuthService {
     }
   }
 
+  async loginWithToken(token: string, user: any): Promise<boolean> {
+    try {
+      const userData: User = {
+        id: user.id || 'temp-id',
+        email: user.email,
+        name: user.name,
+        role: user.role || 'member',
+        department: user.medical_department_id?.toString() || user.department || '',
+        companyId: user.company_id,
+        profileImage: user.profile_image_url || user.avatar || user.profileImage,
+        phone: user.phone,
+        status: user.status,
+        company: user.company
+      }
+
+      useAuthStore.getState().login(userData, token)
+      await this.saveToChromeStorage(userData, token)
+      return true
+    } catch (error: any) {
+      console.error('Failed to login with token:', error)
+      return false
+    }
+  }
+
   isAuthenticated(): boolean {
     return useAuthStore.getState().isAuthenticated
   }

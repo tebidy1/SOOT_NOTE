@@ -29,8 +29,8 @@ export default function TemplateCard({ template, isSelected, onSelect }: Templat
       className={`
         relative text-left p-4 rounded-xl border-2 transition-all duration-200
         ${isSelected
-          ? 'border-blue-500 bg-blue-50 shadow-md'
-          : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
+          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 shadow-md'
+          : 'border-slate-300/70 dark:border-slate-700 bg-[#F0F4F8] dark:bg-[#1E293B] hover:border-blue-300 hover:shadow-sm'
         }
       `}
     >

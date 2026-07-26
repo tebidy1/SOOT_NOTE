@@ -2,41 +2,40 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+export const NOTE_PROCESSING_STEPS = [
+  'Transcribing audio to text...',
+  'Extracting clinical details & symptoms...',
+  'Formatting clinical template & final note...',
+];
+
+const STEP_ICONS = ['🎙️', '🧠', '📋'];
+
 interface ProcessingOverlayProps {
-  step: string;
-  progress: number;
+  step?: string;
+  progress?: number;
   onCancel?: () => void;
   cyclingMessages?: boolean;
   stepsList?: string[];
 }
 
-export function ProcessingOverlay({ step, progress, onCancel, cyclingMessages, stepsList }: ProcessingOverlayProps) {
-  const defaultSteps = [
-    'جاري حفظ التسجيل...',
-    'جاري استخراج المصطلحات...',
-    'جاري تطبيق القالب...',
-    'جاري تنسيق الملاحظة...',
-    'جاري الإنهاء...',
-  ];
-  const steps = stepsList || defaultSteps;
-
-  let currentStepIndex = steps.indexOf(step);
-  if (currentStepIndex === -1) {
-    const match = steps.findIndex((s) => s.toLowerCase().includes(step.toLowerCase()) || step.toLowerCase().includes(s.toLowerCase()));
-    if (match !== -1) currentStepIndex = match;
-  }
-
+export function ProcessingOverlay({
+  progress = 0,
+  onCancel,
+  stepsList,
+}: ProcessingOverlayProps) {
+  const steps = stepsList || NOTE_PROCESSING_STEPS;
   const isComplete = progress >= 100;
 
+  // ── Elapsed time counter (Increments every 1.5 seconds) ──
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const startTimeRef = useRef(Date.now());
+  const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
     startTimeRef.current = Date.now();
     setElapsedSeconds(0);
     const interval = setInterval(() => {
       setElapsedSeconds((prev) => prev + 1);
-    }, 2000);
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
 
@@ -46,213 +45,238 @@ export function ProcessingOverlay({ step, progress, onCancel, cyclingMessages, s
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const [barProgress, setBarProgress] = useState<number[]>(() => steps.map(() => 0));
+  // ── Smooth Time-Based Step & Progress Controller (0s - 12s+) ──
+  // Step 1: 0s - 4s (Transcribing audio)
+  // Step 2: 4s - 8s (Extracting clinical details)
+  // Step 3: 8s - 12s+ (Formatting final note)
+  const [barProgress, setBarProgress] = useState<number[]>([0, 0, 0]);
+  const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
   const animFrameRef = useRef<number>(0);
-  const lastTimeRef = useRef<number>(0);
 
-  const animateBar = useCallback(
-    (timestamp: number) => {
-      if (!lastTimeRef.current) lastTimeRef.current = timestamp;
-      const delta = timestamp - lastTimeRef.current;
-      lastTimeRef.current = timestamp;
+  const updateProgress = useCallback(() => {
+    const elapsedMs = Date.now() - startTimeRef.current;
 
-      setBarProgress((prev) => {
-        const next = [...prev];
-        let changed = false;
+    if (isComplete) {
+      setBarProgress([100, 100, 100]);
+      setActiveStepIndex(2);
+      return;
+    }
 
-        for (let i = 0; i < steps.length; i++) {
-          if (isComplete) {
-            if (next[i] < 100) {
-              next[i] = Math.min(100, next[i] + delta * 0.5);
-              changed = true;
-            }
-          } else if (i < currentStepIndex) {
-            if (next[i] < 100) {
-              next[i] = Math.min(100, next[i] + delta * 0.4);
-              changed = true;
-            }
-          } else if (i === currentStepIndex) {
-            const target = 90;
-            if (next[i] < target) {
-              const remaining = target - next[i];
-              const speed = Math.max(0.015, remaining * 0.0008);
-              next[i] = Math.min(target, next[i] + delta * speed);
-              changed = true;
-            }
-          } else {
-            if (next[i] !== 0) {
-              next[i] = 0;
-              changed = true;
-            }
-          }
-        }
+    // Determine progress per bar based on timeline
+    const b0 = Math.min(100, (elapsedMs / 4000) * 100);
+    const b1 = elapsedMs < 4000 ? 0 : Math.min(100, ((elapsedMs - 4000) / 4000) * 100);
 
-        return changed ? next : prev;
-      });
+    let b2 = 0;
+    if (elapsedMs >= 8000) {
+      if (elapsedMs <= 12000) {
+        b2 = ((elapsedMs - 8000) / 4000) * 90;
+      } else {
+        const extraTime = elapsedMs - 12000;
+        b2 = Math.min(95, 90 + (extraTime / 5000) * 5);
+      }
+    }
 
-      animFrameRef.current = requestAnimationFrame(animateBar);
-    },
-    [currentStepIndex, isComplete, steps.length],
-  );
+    let currentIdx = 0;
+    if (elapsedMs >= 4000 && elapsedMs < 8000) currentIdx = 1;
+    else if (elapsedMs >= 8000) currentIdx = 2;
+
+    setActiveStepIndex(currentIdx);
+    setBarProgress([b0, b1, b2]);
+
+    animFrameRef.current = requestAnimationFrame(updateProgress);
+  }, [isComplete]);
 
   useEffect(() => {
-    lastTimeRef.current = 0;
-    animFrameRef.current = requestAnimationFrame(animateBar);
+    animFrameRef.current = requestAnimationFrame(updateProgress);
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
-  }, [animateBar]);
+  }, [updateProgress]);
 
+  // Overall visual progress metric
   const totalBars = steps.length;
   const completedBars = barProgress.filter((b) => b >= 100).length;
-  const currentBarContribution = barProgress[currentStepIndex] || 0;
+  const currentBarContrib = barProgress[activeStepIndex] || 0;
   const visualProgress = isComplete
     ? 100
-    : Math.min(99, ((completedBars + currentBarContribution / 100) / totalBars) * 100);
-
-  const [cyclingText, setCyclingText] = useState(step);
-
-  useEffect(() => {
-    if (!cyclingMessages) {
-      setCyclingText(step);
-      return;
-    }
-    setCyclingText(step);
-    const messages = [step, 'جاري تحليل المحتوى...', 'جاري إنشاء المخرجات...', 'جاري تنسيق النتائج...', 'على وشك الانتهاء...'];
-    let idx = 0;
-    const interval = setInterval(() => {
-      idx = (idx + 1) % messages.length;
-      setCyclingText(messages[idx]);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [step, cyclingMessages]);
-
-  const displayStep = cyclingMessages ? cyclingText : step;
-
-  const circleRadius = 44;
-  const circleCircumference = 2 * Math.PI * circleRadius;
-  const strokeDashoffset = circleCircumference - (visualProgress / 100) * circleCircumference;
+    : Math.min(99, Math.round(((completedBars + currentBarContrib / 100) / totalBars) * 100));
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300">
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+        className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-slate-100 dark:border-slate-800"
         style={{ animation: 'overlaySlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
       >
-        <div className="p-8">
-          <div className="text-center mb-8">
-            <div className="relative w-28 h-28 mx-auto mb-6">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r={circleRadius} fill="none" stroke="#E5E7EB" strokeWidth="6" />
+        <div className="p-7">
+          {/* Header Badge */}
+          <div className="flex items-center justify-center mb-6">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60">
+              <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+              AI Clinical Scribe
+            </span>
+          </div>
+
+          {/* ── Static Ring Circle with Internal Glow Pulse & Timer ── */}
+          <div className="text-center mb-6">
+            <div className="relative w-44 h-44 mx-auto flex items-center justify-center">
+              {/* Static Smooth Border Ring (No Spinning Outer Line) */}
+              <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                 <circle
                   cx="50"
                   cy="50"
-                  r={circleRadius}
+                  r="44"
                   fill="none"
-                  stroke="url(#progressGradient)"
-                  strokeWidth="6"
+                  className="stroke-slate-100 dark:stroke-slate-800"
+                  strokeWidth="4"
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="44"
+                  fill="none"
+                  stroke={isComplete ? '#10B981' : 'url(#medicalGradientNext)'}
+                  strokeWidth="4.5"
                   strokeLinecap="round"
-                  strokeDasharray={circleCircumference}
-                  strokeDashoffset={strokeDashoffset}
-                  style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                  strokeDasharray={276.46}
+                  strokeDashoffset={276.46 - (visualProgress / 100) * 276.46}
+                  style={{ transition: 'stroke-dashoffset 0.6s ease-out, stroke 0.4s ease' }}
                 />
                 <defs>
-                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <linearGradient id="medicalGradientNext" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#2563EB" />
-                    <stop offset="100%" stopColor="#14B8A6" />
+                    <stop offset="100%" stopColor="#0D9488" />
                   </linearGradient>
                 </defs>
               </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
+
+              {/* Internal Pulse Effect (Inside Circle Only) */}
+              {!isComplete && (
+                <div
+                  className="absolute inset-4 rounded-full bg-teal-500/10 dark:bg-teal-400/10 pointer-events-none"
+                  style={{ animation: 'innerPulse 2.5s ease-in-out infinite' }}
+                />
+              )}
+
+              {/* Timer & Status Display inside the circle */}
+              <div className="relative z-10 flex flex-col items-center justify-center">
                 {isComplete ? (
                   <div style={{ animation: 'checkmarkPop 0.5s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-                    <svg className="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                    </svg>
+                    <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center">
+                      <svg className="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
                   </div>
                 ) : (
                   <>
                     <span
-                      className="text-2xl font-bold tabular-nums"
-                      style={{
-                        background: 'linear-gradient(135deg, #2563EB, #14B8A6)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                      }}
+                      key={elapsedSeconds}
+                      className="text-4xl font-extrabold tabular-nums tracking-tight text-slate-900 dark:text-white"
+                      style={{ animation: 'numberPop 0.4s ease-out' }}
                     >
                       {formatTime(elapsedSeconds)}
                     </span>
-                    <span className="text-[10px] text-gray-400 font-medium tracking-wider uppercase mt-0.5">
-                      المنقضي
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">
+                      Elapsed Time
                     </span>
                   </>
                 )}
               </div>
             </div>
 
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
-              {isComplete ? 'اكتملت المعالجة!' : 'جاري معالجة الملاحظة'}
+            {/* Dynamic Status Headline */}
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-4 mb-1">
+              {isComplete ? 'Note Ready for Review' : 'Processing Clinical Note'}
             </h3>
-            <p className="text-gray-500 text-sm mb-4" style={{ animation: 'fadeInUp 0.3s ease' }} key={displayStep}>
-              {isComplete ? 'ملاحظتك جاهزة للمراجعة' : displayStep}
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {isComplete
+                ? 'Structured documentation generated successfully'
+                : 'AI model is formatting your clinical encounter'}
             </p>
-
-            <div
-              className="text-3xl font-bold mb-2"
-              style={{
-                background: 'linear-gradient(135deg, #2563EB, #14B8A6)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              {Math.round(visualProgress)}%
-            </div>
           </div>
 
-          <div className="space-y-3">
-            {steps.map((stepText, index) => {
+          {/* ── 3-Step Continuous Progressive Bars (0s - 12s+) ── */}
+          <div className="space-y-3.5 mb-6">
+            {steps.slice(0, 3).map((stepText, index) => {
               const isStepCompleted = barProgress[index] >= 100;
-              const isCurrent = index === currentStepIndex && !isComplete;
-              const isFuture = index > currentStepIndex && !isComplete;
+              const isCurrent = index === activeStepIndex && !isComplete;
+              const icon = STEP_ICONS[index] || '📋';
 
               return (
-                <div key={index} className="flex items-center" style={{ opacity: isFuture ? 0.4 : 1, transition: 'opacity 0.5s ease' }}>
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center me-3 flex-shrink-0 transition-all duration-500 ${
-                      isStepCompleted ? 'bg-green-100 text-green-600 scale-100' : isCurrent ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'
-                    }`}
-                  >
-                    {isStepCompleted ? (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      <span className="text-xs font-semibold">{index + 1}</span>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
+                <div
+                  key={index}
+                  className={`p-3 rounded-2xl border transition-all duration-400 ${
+                    isCurrent
+                      ? 'bg-teal-50/50 dark:bg-teal-950/30 border-teal-200/80 dark:border-teal-800/80 shadow-sm'
+                      : isStepCompleted
+                      ? 'bg-slate-50/80 dark:bg-slate-800/50 border-slate-200/60 dark:border-slate-800'
+                      : 'bg-transparent border-slate-100 dark:border-slate-800/40 opacity-40'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
                     <div
-                      className={`text-sm font-medium transition-colors duration-300 ${
-                        isStepCompleted ? 'text-green-700' : isCurrent ? 'text-blue-700' : 'text-gray-500'
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
+                        isStepCompleted
+                          ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400'
+                          : isCurrent
+                          ? 'bg-teal-600 text-white shadow-md shadow-teal-500/20'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
                       }`}
                     >
-                      {stepText}
+                      {isStepCompleted ? (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span>{icon}</span>
+                      )}
                     </div>
-                    <div className="h-1 bg-gray-100 rounded-full mt-1 overflow-hidden">
-                      <div
-                        className={`h-full rounded-full ${isStepCompleted ? 'bg-green-400' : isCurrent ? 'bg-blue-500' : 'bg-gray-200'}`}
-                        style={{ width: `${barProgress[index]}%`, transition: 'width 0.3s ease-out, background-color 0.4s ease' }}
-                      />
-                      {isCurrent && (
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
+                        <span
+                          className={
+                            isStepCompleted
+                              ? 'text-emerald-700 dark:text-emerald-400'
+                              : isCurrent
+                              ? 'text-slate-900 dark:text-white'
+                              : 'text-slate-400 dark:text-slate-500'
+                          }
+                        >
+                          {stepText}
+                        </span>
+                        <span className="text-[10px] text-slate-400 tabular-nums">
+                          {Math.round(barProgress[index])}%
+                        </span>
+                      </div>
+
+                      <div className="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
                         <div
-                          className="h-full rounded-full -mt-1 overflow-hidden"
+                          className={`h-full rounded-full transition-all ${
+                            isStepCompleted
+                              ? 'bg-emerald-500'
+                              : isCurrent
+                              ? 'bg-gradient-to-r from-blue-600 to-teal-500'
+                              : 'bg-slate-200 dark:bg-slate-700'
+                          }`}
                           style={{
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.15) 50%, transparent 100%)',
-                            animation: 'shimmer 2s infinite',
                             width: `${barProgress[index]}%`,
+                            transition: isCurrent ? 'width 0.1s linear' : 'width 0.3s ease-out',
                           }}
                         />
-                      )}
+                        {isCurrent && (
+                          <div
+                            className="absolute top-0 bottom-0 rounded-full overflow-hidden"
+                            style={{
+                              left: 0,
+                              width: `${barProgress[index]}%`,
+                              background:
+                                'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
+                              animation: 'shimmer 1.8s infinite',
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -260,70 +284,67 @@ export function ProcessingOverlay({ step, progress, onCancel, cyclingMessages, s
             })}
           </div>
 
-          {!isComplete && (
-            <div className="mt-6 text-center text-sm text-gray-500">
-              <div className="flex items-center justify-center gap-2">
-                <div className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500" />
-                </div>
-                <span>يقوم الذكاء الاصطناعي بتحليل تسجيلك...</span>
-              </div>
-            </div>
-          )}
-
           {onCancel && (
-            <div className="mt-6">
+            <div>
               {isComplete ? (
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="w-full font-semibold py-3 rounded-xl text-white transition-all duration-300 hover:shadow-lg active:scale-[0.98]"
-                  style={{ background: 'linear-gradient(135deg, #16A34A, #14B8A6)' }}
+                  className="w-full font-bold py-3 px-4 rounded-2xl text-white shadow-lg shadow-emerald-600/20 transition-all duration-200 hover:opacity-95 active:scale-[0.98]"
+                  style={{ background: 'linear-gradient(135deg, #059669, #0D9488)' }}
                 >
-                  عرض النتائج
+                  View Note Results
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="w-full border-2 border-gray-200 text-gray-600 font-semibold py-3 rounded-xl hover:bg-gray-50 active:scale-[0.98] transition-all duration-200"
+                  className="w-full border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold py-2.5 px-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 active:scale-[0.98] transition-all text-xs"
                 >
-                  إلغاء المعالجة
+                  Cancel Processing
                 </button>
               )}
             </div>
           )}
         </div>
 
-        <div className="bg-gray-50 py-3 px-4 text-center">
-          <div className="text-xs text-gray-500">
-            <div className="flex items-center justify-center gap-4">
-              <div className="flex items-center">
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full me-1.5" />
-                <span>معالجة آمنة</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full me-1.5" />
-                <span>متوافق طبياً</span>
-              </div>
-            </div>
+        <div className="bg-slate-50 dark:bg-slate-800/40 py-2.5 px-4 border-t border-slate-100 dark:border-slate-800 text-center">
+          <div className="flex items-center justify-center gap-4 text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              HIPAA Compliant
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+              Encrypted Stream
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+              Medical AI
+            </span>
           </div>
         </div>
       </div>
 
       <style>{`
         @keyframes overlaySlideUp {
-          from { opacity: 0; transform: translateY(30px) scale(0.96); }
+          from { opacity: 0; transform: translateY(24px) scale(0.97); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
         @keyframes checkmarkPop {
-          from { opacity: 0; transform: scale(0.3); }
+          from { opacity: 0; transform: scale(0.4); }
           to { opacity: 1; transform: scale(1); }
         }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(6px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes numberPop {
+          0% { transform: scale(0.92); opacity: 0.7; }
+          50% { transform: scale(1.04); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes innerPulse {
+          0%, 100% { transform: scale(0.92); opacity: 0.2; }
+          50% { transform: scale(1.08); opacity: 0.6; }
         }
         @keyframes shimmer {
           0% { transform: translateX(-100%); }

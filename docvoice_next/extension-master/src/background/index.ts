@@ -1,6 +1,10 @@
 console.log('ScribeFlow Background Script loaded')
 
-chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+if (typeof chrome !== 'undefined' && chrome.sidePanel && typeof chrome.sidePanel.setPanelBehavior === 'function') {
+  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch((err) => {
+    console.warn('Failed to set side panel behavior:', err)
+  })
+}
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log('ScribeFlow extension installed')
@@ -12,9 +16,9 @@ chrome.runtime.onInstalled.addListener(() => {
 })
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('Background received message:', message.type)
+  console.log('Background received message:', message?.type)
 
-  switch (message.type) {
+  switch (message?.type) {
     case 'PAGE_SCANNED':
       handlePageScanned(message.fields)
       break
@@ -32,20 +36,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return true
 
     default:
-      console.warn('Unknown message type:', message.type)
+      console.warn('Unknown message type:', message?.type)
   }
 
-  return true
+  return false
 })
 
 function handlePageScanned(fields: any[]) {
-  console.log(`Page scanned with ${fields.length} fields`)
+  console.log(`Page scanned with ${fields?.length || 0} fields`)
   
   chrome.storage.local.get(['scanHistory'], (result) => {
     const history = result.scanHistory || []
     history.unshift({
       timestamp: new Date().toISOString(),
-      fieldCount: fields.length,
+      fieldCount: fields?.length || 0,
       url: chrome.tabs ? 'unknown' : 'background'
     })
     
@@ -60,7 +64,7 @@ function handlePageScanned(fields: any[]) {
 function handleInjectionComplete(results: any) {
   console.log('Injection complete:', results)
   
-  if (results.successCount > 0) {
+  if (results && results.successCount > 0) {
     showNotification(
       'ScribeFlow',
       `Successfully filled ${results.successCount} field(s)`,
@@ -82,11 +86,9 @@ function handleClearInjectionHistory(sendResponse: (response: any) => void) {
 }
 
 function showNotification(title: string, message: string, type: 'success' | 'error' | 'info' = 'info') {
-  const icon = type === 'success' ? 'success.png' : type === 'error' ? 'error.png' : 'info.png'
-  
   chrome.notifications.create({
     type: 'basic',
-    iconUrl: `../public/icons/${icon}`,
+    iconUrl: 'icons/icon-48.png',
     title: title,
     message: message,
     priority: 2
@@ -94,20 +96,22 @@ function showNotification(title: string, message: string, type: 'success' | 'err
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete' && tab.url) {
+  if (chrome.runtime.lastError) return
+  if (changeInfo.status === 'complete' && tab && tab.url) {
     console.log('Tab updated:', tab.url)
   }
 })
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
+    if (chrome.runtime.lastError || !tab) return
     console.log('Tab activated:', tab.url)
   })
 })
 
 setInterval(() => {
   chrome.storage.local.get(['authToken'], (result) => {
-    if (result.authToken) {
+    if (result && result.authToken) {
       console.log('Token present, checking validity...')
     }
   })

@@ -1,0 +1,91 @@
+{
+    "endpoint": "PUT|/api/channels/{id}",
+    "method": "PUT",
+    "url": "/api/channels/{id}",
+    "timestamp": "2025-11-24 16:02:55",
+    "success": true,
+    "status_code": 200,
+    "response_time_ms": 2295.47,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 128|53H53k0DyQDvzCOfvJO5ZG9kRA79vpSwdF4T7p9n9bab300d",
+            "X-User-IID": "1"
+        },
+        "payload": {
+            "channel_id": 1,
+            "name": "Test Channel 2887"
+        },
+        "url": "http://localhost:8001/api/channels/457?iid=1"
+    },
+    "response": {
+        "status_code": 200,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Mon, 24 Nov 2025 16:02:57 GMT",
+                "Mon, 24 Nov 2025 16:02:57 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "status": true,
+            "code": 200,
+            "message": "Channel updated successfully",
+            "payload": {
+                "id": 457,
+                "company_id": 20,
+                "name": "Test Channel 2887",
+                "description": "Test channel description",
+                "is_private": false,
+                "created_by": {
+                    "id": 1,
+                    "name": "Test User",
+                    "email": "test@example.com",
+                    "email_verified_at": null,
+                    "created_at": "2025-11-24T16:01:27.000000Z",
+                    "updated_at": "2025-11-24T16:01:27.000000Z",
+                    "company_id": 8,
+                    "profile_image_url": null,
+                    "status": "active",
+                    "is_online": false,
+                    "settings": null,
+                    "last_seen": null,
+                    "role": "admin",
+                    "deleted_at": null
+                },
+                "created_at": "2025-11-24T16:02:53.000000Z",
+                "updated_at": "2025-11-24T16:02:57.000000Z",
+                "company": {
+                    "id": 20,
+                    "name": "Test User Company",
+                    "domain": null,
+                    "invitation_code": null,
+                    "plan_type": "basic",
+                    "created_at": "2025-11-24T16:01:46.000000Z",
+                    "updated_at": "2025-11-24T16:01:46.000000Z"
+                },
+                "members": []
+            }
+        },
+        "raw_body": "{\"status\":true,\"code\":200,\"message\":\"Channel updated successfully\",\"payload\":{\"id\":457,\"company_id\":20,\"name\":\"Test Channel 2887\",\"description\":\"Test channel description\",\"is_private\":false,\"created_by\":{\"id\":1,\"name\":\"Test User\",\"email\":\"test@example.com\",\"email_verified_at\":null,\"created_at\":\"2025-11-24T16:01:27.000000Z\",\"updated_at\":\"2025-11-24T16:01:27.000000Z\",\"company_id\":8,\"profile_image_url\":null,\"status\":\"active\",\"is_online\":false,\"settings\":null,\"last_seen\":null,\"role\":\"admin\",\"deleted_at\":null},\"created_at\":\"2025-11-24T16:02:53.000000Z\",\"updated_at\":\"2025-11-24T16:02:57.000000Z\",\"company\":{\"id\":20,\"name\":\"Test User Company\",\"domain\":null,\"invitation_code\":null,\"plan_type\":\"basic\",\"created_at\":\"2025-11-24T16:01:46.000000Z\",\"updated_at\":\"2025-11-24T16:01:46.000000Z\"},\"members\":[]}}"
+    },
+    "error": null
+}

@@ -1,0 +1,65 @@
+{
+    "endpoint": "PATCH|/api/channels/{id}/mark-read",
+    "method": "PATCH",
+    "url": "/api/channels/{id}/mark-read",
+    "timestamp": "2025-11-24 16:03:06",
+    "success": true,
+    "status_code": 200,
+    "response_time_ms": 1568.91,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 128|53H53k0DyQDvzCOfvJO5ZG9kRA79vpSwdF4T7p9n9bab300d",
+            "X-User-IID": "1"
+        },
+        "payload": {
+            "channel_id": 1,
+            "name": "Test Channel 8981"
+        },
+        "url": "http://localhost:8001/api/channels/457/mark-read?iid=1"
+    },
+    "response": {
+        "status_code": 200,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Mon, 24 Nov 2025 16:03:07 GMT",
+                "Mon, 24 Nov 2025 16:03:07 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "status": true,
+            "code": 200,
+            "message": "Channel marked as read",
+            "payload": {
+                "channel_id": 457,
+                "user_id": 1,
+                "updated_at": "2025-11-24T16:03:07.000000Z",
+                "created_at": "2025-11-24T16:03:07.000000Z",
+                "id": 26,
+                "unread_count": 0,
+                "last_read_at": "2025-11-24T16:03:07.000000Z"
+            }
+        },
+        "raw_body": "{\"status\":true,\"code\":200,\"message\":\"Channel marked as read\",\"payload\":{\"channel_id\":457,\"user_id\":1,\"updated_at\":\"2025-11-24T16:03:07.000000Z\",\"created_at\":\"2025-11-24T16:03:07.000000Z\",\"id\":26,\"unread_count\":0,\"last_read_at\":\"2025-11-24T16:03:07.000000Z\"}}"
+    },
+    "error": null
+}

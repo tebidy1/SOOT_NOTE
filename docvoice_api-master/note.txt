@@ -1,0 +1,1 @@
+ Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/tables" -Method POST -ContentType "application/json" -Body '{"table": "produ", "data": {"name": "iPhone 15", "price": "999", "category_id": 1,"brandt": "Apple"}}'

@@ -23,31 +23,114 @@ function isHeaderLine(line: string): boolean {
   return letters.length >= 2 && letters === letters.toUpperCase()
 }
 
-function lineToHTML(line: string): string {
-  if (line.trim() === '') {
-    return '<div style="min-height:1.1em"><br></div>'
+function humanizeHeader(header: string): string {
+  let human = header.replace(/:$/, '').trim()
+
+  // Exact medical field mappings (backend names → display names)
+  const map: Record<string, string> = {
+    'patientcomplaintstext': 'Patient Complaints',
+    'patientcomplaints': 'Patient Complaints',
+    'patientnotes': 'Patient Notes',
+    'painscore': 'Pain Score',
+    'familyeducation': 'Family Education',
+    'patienthistoryofpresentilness': 'History of Present Illness',
+    'patienthistoryofpresentillness': 'History of Present Illness',
+    'historyofpresentillness': 'History of Present Illness',
+    'patientphisicalexaminition': 'Physical Examination',
+    'patientphysicalexamination': 'Physical Examination',
+    'physicalexamination': 'Physical Examination',
+    'vitalsinvestigation': 'Vitals & Investigation',
+    'vitalsinvestigations': 'Vitals & Investigation',
+    'labsinvestigation': 'Labs & Investigation',
+    'labsinvestigations': 'Labs & Investigation',
+    'assessmentandplan': 'Assessment & Plan',
+    'assessment': 'Assessment',
+    'plan': 'Plan',
+    'impression': 'Impression',
+    'diagnosis': 'Diagnosis',
+    'differentialdiagnosis': 'Differential Diagnosis',
+    'medications': 'Medications',
+    'currentmedications': 'Current Medications',
+    'allergies': 'Allergies',
+    'pastmedicalhistory': 'Past Medical History',
+    'socialhistory': 'Social History',
+    'familyhistory': 'Family History',
+    'reviewofsystems': 'Review of Systems',
+    'chiefcomplaint': 'Chief Complaint',
+    'complaints': 'Complaints',
+    'procedures': 'Procedures',
+    'followup': 'Follow-up',
+    'disposition': 'Disposition',
+    'dischargeinstructions': 'Discharge Instructions',
   }
 
-  if (isHeaderLine(line)) {
-    return `<div style="margin-top:14px;margin-bottom:3px;padding:6px 12px 6px 10px;background:rgba(59,130,246,0.06);border-left:3.5px solid #3b82f6;border-bottom:1px solid rgba(59,130,246,0.12);font-weight:700;color:#1e40af;letter-spacing:0.02em;border-radius:0 4px 4px 0">${escapeHTML(line.trim())}</div>`
-  }
+  const key = human.toLowerCase().replace(/[\s_]/g, '')
+  if (map[key]) return map[key]
 
-  const escaped = escapeHTML(line)
-  // [Not Reported] → red (missing); [?...] → amber (ASR uncertainty needing review)
-  let withTokens = escaped.replace(
-    /\[Not\s+Reported\]/gi,
-    `<span style="color:#ef4444;background:rgba(239,68,68,0.08);font-style:italic;padding:1px 4px;border-radius:3px;cursor:pointer;border:1px solid rgba(239,68,68,0.15)" data-token="not-reported">$&</span>`
-  )
-  withTokens = withTokens.replace(
-    /\[\?[^\]]*\]/g,
-    `<span style="color:#b45309;background:rgba(245,158,11,0.12);font-weight:600;padding:1px 4px;border-radius:3px;cursor:pointer;border:1px solid rgba(245,158,11,0.25)" data-token="uncertain" title="Uncertain transcription — please verify">$&</span>`
-  )
-  return `<div style="padding:1.5px 0;line-height:1.65">${withTokens}</div>`
+  human = human.replace(/^(TXT|DLL|SYS)\s+/i, '')
+  human = human.replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase → spaces
+  human = human.replace(/_/g, ' ')
+  human = human.toLowerCase().replace(/\b\w/g, c => c.toUpperCase())
+  return human
 }
 
 function contentToHTML(content: string): string {
   if (!content.trim()) return ''
-  return content.split('\n').map(lineToHTML).join('')
+  
+  const lines = content.split('\n')
+  const blocks: { header: string | null, lines: string[] }[] = []
+  
+  let currentBlock: { header: string | null, lines: string[] } = { header: null, lines: [] }
+  
+  for (const line of lines) {
+    if (isHeaderLine(line)) {
+      if (currentBlock.header !== null || currentBlock.lines.length > 0) {
+        blocks.push(currentBlock)
+      }
+      currentBlock = { header: line, lines: [] }
+    } else {
+      currentBlock.lines.push(line)
+    }
+  }
+  blocks.push(currentBlock)
+  
+  let html = ''
+  for (const block of blocks) {
+    if (!block.header && block.lines.every(l => !l.trim())) {
+      html += block.lines.map(() => '<div style="min-height:1.1em"><br></div>').join('')
+      continue
+    }
+    
+    let cardInner = ''
+    if (block.header) {
+      const humanHeader = humanizeHeader(block.header)
+      cardInner += `<div class="mb-2 flex items-center font-bold text-slate-900 dark:text-white tracking-wide text-[14px]"><span class="w-1.5 h-3.5 bg-blue-500 dark:bg-blue-400 rounded-full shrink-0 mr-2.5"></span><span contenteditable="false" class="text-slate-900 dark:text-white font-extrabold">${escapeHTML(humanHeader)}:</span></div>`
+    }
+    
+    for (const line of block.lines) {
+      if (!line.trim()) {
+        continue
+      }
+      const escaped = escapeHTML(line)
+      let withTokens = escaped.replace(
+        /\[Not\s+Reported\]/gi,
+        `<span class="text-gray-400 dark:text-slate-500 italic px-1 cursor-pointer text-[13px] font-medium transition-colors hover:text-gray-600 dark:hover:text-slate-300" data-token="not-reported">[No notes added]</span>`
+      )
+      withTokens = withTokens.replace(
+        /\[\?[^\]]*\]/g,
+        `<span class="text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 font-semibold px-2 py-0.5 rounded-md cursor-pointer border border-amber-200 dark:border-amber-900/40 text-xs" data-token="uncertain" title="Uncertain transcription — please verify">$&</span>`
+      )
+      cardInner += `<div class="py-0.5 leading-[1.6] text-gray-800 dark:text-slate-200 text-[13px]">${withTokens}</div>`
+    }
+    
+    if (block.header) {
+      html += `<div class="mb-3 bg-[#F1F5F9] dark:bg-slate-800/40 rounded-xl p-3 border border-transparent dark:border-slate-600 shadow-none transition-colors hover:bg-[#E2E8F0] dark:hover:border-slate-500 group outline-none">${cardInner}</div>`
+    } else {
+      html += cardInner
+    }
+  }
+  
+  return html
 }
 
 // ─── Component ─────────────────────────────────────────────────────────────
@@ -87,7 +170,7 @@ export default function NoteViewer({ content, onChange, placeholder }: NoteViewe
     onChange?.(text)
   }, [onChange])
 
-  // Clicking a [Not Reported] span: select its text content
+  // Click handler: auto-select word under cursor or token for fast editing
   const handleClick = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.dataset.token === 'not-reported') {
@@ -96,7 +179,33 @@ export default function NoteViewer({ content, onChange, placeholder }: NoteViewe
       range.selectNodeContents(target)
       selection?.removeAllRanges()
       selection?.addRange(range)
+      return
     }
+
+    // Do not alter selection if clicking header or non-editable elements
+    if (target.getAttribute('contenteditable') === 'false' || target.closest('[contenteditable="false"]')) return
+
+    // Auto-select full word under cursor on single click
+    setTimeout(() => {
+      const sel = window.getSelection()
+      if (!sel || !sel.rangeCount || !sel.isCollapsed) return
+
+      const anchorNode = sel.anchorNode
+      if (!anchorNode || anchorNode.nodeType !== Node.TEXT_NODE) return
+
+      const text = anchorNode.nodeValue || ''
+      const offset = sel.anchorOffset
+
+      const charAt = text[offset]
+      const charBefore = offset > 0 ? text[offset - 1] : ''
+
+      if ((charAt && !/\s/.test(charAt)) || (charBefore && !/\s/.test(charBefore))) {
+        if (typeof sel.modify === 'function') {
+          sel.modify('move', 'backward', 'word')
+          sel.modify('extend', 'forward', 'word')
+        }
+      }
+    }, 0)
   }, [])
 
   // Handle paste: strip HTML and paste as plain text
@@ -111,14 +220,15 @@ export default function NoteViewer({ content, onChange, placeholder }: NoteViewe
       ref={editorRef}
       contentEditable
       suppressContentEditableWarning
+      dir="ltr"
       onInput={handleInput}
       onClick={handleClick}
       onPaste={handlePaste}
       data-placeholder={placeholder || ''}
-      className="w-full min-h-[300px] p-4 focus:outline-none text-gray-800"
+      className="w-full min-h-[300px] p-3 text-[14px] leading-relaxed text-gray-800 dark:text-slate-200 font-sans focus:outline-none bg-transparent"
       style={{
-        fontFamily: '"SF Mono", "Fira Code", ui-monospace, monospace',
-        fontSize: '13.5px',
+        fontFamily: 'inherit',
+        fontSize: '14px',
         lineHeight: '1.65',
         caretColor: '#3b82f6',
       }}

@@ -1,8 +1,6 @@
 export const ROUTES = {
   LOGIN: '/login',
-  PAIRING: '/pairing',
-  HOME: '/',
-  EDITOR: '/editor',
-  INBOX: '/inbox',
+  HOME: '/',         // Will map to Inbox
+  RECORD: '/record', // Will map to Mic Screen
   NOTE_DETAIL: '/note/:noteId'
 } as const

@@ -11,34 +11,40 @@ interface Message {
 }
 
 chrome.runtime.onMessage.addListener((message: Message, sender, sendResponse) => {
-  console.log('Content script received message:', message.type)
+  console.log('Content script received message:', message?.type)
 
-  switch (message.type) {
+  switch (message?.type) {
     case 'SMART_COPY':
       handleSmartCopy(message.content)
+      if (sendResponse) sendResponse({ success: true })
       break
 
     case 'INJECT_FIELDS':
       handleInjectFields(message.extractedFields, message.fieldMappings)
+      if (sendResponse) sendResponse({ success: true })
       break
 
     case 'INJECT_CONTENT':
       handleInjectContent(message.content, message.template)
+      if (sendResponse) sendResponse({ success: true })
       break
 
     case 'SCAN_PAGE':
       handleScanPage()
+      if (sendResponse) sendResponse({ fields: fieldExtractor.scanPage() })
       break
 
     case 'PREVIEW_FIELDS':
       handlePreviewFields(message.content)
+      if (sendResponse) sendResponse({ success: true })
       break
 
     default:
-      console.warn('Unknown message type:', message.type)
+      console.warn('Unknown message type:', message?.type)
+      if (sendResponse) sendResponse({ success: false, error: 'Unknown message type' })
   }
 
-  return true
+  return false
 })
 
 function handleSmartCopy(content: string) {

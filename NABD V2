@@ -1,0 +1,116 @@
+# خطة التنفيذ: تحديث وهندسة قالب NABD V2 (الـ 15 حقلاً)
+
+الهدف من هذه الخطة هو تصميم وهندسة قالب `NABD V2` ليتوافق تماماً مع الحقول الـ 15 في نظام المستشفى (نظام نبض SOUD NOTE)، مع مراعاة التكامل التام مع **الأمر الهندسي الموحد (Master Unified Prompt)** وتخصيص تعليمات محددة للحقول التي تعمل كـ "قوائم منسدلة" (Dropdowns) لضمان أعلى دقة وسرعة أثناء عملية الحقن (Auto-Fill).
+
+## 1. تحليل التكامل مع الأمر الهندسي الموحد (Unified Prompt Integration)
+
+**الأمر الماستر الموجود حالياً في النظام (`MASTER_REPAIR_FORMAT_PROMPT`):**
+النظام لا يرسل القالب الخاص بنا كأمر منفرد للذكاء الاصطناعي، بل يقوم بحقن قالبنا داخل أمر ماستر ضخم وظيفته الأساسية هي:
+1. ترميم النص صوتياً (Phonetic Repair) وإصلاح الأخطاء الإملائية.
+2. حماية الأرقام (Numeric Integrity) واستخراج بيانات المريض (Patient Info).
+3. تغليف النتيجة النهائية في ظرف JSON مغلق يحتوي على مفتاح `"fields"`.
+
+**شكل الأمر الماستر التقريبي في الكود:**
+```text
+SYSTEM DIRECTIVE: You are an elite AI Medical Scribe with a built-in transcript repair stage...
+Output ONE valid minified JSON object:
+{"repaired_transcript":"...","fields":{"<SECTION_KEY>":"<clinical prose or [Not Reported]>"}}
+
+... Rules for Repair ...
+... Rules for Format ...
+
+TEMPLATE (section keys + extraction guidance):
+{{SELECTED_TEMPLATE_NAME}} <--- هنا يتم حقن القالب الخاص بنا (NABD V2)
+
+RAW ASR TRANSCRIPT:
+{{RAW_TEXT_FROM_WHISPER}}
+```
+
+**الخلاصة من هذا التكامل:**
+الذكاء الاصطناعي مهيأ مسبقاً من الأمر الماستر للالتزام الصارم بالعناوين (Keys) التي سنضعها في القالب وعدم اختراع بيانات (Zero Hallucination). مهمتنا في القالب (Template) هي فقط:
+1. تحديد **العناوين الدقيقة** للحقول.
+2. توجيه **طريقة صياغة** كل حقل (مثلاً: حقل نصي طويل، أم حقل قصير مخصص لقائمة منسدلة).
+
+---
+
+## 2. هندسة القالب الجديد (The Engineered NABD V2 Prompt)
+
+بناءً على طلبك، قمنا بترتيب الحقول الـ 15 بنفس التسلسل المطلوب، مع الانتباه الشديد لـ:
+* **الحقل الأول (Dll_complaints) والحقل الرابع عشر (txt_Diagnosis):** تم توجيه الذكاء الاصطناعي ليقوم بتوليد "مصطلحات طبية قياسية قصيرة جداً" (Standardized concise medical terms) لكي تتطابق بسهولة مع القوائم المنسدلة في نظام المستشفى.
+* **الحقل الرابع (PainScore):** تم توجيهه ليولد رقماً فقط (من 1 إلى 10) لأنه قائمة مسبقة.
+* **الحقل الخامس عشر (DiagnosisSelect2):** مخصص لنوع المرض (Acute / Chronic).
+
+**النص الدقيق للقالب (Prompt) المُراد اعتماده:**
+
+```text
+FORMAT AS: NABD V2 MEDICAL NOTE
+Use structured plain text formatting. Do NOT use markdown.
+
+CRITICAL EXTRACTION RULES:
+- Extract data strictly from the transcript. Do NOT invent information.
+- If a section's information is not mentioned, you MUST write exactly [Not Reported].
+- DO NOT duplicate information across sections.
+
+Dll_complaints:
+- (CRITICAL: This is a dropdown field. Output ONLY a concise, standard medical term for the Chief Complaint. e.g., "Chest Pain", "Headache". No long sentences.)
+
+PatientcomplaintsText:
+- (Detailed description of the patient's complaints, symptoms, onset, and severity.)
+
+txt_PatientNotes:
+- (Any additional patient remarks, subjective feelings, or notes from the patient.)
+
+PainScore:
+- (CRITICAL: Output ONLY a single number from 1 to 10. If not mentioned, write [Not Reported].)
+
+FamilyEducation:
+- (Instructions, education, or return precautions given to the patient or family.)
+
+txt_PatientHistoryOfPresentIlness:
+- (Past medical history, previous surgeries, allergies if part of history, and chronicity of present illness.)
+
+txt_PatientPhisicalExaminition:
+- (Vital signs, general appearance, and system-specific physical examination findings.)
+
+txt_PatientInvestigation:
+- (Laboratory tests drawn, imaging ordered, EKG results, or pending diagnostics.)
+
+txt_PatientMangementplan:
+- (Future management, medications prescribed, disposition, and referrals.)
+
+txt_NoteFromReceptionToDoctor:
+- (Notes regarding arrival, triage, EMS handover, or reception remarks.)
+
+txt_SignificantSign:
+- (Critical patient alerts, strict allergies, or significant warning signs that need immediate attention.)
+
+txt_OtherConditions:
+- (Comorbidities or secondary medical conditions mentioned.)
+
+txt_RecordOfTreatment:
+- (Treatments, medications, or interventions already administered during this visit in the clinic/ER.)
+
+txt_Diagnosis:
+- (CRITICAL: This is a dropdown field. Output ONLY a concise, standard medical term for the Primary Diagnosis (e.g., "Essential Hypertension", "Acute Anterior STEMI"). No long explanations.)
+
+DiagnosisSelect2:
+- (Type of illness classification. Output ONLY "Acute", "Chronic", or "Acute on Chronic" based on context.)
+```
+
+> [!TIP]
+> **ملاحظة حول عناوين الأقسام في القالب:**
+> بدلاً من استخدام العناوين الإنجليزية الطويلة (مثل `PATIENT COMPLAINT`)، قمنا في هذا القالب باستخدام **المعرفات البرمجية الدقيقة (Exact Field IDs)** الموجودة في سيرفر نظامك (مثل `Dll_complaints` و `txt_Diagnosis`).
+> هذا يضمن دقة استخراج (Mapping Accuracy) بنسبة 100% ويمنع أي التباس بين السيرفر والذكاء الاصطناعي.
+
+---
+
+## 3. خطة التنفيذ (Execution Plan)
+
+1. **تحديث قاعدة البيانات:**
+   - سأقوم بإنشاء سكريبت برمجي `update_nabd_exact_15.php` وتمرير القالب الجديد بداخله.
+   - السكريبت سيقوم بالبحث عن أي ماكرو باسم `NABD V2` وتحديث حقل `content` و `ai_instruction` الخاص به بالقالب الجديد.
+2. **التنفيذ (Execution):** سأقوم بتشغيل السكريبت لتطبيق التغيير على جميع الشركات في النظام المحلي.
+3. **التأكيد:** بعد التحديث، ستكون جميع الملاحظات التي تستخدم `NABD V2` مهيأة لإخراج 15 حقلاً بالترتيب الدقيق المطلوب والمُهيأ للقوائم المنسدلة في المستشفى.
+
+### User Review Required
+هل أنت موافق على الصيغة المكتوبة في القالب أعلاه؟ إذا كانت العناوين والتعليمات متوافقة مع رؤيتك لعمل القوائم المنسدلة في المستشفى، يرجى إعطاء الموافقة (Proceed) لأقوم بتنفيذ التحديث في قاعدة البيانات.

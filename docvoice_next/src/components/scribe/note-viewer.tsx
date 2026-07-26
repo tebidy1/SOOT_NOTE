@@ -25,7 +25,7 @@ function lineToHTML(line: string): string {
     return '<div style="min-height:1.1em"><br></div>';
   }
   if (isHeaderLine(line)) {
-    return `<div style="margin-top:14px;margin-bottom:3px;padding:6px 12px 6px 10px;background:rgba(59,130,246,0.06);border-left:3.5px solid #3b82f6;border-bottom:1px solid rgba(59,130,246,0.12);font-weight:700;color:#1e40af;letter-spacing:0.02em;border-radius:0 4px 4px 0">${escapeHTML(line.trim())}</div>`;
+    return `<div class="mt-3.5 mb-1 py-1.5 px-2.5 bg-blue-500/10 dark:bg-blue-500/15 border-l-4 border-blue-500 font-extrabold text-blue-950 dark:text-white text-sm rounded-r-md tracking-wide">${escapeHTML(line.trim())}</div>`;
   }
   const escaped = escapeHTML(line);
   const withTokens = escaped.replace(

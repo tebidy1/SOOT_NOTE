@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Note } from '../../types/note'
 
 interface InboxCardProps {
   note: Note
+  noteNumber?: number
   isSelected: boolean
   showActions: boolean
   onSelect: () => void
@@ -12,244 +14,165 @@ interface InboxCardProps {
   onInjectToPage: () => void
 }
 
+import { useInboxStore } from '../../store/inboxStore'
+
 export default function InboxCard({
   note,
-  isSelected,
-  showActions,
+  noteNumber = 0,
   onSelect,
-  onToggleActions,
-  onDelete,
-  onMarkAsRead,
   onSmartCopy,
   onInjectToPage
 }: InboxCardProps) {
-  const formatDate = (dateString: string) => {
+  const isDraft = note.status === 'pending'
+  const { interactedNotes, setNoteInteraction } = useInboxStore()
+  
+  // Use global interacted state, default to none
+  const actionTaken = interactedNotes[note.id] || 'none'
+
+
+  const formatTime = (dateString: string) => {
     const date = new Date(dateString)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-    const diffHours = Math.floor(diffMs / 3600000)
-    const diffDays = Math.floor(diffMs / 86400000)
+    let hours = date.getHours()
+    const minutes = date.getMinutes()
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12
+    hours = hours ? hours : 12 
+    const strMinutes = minutes < 10 ? '0' + minutes : minutes
+    return `${hours}:${strMinutes} ${ampm}`
+  }
 
-    if (diffMins < 60) {
-      return `${diffMins}m ago`
-    } else if (diffHours < 24) {
-      return `${diffHours}h ago`
-    } else if (diffDays < 7) {
-      return `${diffDays}d ago`
-    } else {
-      return date.toLocaleDateString()
+  const isInteracted = actionTaken === 'copied' || actionTaken === 'injected'
+  const isFailed = note.status === 'failed'
+
+  const getStatusIcon = () => {
+    if (isInteracted || note.status === 'completed') {
+      return (
+        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+        </svg>
+      )
     }
+    return (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      </svg>
+    )
   }
 
-  const getStatusColor = (status: Note['status']) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800'
-      case 'processing':
-        return 'bg-blue-100 text-blue-800'
-      case 'pending':
-        return 'bg-amber-100 text-amber-800'
-      case 'failed':
-        return 'bg-red-100 text-red-800'
-      default:
-        return 'bg-gray-100 text-gray-800'
-    }
+  const getBadgeLabel = () => {
+    if (actionTaken === 'copied') return 'COPIED'
+    if (actionTaken === 'injected') return 'INJECTED'
+    if (isFailed) return 'FAILED'
+    return 'WAITING'
   }
 
-  const getStatusIcon = (status: Note['status']) => {
-    switch (status) {
-      case 'completed':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-          </svg>
-        )
-      case 'processing':
-        return (
-          <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        )
-      case 'pending':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        )
-      case 'failed':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        )
-      default:
-        return null
-    }
-  }
-
-  const getPreviewText = (text: string) => {
-    if (!text) return ''
-    const plainText = text.replace(/\[([^\]]+)\]/g, '$1')
-    return plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText
-  }
-
-  const displayText = note.formattedText || note.rawText || note.content
-  const displayTitle = `Note #${note.id}`
+  const displayText = note.formattedText || note.rawText || note.content || ''
+  const displayTitle = noteNumber > 0 ? `NO-${noteNumber}` : 'Draft Note'
 
   return (
     <div 
       onClick={onSelect}
-      className={`relative bg-white rounded-xl shadow-sm border-2 transition-all duration-200 cursor-pointer ${
-      isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
-    }`}>
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-semibold text-gray-900 truncate">{displayTitle}</h3>
-              {note.status === 'pending' && (
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              )}
+      className={`mb-3 bg-[#F1F5F9] dark:bg-[#1E293B] rounded-lg cursor-pointer overflow-hidden flex shadow-none border border-transparent dark:border-[#334155] hover:bg-[#E2E8F0] dark:hover:bg-[#283548] transition-all`}
+    >
+      {/* Side Color Bar */}
+      <div className={`w-1 shrink-0 ${
+        isFailed ? 'bg-red-500' : isInteracted ? 'bg-blue-400/40 dark:bg-blue-500/30' : 'bg-blue-500'
+      }`}></div>
+
+      {/* Main Content */}
+      <div className="flex-1 px-4 py-3 min-w-0">
+        
+        {/* Row 1: Icon, Title, Action */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center space-x-3">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              isFailed
+                ? 'bg-red-500/20 text-red-500'
+                : isInteracted
+                ? 'bg-blue-500/10 text-blue-500/60 dark:bg-blue-500/15 dark:text-blue-400/60'
+                : 'bg-blue-500/20 text-blue-500 dark:text-blue-400'
+            }`}>
+              {getStatusIcon()}
             </div>
-            
-            <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-              {getPreviewText(displayText)}
-            </p>
-            
-            <div className="flex items-center space-x-4 text-xs text-gray-500">
-              <div className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{formatDate(note.createdAt)}</span>
-              </div>
-              
-              {note.audioPath && (
-                <div className="flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                  </svg>
-                  <span>Audio</span>
-                </div>
-              )}
-            </div>
+            <span className={`text-[16px] ${isDraft ? 'font-medium italic text-gray-700 dark:text-gray-400' : 'font-semibold text-gray-900 dark:text-slateDark-text'}`}>
+              {displayTitle}
+            </span>
           </div>
-          
-          <div className="flex items-center space-x-2">
-            <div className={`px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${getStatusColor(note.status)}`}>
-              {getStatusIcon(note.status)}
-              <span className="capitalize">{note.status}</span>
-            </div>
-            
+
+          <div className="flex items-center space-x-1">
+            {/* Inject Button */}
+            {!isDraft && note.status === 'completed' && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setNoteInteraction(note.id, 'injected')
+                  if (onInjectToPage) onInjectToPage()
+                }}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  actionTaken === 'injected'
+                    ? 'bg-blue-100/70 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+                    : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-500 dark:hover:text-blue-400 dark:hover:bg-blue-900/20'
+                }`} title="Inject to Page"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                </svg>
+              </button>
+            )}
+
+            {/* Copy Button */}
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                onToggleActions()
+                if (!isDraft) {
+                  setNoteInteraction(note.id, 'copied')
+                  onSmartCopy()
+                }
               }}
-              className="p-1 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+              disabled={isDraft}
+              className={`p-1.5 rounded-lg transition-colors ${
+                actionTaken === 'copied'
+                  ? 'bg-blue-100/70 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+                  : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-500 dark:hover:text-blue-400 dark:hover:bg-blue-900/20'
+              }`} title={isDraft ? "Select a template first" : "Copy to Clipboard"}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
             </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-end mt-2">
+        {/* Row 2: Preview Text */}
+        <div className="mb-3">
+          <p className={`text-[14px] leading-[1.4] line-clamp-2 transition-all duration-300 ${
+            isInteracted
+              ? 'text-gray-500 dark:text-[#64748B] font-normal' // Matte
+              : 'text-gray-800 dark:text-gray-200 font-normal' // Matches NoteViewer (clear, normal weight)
+          }`}>
+            {displayText}
+          </p>
+        </div>
+
+        {/* Row 3: Time & Badge */}
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            {note.status === 'completed' && (
-              <>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onSmartCopy()
-                  }}
-                  className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
-                >
-                  Smart Copy
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onInjectToPage()
-                  }}
-                  className="text-xs bg-teal-50 text-teal-700 px-2 py-1 rounded hover:bg-teal-100 transition-colors"
-                >
-                  Inject
-                </button>
-              </>
-            )}
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
+              isFailed
+                ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                : isInteracted
+                ? 'bg-blue-100/40 text-blue-600/75 dark:bg-blue-900/20 dark:text-blue-400/60'
+                : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+            }`}>
+              {getBadgeLabel()}
+            </span>
+            <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
+              {formatTime(note.createdAt)}
+            </span>
           </div>
         </div>
-      </div>
 
-      {showActions && (
-        <div 
-          className="absolute top-full right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="py-1">
-            <button
-              onClick={() => {
-                onMarkAsRead()
-                onToggleActions()
-              }}
-              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Mark as Read
-            </button>
-            
-            {note.status === 'completed' && (
-              <>
-                <button
-                  onClick={() => {
-                    onSmartCopy()
-                    onToggleActions()
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                  Smart Copy
-                </button>
-                
-                <button
-                  onClick={() => {
-                    onInjectToPage()
-                    onToggleActions()
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                  </svg>
-                  Inject to Page
-                </button>
-              </>
-            )}
-            
-            <div className="border-t border-gray-200 my-1"></div>
-            
-            <button
-              onClick={() => {
-                onDelete()
-                onToggleActions()
-              }}
-              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center"
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-              Delete Note
-            </button>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

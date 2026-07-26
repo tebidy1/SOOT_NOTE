@@ -659,22 +659,18 @@ export default function NoteDetailScreen() {
         />
       )}
 
-      {/* Header — pinned at top, never scrolls. Removed hard borders. */}
+      {/* Header — pinned at top, never scrolls. Back left, Logo right. */}
       <div className="flex items-center justify-between px-4 py-3 bg-white/90 dark:bg-[#0F172A]/90 backdrop-blur-sm flex-shrink-0 z-30">
-        <div className="flex items-center space-x-3">
-          <Logo className="h-11 w-auto" variant={theme === 'dark' ? 'light' : 'dark'} />
-        </div>
-        <div className="flex items-center space-x-2 flex-shrink-0">
-          <button
-            onClick={handleBack}
-            className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-semibold px-3 py-1.5 bg-[#F1F5F9] dark:bg-[#1E293B]/80 border border-slate-200 dark:border-slate-700 rounded-lg shadow-none text-sm transition-all"
-          >
-            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            Back
-          </button>
-        </div>
+        <button
+          onClick={handleBack}
+          className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-semibold px-3 py-1.5 bg-[#F1F5F9] dark:bg-[#1E293B]/80 border border-slate-200 dark:border-slate-700 rounded-lg text-sm transition-all"
+        >
+          <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+        <Logo className="h-11 w-auto" variant={theme === 'dark' ? 'light' : 'dark'} />
       </div>
 
 
@@ -993,6 +989,7 @@ export default function NoteDetailScreen() {
             <textarea
               value={editorContent}
               onChange={(e) => setEditorContent(e.target.value)}
+              dir="ltr"
               className="w-full min-h-[300px] p-5 text-[14px] leading-relaxed text-gray-800 dark:text-slate-200 font-sans resize-none focus:outline-none bg-white dark:bg-[#1E293B]"
               placeholder="Raw transcript text..."
               spellCheck={false}

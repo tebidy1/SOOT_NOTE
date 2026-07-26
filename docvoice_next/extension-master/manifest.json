@@ -15,7 +15,13 @@
     "<all_urls>"
   ],
   "action": {
-    "default_title": "SoutNote"
+    "default_title": "SoutNote",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
   },
   "side_panel": {
     "default_path": "index.html"
@@ -33,17 +39,17 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["popup/*"],
+      "resources": ["popup/*", "assets/*", "icons/*", "pcm-worklet.js", "public/*", "index.html"],
       "matches": ["<all_urls>"]
     }
   ],
   "icons": {
-    "16": "public/icons/icon.svg",
-    "32": "public/icons/icon.svg",
-    "48": "public/icons/icon.svg",
-    "128": "public/icons/icon.svg"
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://assets9.lottiefiles.com https://lottie.host https://*.lottiefiles.com https://docapi.sootnote.com wss://docapi.sootnote.com https://*.oci.oraclecloud.com wss://*.oci.oraclecloud.com;"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:8002 http://127.0.0.1:8002 ws://localhost:8002 https://assets9.lottiefiles.com https://lottie.host https://*.lottiefiles.com https://*.oci.oraclecloud.com wss://*.oci.oraclecloud.com;"
   }
 }

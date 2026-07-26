@@ -4,7 +4,7 @@ import { CreateNoteData } from '../types/note'
 import { useAuthStore } from '../store/authStore'
 import { platform } from '../platform'
 
-const API_BASE_URL = 'http://localhost:8002/api'
+const API_BASE_URL = 'http://127.0.0.1:8002/api'
 
 class ApiClient {
   private client: AxiosInstance
@@ -193,17 +193,43 @@ class ApiClient {
   }
 
   async initiatePairing(): Promise<ApiResponse<{ pairing_id: string; short_code: string; expires_in: number }>> {
-    return this.request({
+    const response = await this.request({
       method: 'GET',
       url: '/pairing/initiate'
     })
+
+    if (response.success && !response.data && (response as any).pairing_id) {
+      return {
+        success: true,
+        data: {
+          pairing_id: (response as any).pairing_id,
+          short_code: (response as any).short_code,
+          expires_in: (response as any).expires_in
+        }
+      }
+    }
+
+    return response
   }
 
   async checkPairingStatus(pairingId: string): Promise<ApiResponse<{ status: 'pending' | 'authorized'; token?: string; user?: any }>> {
-    return this.request({
+    const response = await this.request({
       method: 'GET',
       url: `/pairing/check/${pairingId}`
     })
+
+    if (response.success && !response.data && (response as any).status) {
+      return {
+        success: true,
+        data: {
+          status: (response as any).status,
+          token: (response as any).token,
+          user: (response as any).user
+        }
+      }
+    }
+
+    return response
   }
 
   async authorizePairing(pairingId: string, deviceName: string): Promise<ApiResponse<{ message: string }>> {

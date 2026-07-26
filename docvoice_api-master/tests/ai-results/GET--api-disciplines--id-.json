@@ -1,0 +1,64 @@
+{
+    "endpoint": "GET|/api/disciplines/{id}",
+    "method": "GET",
+    "url": "/api/disciplines/{id}",
+    "timestamp": "2025-11-23 08:21:37",
+    "success": true,
+    "status_code": 200,
+    "response_time_ms": 3180.23,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 104|mF1Hw3nJgx9YQJlwS909MWZh5YlSegLKjWPl90u5364f31d2",
+            "X-User-IID": "1"
+        },
+        "payload": [],
+        "url": "http://localhost:8001/api/disciplines/1?iid=1"
+    },
+    "response": {
+        "status_code": 200,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Sun, 23 Nov 2025 08:21:40 GMT",
+                "Sun, 23 Nov 2025 08:21:39 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "status": true,
+            "code": 200,
+            "message": "Resource retrieved successfully",
+            "payload": {
+                "id": 1,
+                "company_id": 7,
+                "name": "Test Discipline 4870",
+                "description": "Test discipline description",
+                "code": "DISC119",
+                "color": null,
+                "created_at": "2025-11-23T07:51:32.000000Z",
+                "updated_at": "2025-11-23T07:51:32.000000Z",
+                "company": null
+            }
+        },
+        "raw_body": "{\"status\":true,\"code\":200,\"message\":\"Resource retrieved successfully\",\"payload\":{\"id\":1,\"company_id\":7,\"name\":\"Test Discipline 4870\",\"description\":\"Test discipline description\",\"code\":\"DISC119\",\"color\":null,\"created_at\":\"2025-11-23T07:51:32.000000Z\",\"updated_at\":\"2025-11-23T07:51:32.000000Z\",\"company\":null}}"
+    },
+    "error": null
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار API الخطة مع المهام</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 15px; margin: 5px; background: #007cba; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #005a87; }
+        .result { margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 3px; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+        input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 3px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        .task-item { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 3px; }
+        .assignee { display: inline-block; margin: 2px; padding: 2px 6px; background: #e3f2fd; border-radius: 3px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>اختبار API الخطة مع المهام والمسندين</h1>
+    
+    <div class="test-section">
+        <h2>جلب خطة محددة مع المهام والمسندين</h2>
+        <label>معرف الخطة:</label>
+        <input type="number" id="plan_id" value="1" placeholder="معرف الخطة">
+        <button onclick="getPlan()">جلب الخطة</button>
+        <div id="planResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>جلب جميع الخطط</h2>
+        <button onclick="getAllPlans()">جلب جميع الخطط</button>
+        <div id="allPlansResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+        
+        async function getPlan() {
+            const planId = document.getElementById('plan_id').value;
+            try {
+                const response = await fetch(`${API_BASE}/plans/plan/${planId}`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                // تنسيق النتيجة لعرض أفضل
+                let formattedResult = JSON.stringify(result, null, 2);
+                
+                // إذا كانت هناك مهام، اعرضها بشكل منظم
+                if (result.payload && result.payload.tasks) {
+                    formattedResult += '\n\n=== المهام والمسندين ===\n';
+                    result.payload.tasks.forEach((task, index) => {
+                        formattedResult += `\nالمهمة ${index + 1}:\n`;
+                        formattedResult += `- العنوان: ${task.title}\n`;
+                        formattedResult += `- الحالة: ${task.status}\n`;
+                        formattedResult += `- مكتملة: ${task.completed ? 'نعم' : 'لا'}\n`;
+                        formattedResult += `- الأولوية: ${task.priority}\n`;
+                        if (task.due_date) {
+                            formattedResult += `- تاريخ الاستحقاق: ${task.due_date}\n`;
+                        }
+                        if (task.assignees && task.assignees.length > 0) {
+                            formattedResult += `- المسندين: `;
+                            task.assignees.forEach((assignee, i) => {
+                                formattedResult += `${assignee.name} (ID: ${assignee.id})`;
+                                if (i < task.assignees.length - 1) formattedResult += ', ';
+                            });
+                            formattedResult += '\n';
+                        } else {
+                            formattedResult += `- المسندين: لا يوجد\n`;
+                        }
+                    });
+                }
+                
+                document.getElementById('planResult').textContent = formattedResult;
+            } catch (error) {
+                document.getElementById('planResult').textContent = 'خطأ: ' + error.message;
+            }
+        }
+        
+        async function getAllPlans() {
+            try {
+                const response = await fetch(`${API_BASE}/plans/all`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                document.getElementById('allPlansResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('allPlansResult').textContent = 'خطأ: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

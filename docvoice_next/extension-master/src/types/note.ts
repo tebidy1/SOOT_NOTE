@@ -75,6 +75,15 @@ export interface NoteReview {
   passed: boolean
   missing_numbers: string[]
   suspicious_ranges: string[]
+  // Uppercase acronyms (BNP, CBC...) in the note but absent from the raw ASR.
+  unverified_entities?: string[]
+  // Long lowercase clinical terms (procalcitonin, albuterol...) in critical
+  // fields that lack any exact / stem / phonetic match in the raw ASR.
+  unverified_terms?: string[]
+  // Polarity reversals: anchor terms whose negation state in the note
+  // disagrees with the raw ASR (e.g. doctor said "denies chest pain",
+  // note asserts "chest pain present"). Format: "term (field: direction)".
+  polarity_flags?: string[]
   unverified?: boolean
 }
 
@@ -105,6 +114,9 @@ export interface Note {
   outputs: NoteOutput[]
   fieldMappings?: FieldMapping[]
   review?: NoteReview | null
+  // Deterministic verification of the injection data (field_mappings) against
+  // the raw ASR — shown on the injection-preview tab, separate from `review`.
+  fieldReview?: NoteReview | null
   aiFlags?: AiFlag[]
   company?: NoteCompany
   user?: NoteUser
@@ -133,6 +145,7 @@ export interface TemplateField {
 export interface CreateNoteData {
   raw_text: string
   formatted_text?: string
+  doctor_specialty?: string
   patient_name?: string
   summary?: string | null
   audio_path?: string

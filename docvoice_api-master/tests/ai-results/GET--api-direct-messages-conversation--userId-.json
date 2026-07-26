@@ -1,0 +1,87 @@
+{
+    "endpoint": "GET|/api/direct-messages/conversation/{userId}",
+    "method": "GET",
+    "url": "/api/direct-messages/conversation/{userId}",
+    "timestamp": "2025-11-24 16:03:44",
+    "success": true,
+    "status_code": 200,
+    "response_time_ms": 2407.2,
+    "request": {
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer 128|53H53k0DyQDvzCOfvJO5ZG9kRA79vpSwdF4T7p9n9bab300d",
+            "X-User-IID": "1"
+        },
+        "payload": [],
+        "url": "http://localhost:8001/api/direct-messages/conversation/1?iid=1"
+    },
+    "response": {
+        "status_code": 200,
+        "headers": {
+            "Host": [
+                "localhost:8001"
+            ],
+            "Date": [
+                "Mon, 24 Nov 2025 16:03:46 GMT",
+                "Mon, 24 Nov 2025 16:03:46 GMT"
+            ],
+            "Connection": [
+                "close"
+            ],
+            "X-Powered-By": [
+                "PHP/8.2.4"
+            ],
+            "Cache-Control": [
+                "no-cache, private"
+            ],
+            "Content-Type": [
+                "application/json"
+            ],
+            "Vary": [
+                "Origin"
+            ]
+        },
+        "body": {
+            "status": true,
+            "code": 200,
+            "message": "Conversation retrieved successfully",
+            "payload": {
+                "current_page": 1,
+                "data": [],
+                "first_page_url": "http://localhost:8001/api/direct-messages/conversation/1?page=1",
+                "from": null,
+                "last_page": 1,
+                "last_page_url": "http://localhost:8001/api/direct-messages/conversation/1?page=1",
+                "links": [
+                    {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "page": null,
+                        "active": false
+                    },
+                    {
+                        "url": "http://localhost:8001/api/direct-messages/conversation/1?page=1",
+                        "label": "1",
+                        "page": 1,
+                        "active": true
+                    },
+                    {
+                        "url": null,
+                        "label": "Next &raquo;",
+                        "page": null,
+                        "active": false
+                    }
+                ],
+                "next_page_url": null,
+                "path": "http://localhost:8001/api/direct-messages/conversation/1",
+                "per_page": 50,
+                "prev_page_url": null,
+                "to": null,
+                "total": 0
+            }
+        },
+        "raw_body": "{\"status\":true,\"code\":200,\"message\":\"Conversation retrieved successfully\",\"payload\":{\"current_page\":1,\"data\":[],\"first_page_url\":\"http:\\/\\/localhost:8001\\/api\\/direct-messages\\/conversation\\/1?page=1\",\"from\":null,\"last_page\":1,\"last_page_url\":\"http:\\/\\/localhost:8001\\/api\\/direct-messages\\/conversation\\/1?page=1\",\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"page\":null,\"active\":false},{\"url\":\"http:\\/\\/localhost:8001\\/api\\/direct-messages\\/conversation\\/1?page=1\",\"label\":\"1\",\"page\":1,\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"page\":null,\"active\":false}],\"next_page_url\":null,\"path\":\"http:\\/\\/localhost:8001\\/api\\/direct-messages\\/conversation\\/1\",\"per_page\":50,\"prev_page_url\":null,\"to\":null,\"total\":0}}"
+    },
+    "error": null
+}

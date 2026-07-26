@@ -29,6 +29,9 @@ class InboxNote extends Model
         'raw_text',
         'original_text',
         'formatted_text',
+        'repaired_transcript',
+        'repair_flags',
+        'repair_patient_info',
         'audio_path',
         'patient_name',
         'summary',
@@ -42,6 +45,8 @@ class InboxNote extends Model
      */
     protected $casts = [
         'status' => InboxStatus::class,
+        'repair_flags' => 'array',
+        'repair_patient_info' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

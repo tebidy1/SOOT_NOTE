@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useInboxStore } from '../../store/inboxStore'
+import { useSettingsStore } from '../../store/settingsStore'
 import { ROUTES } from '../routes'
 import InboxCard from '../components/InboxCard'
 import BottomNav from '../components/BottomNav'
@@ -10,6 +11,7 @@ import Logo from '../components/Logo'
 export default function InboxScreen() {
   const navigate = useNavigate()
   const { notes, isLoading, unreadCount, selectedNoteId, pagination } = useInboxStore()
+  const { theme } = useSettingsStore()
   const [filter, setFilter] = useState<'all' | 'unread' | 'completed' | 'pending'>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [showActions, setShowActions] = useState<string | null>(null)
@@ -73,197 +75,115 @@ export default function InboxScreen() {
 
   const handleInjectToPage = (noteId: string) => {
     const note = notes.find(n => n.id === noteId)
-    if (note) {
-      const injectText = note.formattedText || note.rawText || note.content
+    if (!note) return
+    const injectText = note.formattedText || note.rawText || note.content
+    if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0].id) {
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: 'INJECT_CONTENT',
-            content: injectText
-          })
+        if (tabs[0]?.id) {
+          chrome.tabs.sendMessage(tabs[0].id, { type: 'INJECT_CONTENT', content: injectText })
         }
       })
+    } else {
+      navigator.clipboard.writeText(injectText || '')
     }
   }
 
-  const filters = [
-    { id: 'all', label: 'All', count: notes.length },
-    { id: 'unread', label: 'Unread', count: unreadCount },
-    { id: 'completed', label: 'Completed', count: notes.filter(n => n.status === 'completed').length },
-    { id: 'pending', label: 'Pending', count: notes.filter(n => n.status === 'pending').length }
-  ]
+  const formatGroupDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffDays = Math.floor(diffMs / 86400000)
+    
+    if (diffDays === 0) return 'TODAY'
+    if (diffDays === 1) return 'YESTERDAY'
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()
+  }
+
+  // Group notes by date
+  const groupedNotes: { [key: string]: typeof filteredNotes } = {}
+  filteredNotes.forEach(note => {
+    const groupKey = formatGroupDate(note.createdAt)
+    if (!groupedNotes[groupKey]) groupedNotes[groupKey] = []
+    groupedNotes[groupKey].push(note)
+  })
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <Logo className="h-12 w-auto" variant="dark" />
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={handleRefresh}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
-              disabled={isLoading}
-            >
-              <svg className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </button>
-            
-            <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                {unreadCount > 0 ? unreadCount : '0'}
-              </div>
-              {unreadCount > 0 && (
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {unreadCount}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+    <div className="h-screen bg-white dark:bg-[#0F172A] pb-[60px] flex flex-col">
+      {/* Sticky Header - Removed hard bottom border */}
+      <div className="sticky top-0 z-10 bg-white/90 dark:bg-[#0F172A]/90 backdrop-blur-sm flex items-center justify-between px-4 pt-4 pb-2">
+        <Logo className="h-11 w-auto" variant={theme === 'dark' ? 'light' : 'dark'} />
+        <button className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" title="View Archive">
+          <svg className="w-6 h-6 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+          </svg>
+        </button>
+      </div>
 
-        <div className="mb-6">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search notes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <div className="absolute left-3 top-3.5 text-gray-400">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="mb-6 relative">
-          {/* Filters Wrapper with fading edge indicators */}
-          <div className="relative overflow-hidden">
-            <div className="flex space-x-2 overflow-x-auto scrollbar-hide py-1 pr-8">
-              {filters.map((filterItem) => (
-                <button
-                  key={filterItem.id}
-                  onClick={() => setFilter(filterItem.id as any)}
-                  className={`
-                    flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm
-                    ${filter === filterItem.id
-                      ? 'bg-blue-600 text-white shadow-blue-100'
-                      : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-gray-150 border border-gray-200'
-                    }
-                  `}
-                >
-                  <span>{filterItem.label}</span>
-                  {filterItem.count > 0 && (
-                    <span className={`ml-2 px-1.5 py-0.5 text-xs rounded-full ${
-                      filter === filterItem.id
-                        ? 'bg-blue-800 text-blue-100'
-                        : 'bg-gray-200 text-gray-600'
-                    }`}>
-                      {filterItem.count}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-            {/* Edge fades for modern horizontal scroll hint */}
-            <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-blue-50 to-transparent pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-blue-50 to-transparent pointer-events-none" />
-          </div>
-        </div>
-
+      <div className="p-4 flex-1 flex flex-col overflow-hidden">
         {isLoading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading your notes...</p>
+          <div className="flex-1 flex flex-col items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
           </div>
         ) : filteredNotes.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No notes found</h3>
-            <p className="text-gray-600 mb-6">
-              {searchQuery
-                ? 'No notes match your search'
-                : filter !== 'all'
-                ? `No ${filter} notes`
-                : 'Start by recording your first note'}
-            </p>
-            {!searchQuery && filter === 'all' && (
-              <button
-                onClick={() => navigate(ROUTES.HOME)}
-                className="bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-700 hover:to-teal-600 transition-colors"
-              >
-                Record New Note
-              </button>
-            )}
+          <div className="flex-1 flex items-center justify-center">
+            <p className="text-gray-400 dark:text-gray-500 text-[15px]">All caught up!</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {filteredNotes.map((note) => (
-              <InboxCard
-                key={note.id}
-                note={note}
-                isSelected={selectedNoteId === note.id}
-                showActions={showActions === note.id}
-                onSelect={() => handleNoteClick(note.id)}
-                onToggleActions={() => setShowActions(showActions === note.id ? null : note.id)}
-                onDelete={() => handleDeleteNote(note.id)}
-                onMarkAsRead={() => handleMarkAsRead(note.id)}
-                onSmartCopy={() => handleSmartCopy(note.id)}
-                onInjectToPage={() => handleInjectToPage(note.id)}
-              />
+          <div className="flex-1 overflow-y-auto pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {Object.entries(groupedNotes).map(([groupTitle, notesInGroup]) => (
+              <div key={groupTitle}>
+                <div className="px-1 py-2 mb-1">
+                  <span className="text-blue-500 dark:text-[#38BDF8] font-bold text-[12px] tracking-[1.2px]">
+                    {groupTitle}
+                  </span>
+                </div>
+                <div>
+                  {notesInGroup.map((note, index) => (
+                    <InboxCard
+                      key={note.id}
+                      note={note}
+                      noteNumber={notes.length - notes.findIndex(n => n.id === note.id)}
+                      isSelected={selectedNoteId === note.id}
+                      showActions={showActions === note.id}
+                      onSelect={() => handleNoteClick(note.id)}
+                      onToggleActions={() => setShowActions(showActions === note.id ? null : note.id)}
+                      onDelete={() => handleDeleteNote(note.id)}
+                      onMarkAsRead={() => handleMarkAsRead(note.id)}
+                      onSmartCopy={() => handleSmartCopy(note.id)}
+                      onInjectToPage={() => handleInjectToPage(note.id)}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
 
-        {pagination && pagination.last_page > 1 && (
-          <div className="flex items-center justify-between mt-6 px-2">
+        {filteredNotes.length > 0 && pagination && (
+          <div className="absolute bottom-[65px] right-4 bg-[#F8FAFC]/95 dark:bg-slateDark-hover/95 backdrop-blur shadow-[0_2px_12px_rgba(15,23,42,0.06)] rounded-full px-3 py-1.5 flex items-center space-x-2 z-10 border border-slate-200/80 dark:border-slateDark-divider">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage <= 1 || isLoading}
-              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-1 text-gray-600 dark:text-gray-300 disabled:opacity-30 hover:bg-gray-100 dark:hover:bg-slateDark-border rounded-full transition-colors"
             >
-              <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <span className="text-sm text-gray-600">
+            <span className="text-[12px] font-bold text-gray-800 dark:text-slateDark-text">
               {currentPage} / {pagination.last_page}
             </span>
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage >= pagination.last_page || isLoading}
-              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-1 text-gray-600 dark:text-gray-300 disabled:opacity-30 hover:bg-gray-100 dark:hover:bg-slateDark-border rounded-full transition-colors"
             >
-              <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
         )}
-
-        <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Notes are automatically synced every 5 minutes</p>
-        </div>
       </div>
 
       <BottomNav activeRoute="inbox" />

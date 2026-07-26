@@ -15,10 +15,11 @@ function App() {
   const { theme } = useSettingsStore()
 
   useEffect(() => {
+    document.documentElement.classList.remove('dark', 'semi-light')
     if (theme === 'dark') {
       document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
+    } else if (theme === 'semi-light') {
+      document.documentElement.classList.add('semi-light')
     }
   }, [theme])
 

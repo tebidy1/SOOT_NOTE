@@ -90,8 +90,8 @@ export function InboxCard({ note, isSelected, showActions, onSelect, onToggleAct
   return (
     <div
       onClick={onSelect}
-      className={`relative bg-white rounded-xl shadow-sm border-2 transition-all duration-200 cursor-pointer ${
-        isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
+      className={`relative bg-[#F0F4F8] dark:bg-[#1E293B] rounded-xl shadow-sm border transition-all duration-200 cursor-pointer ${
+        isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30' : 'border-slate-300/70 dark:border-slate-700 hover:bg-[#E6ECF2] dark:hover:bg-[#283548]'
       }`}
     >
       <div className="p-4">

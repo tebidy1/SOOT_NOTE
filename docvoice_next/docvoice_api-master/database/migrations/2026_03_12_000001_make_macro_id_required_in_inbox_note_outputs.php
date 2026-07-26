@@ -19,21 +19,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First, drop the existing foreign key constraint
-        // The constraint name follows Laravel's convention: {table}_{columns}_foreign
-        DB::statement('ALTER TABLE inbox_note_outputs DROP FOREIGN KEY inbox_note_outputs_macro_id_foreign');
-        
-        // Update any NULL macro_id values to a valid default or delete them
-        // Here we delete rows with NULL macro_id (can't have required field without valid macro)
-        DB::table('inbox_note_outputs')
-            ->whereNull('macro_id')
-            ->delete();
-        
-        // Now change the column to NOT NULL
-        DB::statement('ALTER TABLE inbox_note_outputs MODIFY macro_id BIGINT UNSIGNED NOT NULL');
-        
-        // Re-add the foreign key constraint with RESTRICT (prevent deletion of macros with outputs)
-        DB::statement('ALTER TABLE inbox_note_outputs ADD CONSTRAINT inbox_note_outputs_macro_id_foreign FOREIGN KEY (macro_id) REFERENCES macros(id) ON DELETE RESTRICT');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE inbox_note_outputs DROP FOREIGN KEY inbox_note_outputs_macro_id_foreign');
+            
+            DB::table('inbox_note_outputs')
+                ->whereNull('macro_id')
+                ->delete();
+            
+            DB::statement('ALTER TABLE inbox_note_outputs MODIFY macro_id BIGINT UNSIGNED NOT NULL');
+            
+            DB::statement('ALTER TABLE inbox_note_outputs ADD CONSTRAINT inbox_note_outputs_macro_id_foreign FOREIGN KEY (macro_id) REFERENCES macros(id) ON DELETE RESTRICT');
+        }
     }
 
     /**
@@ -41,13 +37,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Drop the foreign key constraint
-        DB::statement('ALTER TABLE inbox_note_outputs DROP FOREIGN KEY inbox_note_outputs_macro_id_foreign');
-        
-        // Change back to nullable
-        DB::statement('ALTER TABLE inbox_note_outputs MODIFY macro_id BIGINT UNSIGNED NULL');
-        
-        // Re-add the foreign key constraint with SET NULL
-        DB::statement('ALTER TABLE inbox_note_outputs ADD CONSTRAINT inbox_note_outputs_macro_id_foreign FOREIGN KEY (macro_id) REFERENCES macros(id) ON DELETE SET NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE inbox_note_outputs DROP FOREIGN KEY inbox_note_outputs_macro_id_foreign');
+            
+            DB::statement('ALTER TABLE inbox_note_outputs MODIFY macro_id BIGINT UNSIGNED NULL');
+            
+            DB::statement('ALTER TABLE inbox_note_outputs ADD CONSTRAINT inbox_note_outputs_macro_id_foreign FOREIGN KEY (macro_id) REFERENCES macros(id) ON DELETE SET NULL');
+        }
     }
 };
