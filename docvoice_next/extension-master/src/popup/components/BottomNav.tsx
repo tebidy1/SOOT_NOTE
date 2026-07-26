@@ -128,7 +128,10 @@ export default function BottomNav({ activeRoute }: BottomNavProps) {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 bg-[#E6EDF5]/95 dark:bg-[#0F172A]/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_-10px_30px_rgba(0,0,0,0.3)] h-14 z-50 border-none">
+      <div
+        className="fixed bottom-0 left-0 right-0 bg-[#E6EDF5]/95 dark:bg-[#0F172A]/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_-10px_30px_rgba(0,0,0,0.3)] z-50 border-none"
+        style={{ height: 'calc(3.5rem + env(safe-area-inset-bottom))', paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
         <div className="flex items-center justify-between px-8 h-full relative">
           {/* Inbox — left */}
           <button
