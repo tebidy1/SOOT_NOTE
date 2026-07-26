@@ -191,6 +191,28 @@ class ApiClient {
     console.log(`⏱️ [Perf] Token Fetch: ${duration} ms`)
     return response
   }
+
+  async initiatePairing(): Promise<ApiResponse<{ pairing_id: string; short_code: string; expires_in: number }>> {
+    return this.request({
+      method: 'GET',
+      url: '/pairing/initiate'
+    })
+  }
+
+  async checkPairingStatus(pairingId: string): Promise<ApiResponse<{ status: 'pending' | 'authorized'; token?: string; user?: any }>> {
+    return this.request({
+      method: 'GET',
+      url: `/pairing/check/${pairingId}`
+    })
+  }
+
+  async authorizePairing(pairingId: string, deviceName: string): Promise<ApiResponse<{ message: string }>> {
+    return this.request({
+      method: 'POST',
+      url: '/pairing/authorize',
+      data: { pairing_id: pairingId, device_name: deviceName },
+    })
+  }
 }
 
 export const apiClient = ApiClient.getInstance()
