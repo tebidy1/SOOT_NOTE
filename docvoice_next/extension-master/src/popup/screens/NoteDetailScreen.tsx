@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useInboxStore } from '../../store/inboxStore'
+import { useSettingsStore } from '../../store/settingsStore'
 import { inboxService } from '../../services/inboxService'
 
 import { Note, NoteOutput, SuggestedMacro, FieldMapping, toDisplayStatus, displayStatusColor } from '../../types/note'
@@ -8,6 +9,7 @@ import ProcessingOverlay, { NOTE_PROCESSING_STEPS } from '../components/Processi
 import NoteViewer, { generateClipboardHTML } from '../components/NoteViewer'
 import { injectionService } from '../../services/injectionService'
 import Logo from '../components/Logo'
+import { platform } from '../../platform'
 
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -107,8 +109,8 @@ const injectFieldMappings = function(mappings: { form_field: string; value: stri
 
   const notif = document.createElement('div')
   notif.textContent = filledCount > 0
-    ? `ScribeFlow: Filled ${filledCount} fields`
-    : 'ScribeFlow: No matching fields found'
+    ? `SoutNote: Filled ${filledCount} fields`
+    : 'SoutNote: No matching fields found'
   Object.assign(notif.style, {
     position: 'fixed', top: '20px', right: '20px', zIndex: '10000',
     padding: '12px 20px', borderRadius: '8px', color: 'white',
@@ -163,12 +165,22 @@ const injectContentFallback = function(content: string) {
   }
 
   const _findField = (formField: string): HTMLElement | null => {
+    const friendlyToRaw: Record<string, string> = {
+      'patient_complaints': 'patientcomplaintstext',
+      'patient_notes': 'patientnotes',
+      'pain_score': 'painscore'
+    }
+    const mappedField = friendlyToRaw[formField] || formField
+
     const labelText = formField.replace(/_/g, ' ').toLowerCase().trim()
+    const rawLabelText = mappedField.replace(/_/g, ' ').toLowerCase().trim()
+
     const labels = Array.from(document.querySelectorAll('label'))
     const matchedLabel = labels.find((label: HTMLLabelElement) => {
       const text = (label.textContent || '').toLowerCase().trim()
-      return text === labelText || text.includes(labelText)
+      return text === labelText || text.includes(labelText) || text === rawLabelText || text.includes(rawLabelText)
     }) as HTMLLabelElement | undefined
+
     if (matchedLabel) {
       if (matchedLabel.htmlFor) {
         const el = document.getElementById(matchedLabel.htmlFor) as HTMLElement | null
@@ -183,6 +195,8 @@ const injectContentFallback = function(content: string) {
       }
     }
     return document.querySelector(
+      `input[name="${mappedField}"], textarea[name="${mappedField}"], select[name="${mappedField}"],` +
+      `input[id="${mappedField}"], textarea[id="${mappedField}"], select[id="${mappedField}"],` +
       `input[name="${formField}"], textarea[name="${formField}"], select[name="${formField}"],` +
       `input[id="${formField}"], textarea[id="${formField}"], select[id="${formField}"]`
     ) as HTMLElement | null
@@ -217,7 +231,7 @@ const injectContentFallback = function(content: string) {
   }
 
   const notif = document.createElement('div')
-  notif.textContent = filledCount > 0 ? `ScribeFlow: Filled ${filledCount} fields (fallback)` : 'ScribeFlow: No fields matched'
+  notif.textContent = filledCount > 0 ? `SoutNote: Filled ${filledCount} fields (fallback)` : 'SoutNote: No fields matched'
   Object.assign(notif.style, {
     position: 'fixed', top: '20px', right: '20px', zIndex: '10000',
     padding: '12px 20px', borderRadius: '8px', color: 'white',
@@ -232,7 +246,8 @@ const injectContentFallback = function(content: string) {
 export default function NoteDetailScreen() {
   const { noteId } = useParams<{ noteId: string }>()
   const navigate = useNavigate()
-  const { notes } = useInboxStore()
+  const { notes, setNoteInteraction } = useInboxStore()
+  const { theme } = useSettingsStore()
 
   const [note, setNote] = useState<Note | null>(null)
   const [activeTabIndex, setActiveTabIndex] = useState(0)
@@ -249,6 +264,18 @@ export default function NoteDetailScreen() {
   // Same shared list as HomeScreen's saving overlay → one continuous animation
   const processingSteps = NOTE_PROCESSING_STEPS
 
+  const tabsContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const activeTabEl = tabsContainerRef.current?.querySelector('[data-active="true"]')
+      if (activeTabEl) {
+        activeTabEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      }
+    }, 150)
+    return () => clearTimeout(timer)
+  }, [activeTabIndex, generatedOutputs])
+
   const FIELD_PREVIEW_TAB_INDEX = -1
 
   const fieldMappings = useMemo(() => note?.fieldMappings || [], [note?.fieldMappings])
@@ -261,6 +288,7 @@ export default function NoteDetailScreen() {
     if (!noteId) return
 
     const existingNote = notes.find(n => n.id === noteId) || null
+    let hasInitialized = false
     if (existingNote) {
       setNote(existingNote)
       setGeneratedOutputs(existingNote.outputs || [])
@@ -279,10 +307,37 @@ export default function NoteDetailScreen() {
         setActiveTabIndex(0)
         setEditorContent(existingNote.rawText || '')
       }
+      hasInitialized = true
     }
     
     // Always fetch fresh data from server
-    loadNote()
+    const fetchNote = async () => {
+      const loaded = await inboxService.getNote(noteId)
+      if (loaded) {
+        setNote(loaded)
+        setGeneratedOutputs(loaded.outputs || [])
+
+        if (loaded.appliedMacroId) {
+          setSelectedMacroId(loaded.appliedMacroId)
+        } else if (loaded.suggestedMacroId) {
+          setSelectedMacroId(loaded.suggestedMacroId)
+        }
+
+        // Only force tab switch if we haven't initialized yet
+        // This prevents a delayed load from resetting the user's active tab
+        if (!hasInitialized) {
+          if (loaded.outputs && loaded.outputs.length > 0) {
+            const lastIndex = loaded.outputs.length - 1
+            setActiveTabIndex(lastIndex + 1)
+            setEditorContent(loaded.outputs[lastIndex].content || '')
+          } else {
+            setActiveTabIndex(0)
+            setEditorContent(loaded.rawText || '')
+          }
+        }
+      }
+    }
+    fetchNote()
   }, [noteId])
 
   useEffect(() => {
@@ -297,29 +352,7 @@ export default function NoteDetailScreen() {
     loadMacros()
   }, [])
 
-  const loadNote = async () => {
-    if (!noteId) return
-    const loaded = await inboxService.getNote(noteId)
-    if (loaded) {
-      setNote(loaded)
-      setGeneratedOutputs(loaded.outputs || [])
 
-      if (loaded.appliedMacroId) {
-        setSelectedMacroId(loaded.appliedMacroId)
-      } else if (loaded.suggestedMacroId) {
-        setSelectedMacroId(loaded.suggestedMacroId)
-      }
-
-      if (loaded.outputs && loaded.outputs.length > 0) {
-        const lastIndex = loaded.outputs.length - 1
-        setActiveTabIndex(lastIndex + 1)
-        setEditorContent(loaded.outputs[lastIndex].content || '')
-      } else {
-        setActiveTabIndex(0)
-        setEditorContent(loaded.rawText || '')
-      }
-    }
-  }
 
   const loadMacros = async () => {
     const macros = await inboxService.fetchMacros()
@@ -381,7 +414,8 @@ export default function NoteDetailScreen() {
       setGeneratingMessage('Applying template...')
       setProcessingProgress(50)
 
-      const updatedNote = await inboxService.applyMacro(noteId, macroId)
+      const processingMode = useSettingsStore.getState().processingMode
+      const updatedNote = await inboxService.applyMacro(noteId, macroId, processingMode)
 
       setGeneratingMessage('Formatting output...')
       setProcessingProgress(90)
@@ -392,9 +426,10 @@ export default function NoteDetailScreen() {
         setNote(updatedNote)
         setGeneratedOutputs(updatedNote.outputs || [])
         if (updatedNote.outputs && updatedNote.outputs.length > 0) {
-          const lastIndex = updatedNote.outputs.length - 1
-          setActiveTabIndex(lastIndex + 1)
-          setEditorContent(updatedNote.outputs[lastIndex]?.content || '')
+          const targetIndex = updatedNote.outputs.findIndex(o => o.macro_id === macroId)
+          const idxToUse = targetIndex >= 0 ? targetIndex : updatedNote.outputs.length - 1
+          setActiveTabIndex(idxToUse + 1)
+          setEditorContent(updatedNote.outputs[idxToUse]?.content || '')
         }
         setIsTemplateExpanded(false)
       }
@@ -461,6 +496,14 @@ export default function NoteDetailScreen() {
 
     setIsCopied(true)
     setTimeout(() => setIsCopied(false), 2000)
+    setNoteInteraction(noteId, 'copied')
+
+    // PWA has no access to another site's DOM (sandboxed origin). Copy is the
+    // full journey there — no chrome.scripting.executeScript to attempt.
+    if (!platform.isExtension) {
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(10)
+      return
+    }
 
     setIsInjecting(true)
     setGeneratingMessage('Injecting fields...')
@@ -482,10 +525,10 @@ export default function NoteDetailScreen() {
       console.log('[INJECT] 📋 fieldMappings from note:', fieldMappings)
       console.log('[INJECT] fieldMappings.length:', fieldMappings.length)
 
-      // The field analysis runs in the background on the server after the note
-      // is saved — if it wasn't ready when this screen loaded, refetch once now.
+      // Field mappings are generated inline when applyMacro is called. If none
+      // are on the current state, refetch in case a prior session already ran one.
       if (fieldMappings.length === 0) {
-        console.log('[INJECT] ⏳ No mappings yet — refetching note (background analysis may have finished)...')
+        console.log('[INJECT] ⏳ No mappings yet — refetching note...')
         const fresh = await inboxService.getNote(noteId)
         if (fresh) {
           setNote(fresh)
@@ -606,7 +649,7 @@ export default function NoteDetailScreen() {
   const isOnGeneratedTab = activeTabIndex > 0 && !isOnFieldPreviewTab
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="h-screen bg-white dark:bg-[#0F172A] flex flex-col overflow-hidden relative">
       {isGenerating && (
         <ProcessingOverlay
           step={generatingMessage}
@@ -616,15 +659,15 @@ export default function NoteDetailScreen() {
         />
       )}
 
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-b from-blue-50 to-white">
+      {/* Header — pinned at top, never scrolls. Removed hard borders. */}
+      <div className="flex items-center justify-between px-4 py-3 bg-white/90 dark:bg-[#0F172A]/90 backdrop-blur-sm flex-shrink-0 z-30">
         <div className="flex items-center space-x-3">
-          <Logo className="h-12 w-auto" variant="dark" />
+          <Logo className="h-11 w-auto" variant={theme === 'dark' ? 'light' : 'dark'} />
         </div>
         <div className="flex items-center space-x-2 flex-shrink-0">
           <button
             onClick={handleBack}
-            className="flex items-center text-gray-600 hover:text-gray-900 font-semibold px-3 py-1.5 bg-white/80 border border-gray-200 rounded-lg shadow-sm text-sm transition-all"
+            className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-semibold px-3 py-1.5 bg-[#F1F5F9] dark:bg-[#1E293B]/80 border border-slate-200 dark:border-slate-700 rounded-lg shadow-none text-sm transition-all"
           >
             <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -634,65 +677,21 @@ export default function NoteDetailScreen() {
         </div>
       </div>
 
-      {/* Note Sub-header details */}
-      <div className="px-6 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-        <div className="min-w-0">
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold text-gray-900 text-sm">
-              NO-{note.id.slice(-4)}
-            </span>
-            {note.patientName && note.patientName !== 'Untitled' && (
-              <>
-                <span className="text-gray-400">·</span>
-                <span className="text-gray-700 font-medium text-sm truncate">{note.patientName}</span>
-              </>
-            )}
-          </div>
-          <p className="text-[11px] text-gray-500 mt-0.5">{formatDate(note.createdAt)}</p>
-        </div>
 
-        <div className="flex items-center space-x-2 flex-shrink-0">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${displayStatusColor(displayStatus)}`}>
-            {displayStatus}
-          </span>
-
-          <button
-            onClick={handleDelete}
-            className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-            title="Delete note"
-          >
-            <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-
-          {note.status !== 'completed' && note.status !== 'failed' && (
-            <button
-              onClick={handleMarkAsReady}
-              className="p-1.5 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-lg transition-colors"
-              title="Mark as ready"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-              </svg>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Tabbed Editor */}
-      <div className="flex-1 flex flex-col mt-3 min-h-0">
-        {/* Tab Bar Container */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-2 flex-shrink-0">
+      {/* Tabbed Editor Container */}
+      <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-[#1E293B] border-t border-transparent dark:border-slate-800 rounded-t-3xl shadow-none mx-0 mt-2 z-20">
+        {/* Tab Bar Container — removed hard borders */}
+        <div className="flex items-center justify-between px-4 pt-3 flex-shrink-0">
           {/* Tabs Wrapper with fading edge indicators */}
           <div className="relative flex-1 overflow-hidden">
-            <div className="flex items-center overflow-x-auto min-w-0 scrollbar-hide py-1 pr-8">
+            <div ref={tabsContainerRef} className="flex items-center overflow-x-auto min-w-0 scrollbar-hide py-1 pr-8">
               <button
                 onClick={() => handleTabSelect(0)}
+                data-active={activeTabIndex === 0}
                 className={`px-4 py-2 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
                   activeTabIndex === 0
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-blue-600 text-blue-600 dark:border-[#38BDF8] dark:text-[#38BDF8]'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                 }`}
               >
                 Source
@@ -700,10 +699,11 @@ export default function NoteDetailScreen() {
               {fieldMappings.length > 0 && (
                 <button
                   onClick={() => handleTabSelect(FIELD_PREVIEW_TAB_INDEX)}
+                  data-active={isOnFieldPreviewTab}
                   className={`px-4 py-2 text-sm font-medium border-b-2 whitespace-nowrap transition-colors flex items-center space-x-1 ${
                     isOnFieldPreviewTab
-                      ? 'border-blue-600 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      ? 'border-blue-600 text-blue-600 dark:border-[#38BDF8] dark:text-[#38BDF8]'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   }`}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -716,10 +716,11 @@ export default function NoteDetailScreen() {
                 <div key={`${output.macro_id}-${index}`} className="flex items-center mr-1">
                   <button
                     onClick={() => handleTabSelect(index + 1)}
+                    data-active={activeTabIndex === index + 1}
                     className={`px-3 py-2 text-sm font-medium border-b-2 whitespace-nowrap transition-colors flex items-center space-x-1 ${
                       activeTabIndex === index + 1
-                        ? 'border-blue-600 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                        ? 'border-blue-600 text-blue-600 dark:border-[#38BDF8] dark:text-[#38BDF8]'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                     }`}
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -729,7 +730,7 @@ export default function NoteDetailScreen() {
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); handleCloseTab(index) }}
-                    className="p-0.5 text-gray-400 hover:text-gray-700 rounded transition-colors"
+                    className="p-0.5 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 rounded transition-colors"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -739,31 +740,31 @@ export default function NoteDetailScreen() {
               ))}
             </div>
             {/* Edge fades for modern horizontal scroll hint */}
-            <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-white dark:from-[#1E293B] to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-[#1E293B] to-transparent pointer-events-none" />
           </div>
 
           {/* Template Selector Dropdown */}
           <div className="relative flex-shrink-0 ml-2 py-1">
             <button
               onClick={() => setIsTemplateExpanded(!isTemplateExpanded)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-all shadow-sm group"
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-gray-50 dark:bg-[#0F172A] hover:bg-blue-50 dark:hover:bg-[#1E293B] hover:text-blue-600 dark:hover:text-[#38BDF8] rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 transition-all shadow-sm group"
               title="Apply new template"
             >
-              <svg className="w-4 h-4 text-blue-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-blue-600 dark:text-[#38BDF8] transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
               </svg>
               <span>Add</span>
             </button>
 
             {isTemplateExpanded && (
-              <div className="absolute right-0 top-full mt-2 w-[340px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col transform origin-top-right transition-all duration-200">
-                <div className="bg-gray-50/80 backdrop-blur-sm px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                  <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">Templates</span>
+              <div className="absolute right-0 top-full mt-2 w-[340px] bg-white dark:bg-[#1E293B] rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col transform origin-top-right transition-all duration-200">
+                <div className="bg-gray-50/80 dark:bg-[#0F172A]/80 backdrop-blur-sm px-4 py-3 flex items-center justify-between">
+                  <span className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Templates</span>
                 </div>
                 {displayedMacros.length === 0 ? (
                   <div className="p-4 text-center">
-                    <p className="text-sm text-gray-500">No templates available</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">No templates available</p>
                   </div>
                 ) : (
                   <div className="max-h-[290px] overflow-y-auto custom-scrollbar p-3">
@@ -789,9 +790,9 @@ export default function NoteDetailScreen() {
                             key={macro.id}
                             onClick={() => handleApplyMacro(macro.id)}
                             disabled={isGenerating}
-                            className="flex items-center space-x-2 p-2 bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl text-left text-xs font-semibold text-gray-700 hover:text-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed group shadow-sm hover:shadow-md"
+                            className="flex items-center space-x-2 p-2 bg-gray-50 dark:bg-[#0F172A] hover:bg-blue-50 dark:hover:bg-[#1E293B] rounded-xl text-left text-xs font-semibold text-gray-700 dark:text-gray-200 hover:text-blue-700 dark:hover:text-blue-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed group shadow-sm hover:shadow-md"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-white group-hover:bg-blue-100 flex items-center justify-center flex-shrink-0 transition-colors shadow-sm text-base">
+                            <div className="w-8 h-8 rounded-lg bg-white dark:bg-[#1E293B] group-hover:bg-blue-100 dark:group-hover:bg-[#0F172A] flex items-center justify-center flex-shrink-0 transition-colors shadow-sm text-base">
                               {emoji}
                             </div>
                             <span className="truncate flex-1 font-semibold">{text}</span>
@@ -806,41 +807,126 @@ export default function NoteDetailScreen() {
           </div>
         </div>
 
-        {/* Numeric-integrity review banner (deterministic backend check) */}
-        {reviewInfo && !reviewInfo.passed && (
-          <div className="mx-3 mt-2 flex items-start space-x-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 flex-shrink-0">
-            <svg className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-            </svg>
-            <div className="text-xs text-amber-800 leading-relaxed">
-              <span className="font-semibold">Please verify — </span>
-              {reviewInfo.missing_numbers.length > 0 && (
-                <span>values from dictation not found in the note: <span className="font-mono font-semibold">{reviewInfo.missing_numbers.join(', ')}</span>. </span>
-              )}
-              {reviewInfo.suspicious_ranges.length > 0 && (
-                <span>possibly merged range(s): <span className="font-mono font-semibold">{reviewInfo.suspicious_ranges.join(', ')}</span>. </span>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* Editor Area — unified view+edit with rich formatting */}
-        <div className="flex-1 min-h-0 overflow-auto">
+        <div className="flex-1 min-h-0 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-16">
+          {/* Verification banner — now inside scroll area so it scrolls up with content */}
+          {reviewInfo && !reviewInfo.passed && (
+            <div className="mx-4 mt-3 mb-2 rounded-xl border border-amber-200 dark:border-amber-900/30 bg-amber-50 dark:bg-[#2A2312]/40 p-4 shadow-sm">
+              <div className="flex items-center space-x-2 mb-2.5">
+                <svg className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                </svg>
+                <span className="text-sm font-bold text-amber-900 dark:text-amber-400 uppercase tracking-wide">
+                  Verify before signing
+                </span>
+              </div>
+              <ul className="text-[13px] text-amber-800 dark:text-amber-200/90 leading-relaxed space-y-2 ml-1">
+                {reviewInfo.unverified && (
+                  <li>
+                    <span className="font-semibold text-amber-900 dark:text-amber-300">Automatic formatting could not be verified.</span>
+                    <span className="opacity-90"> — the AI did not return a structured result, so none of the safety checks could run. Read the entire note against your dictation before signing.</span>
+                  </li>
+                )}
+                {reviewInfo.missing_numbers.length > 0 && (
+                  <li>
+                    <span className="font-semibold text-amber-900 dark:text-amber-300">Numbers not in the note:</span>{' '}
+                    <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{reviewInfo.missing_numbers.join(', ')}</span>
+                    <span className="opacity-90"> — you dictated them; confirm they weren't dropped.</span>
+                  </li>
+                )}
+                {reviewInfo.suspicious_ranges.length > 0 && (
+                  <li>
+                    <span className="font-semibold text-amber-900 dark:text-amber-300">Merged into a range:</span>{' '}
+                    <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{reviewInfo.suspicious_ranges.join(', ')}</span>
+                    <span className="opacity-90"> — two separate readings may have been joined.</span>
+                  </li>
+                )}
+                {!!reviewInfo.unverified_entities?.length && (
+                  <li>
+                    <span className="font-semibold text-amber-900 dark:text-amber-300">Acronyms not heard in dictation:</span>{' '}
+                    <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{reviewInfo.unverified_entities.join(', ')}</span>
+                    <span className="opacity-90"> — the AI may have substituted a wrong test/drug.</span>
+                  </li>
+                )}
+                {!!reviewInfo.unverified_terms?.length && (
+                  <li>
+                    <span className="font-semibold text-amber-900 dark:text-amber-300">Drug/test names to double-check:</span>{' '}
+                    <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{reviewInfo.unverified_terms.join(', ')}</span>
+                    <span className="opacity-90"> — not a phonetic match to anything you said.</span>
+                  </li>
+                )}
+                {!!reviewInfo.polarity_flags?.length && (
+                  <li>
+                    <span className="font-semibold text-amber-900 dark:text-amber-300">Possible reversed meaning:</span>{' '}
+                    <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{reviewInfo.polarity_flags.join(', ')}</span>
+                    <span className="opacity-90"> — negation disagrees with dictation (e.g. you may have said "denies X" but the note asserts X).</span>
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
           {isOnFieldPreviewTab ? (
             <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center space-x-2">
-                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
-                  <span className="text-sm font-bold text-gray-800">Injection Data Preview</span>
+                  <span className="text-sm font-bold text-gray-800 dark:text-gray-200">Injection Data Preview</span>
                 </div>
-                <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+                <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-full">
                   {fieldMappings.filter(fm => fm.value != null && fm.value !== '').length}/{fieldMappings.length} fields with value
                 </span>
               </div>
+
+              {/* Injection-path safety net */}
+              {note?.fieldReview && !note.fieldReview.passed && (
+                <div className="mb-6 rounded-xl border border-amber-200 dark:border-amber-900/30 bg-amber-50 dark:bg-[#2A2312]/40 p-4 shadow-sm">
+                  <div className="flex items-center space-x-2 mb-2.5">
+                    <svg className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                    </svg>
+                    <span className="text-sm font-bold text-amber-900 dark:text-amber-400 uppercase tracking-wide">
+                      Verify before injecting
+                    </span>
+                  </div>
+                  <ul className="text-[13px] text-amber-800 dark:text-amber-200/90 leading-relaxed space-y-2 ml-1">
+                    {note.fieldReview.missing_numbers.length > 0 && (
+                      <li>
+                        <span className="font-semibold text-amber-900 dark:text-amber-300">Numbers not in the injection data:</span>{' '}
+                        <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{note.fieldReview.missing_numbers.join(', ')}</span>
+                      </li>
+                    )}
+                    {note.fieldReview.suspicious_ranges.length > 0 && (
+                      <li>
+                        <span className="font-semibold text-amber-900 dark:text-amber-300">Merged into a range:</span>{' '}
+                        <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{note.fieldReview.suspicious_ranges.join(', ')}</span>
+                      </li>
+                    )}
+                    {!!note.fieldReview.unverified_entities?.length && (
+                      <li>
+                        <span className="font-semibold text-amber-900 dark:text-amber-300">Acronyms not heard in dictation:</span>{' '}
+                        <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{note.fieldReview.unverified_entities.join(', ')}</span>
+                      </li>
+                    )}
+                    {!!note.fieldReview.unverified_terms?.length && (
+                      <li>
+                        <span className="font-semibold text-amber-900 dark:text-amber-300">Drug/test names to double-check:</span>{' '}
+                        <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{note.fieldReview.unverified_terms.join(', ')}</span>
+                      </li>
+                    )}
+                    {!!note.fieldReview.polarity_flags?.length && (
+                      <li>
+                        <span className="font-semibold text-amber-900 dark:text-amber-300">Possible reversed meaning:</span>{' '}
+                        <span className="font-mono font-semibold bg-amber-100 dark:bg-amber-900/50 px-1 rounded">{note.fieldReview.polarity_flags.join(', ')}</span>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
+
               {fieldMappings.length === 0 ? (
-                <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
+                <div className="flex items-center justify-center h-64 text-gray-400 dark:text-gray-500 text-sm">
                   No field mappings available. Use a template to generate injection data.
                 </div>
               ) : (
@@ -851,20 +937,20 @@ export default function NoteDetailScreen() {
                     return (
                       <>
                         {nonEmpty.length > 0 && (
-                          <div>
-                            <p className="text-xs font-semibold text-green-500 mb-2">Ready to inject</p>
-                            <div className="space-y-1">
+                          <div className="mb-6">
+                            <p className="text-xs font-bold text-green-600 dark:text-green-400 mb-3 uppercase tracking-wider">Ready to inject</p>
+                            <div className="space-y-2.5">
                               {nonEmpty.map((fm, i) => (
-                                <div key={i} className="flex items-start space-x-3 p-3 bg-green-50/50 border border-green-200/50 rounded-lg">
-                                  <svg className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <div key={i} className="flex items-start space-x-3 p-2.5 bg-green-50/40 dark:bg-slate-800/40 border border-green-100/50 dark:border-green-900/20 rounded-xl shadow-sm">
+                                  <svg className="w-4 h-4 text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                   </svg>
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-800">{fm.form_field}{fm.form_type ? ` (${fm.form_type})` : ''}</p>
-                                    <p className="text-xs text-gray-600 mt-0.5 truncate">{fm.value}</p>
+                                    <p className="text-sm font-semibold text-gray-800 dark:text-slate-200">{fm.form_field.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}{fm.form_type ? ` (${fm.form_type})` : ''}</p>
+                                    <p className="text-[13px] text-gray-600 dark:text-slate-400 mt-1 truncate">{fm.value}</p>
                                   </div>
                                   {fm.confidence > 0 && (
-                                    <span className={`text-xs font-semibold px-1.5 py-0.5 rounded-full flex-shrink-0 ${fm.confidence > 0.7 ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${fm.confidence > 0.7 ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400' : 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400'}`}>
                                       {Math.round(fm.confidence * 100)}%
                                     </span>
                                   )}
@@ -875,16 +961,16 @@ export default function NoteDetailScreen() {
                         )}
                         {empty.length > 0 && (
                           <div>
-                            {nonEmpty.length > 0 && <div className="h-4" />}
-                            <p className="text-xs font-semibold text-gray-400 mb-2">Empty fields (skipped)</p>
-                            <div className="space-y-1">
+                            {nonEmpty.length > 0 && <div className="h-2" />}
+                            <p className="text-xs font-bold text-gray-400 dark:text-slate-500 mb-3 uppercase tracking-wider">Empty fields (skipped)</p>
+                            <div className="space-y-2">
                               {empty.map((fm, i) => (
-                                <div key={i} className="flex items-start space-x-3 p-3 bg-gray-50/50 border border-gray-200/50 rounded-lg">
-                                  <svg className="w-4 h-4 text-gray-300 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h8" />
+                                <div key={i} className="flex items-start space-x-3 p-2.5 bg-gray-50/50 dark:bg-[#0F172A]/50 border border-transparent rounded-xl">
+                                  <svg className="w-4 h-4 text-gray-300 dark:text-slate-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 12h8" />
                                   </svg>
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-600">{fm.form_field}{fm.form_type ? ` (${fm.form_type})` : ''}</p>
+                                    <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{fm.form_field.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}{fm.form_type ? ` (${fm.form_type})` : ''}</p>
                                   </div>
                                 </div>
                               ))}
@@ -907,7 +993,7 @@ export default function NoteDetailScreen() {
             <textarea
               value={editorContent}
               onChange={(e) => setEditorContent(e.target.value)}
-              className="w-full h-full min-h-[300px] p-4 text-sm text-gray-800 font-mono resize-none focus:outline-none bg-white"
+              className="w-full min-h-[300px] p-5 text-[14px] leading-relaxed text-gray-800 dark:text-slate-200 font-sans resize-none focus:outline-none bg-white dark:bg-[#1E293B]"
               placeholder="Raw transcript text..."
               spellCheck={false}
             />
@@ -915,27 +1001,12 @@ export default function NoteDetailScreen() {
         </div>
       </div>
 
-      {/* Action Dock */}
-      <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 flex-shrink-0">
-        {isOnGeneratedTab && (
-          <button
-            onClick={handleInsurance}
-            disabled={isGenerating || !quickMacros.some(m =>
-              m.trigger.toLowerCase().includes('insurance') ||
-              m.category.toLowerCase().includes('insurance')
-            )}
-            className="mb-2 px-3 py-1.5 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold hover:bg-amber-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            <span>INSURANCE</span>
-          </button>
-        )}
+      {/* Floating Action Dock */}
+      <div className="absolute bottom-5 left-0 right-0 flex flex-row items-center justify-center gap-2 pointer-events-none z-40 px-3">
         <button
           onClick={handleSmartCopyInject}
           disabled={!editorContent.trim() || isInjecting}
-          className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold py-2.5 rounded-lg hover:from-blue-700 hover:to-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+          className="w-auto px-6 py-2.5 rounded-full bg-blue-600 dark:bg-blue-600 text-white font-bold shadow-xl hover:bg-blue-700 dark:hover:bg-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 pointer-events-auto border-none text-xs"
         >
           {isInjecting ? (
             <>
@@ -957,10 +1028,24 @@ export default function NoteDetailScreen() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
-              <span>SMART COPY / INJECT</span>
+              <span>{platform.isExtension ? 'SMART COPY / INJECT' : 'COPY'}</span>
             </>
           )}
         </button>
+
+        {/* Floating Insurance Button */}
+        {isOnGeneratedTab && (
+          <button
+            onClick={handleInsurance}
+            disabled={isGenerating || !quickMacros.some(m =>
+              m.trigger.toLowerCase().includes('insurance') ||
+              m.category.toLowerCase().includes('insurance')
+            )}
+            className="px-3 py-2 bg-white dark:bg-[#1E293B] text-blue-600 dark:text-[#38BDF8] border border-gray-200 dark:border-slate-700 shadow-md rounded-full text-[11px] font-extrabold hover:bg-gray-50 dark:hover:bg-[#334155] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center pointer-events-auto shadow-blue-500/10 shrink-0"
+          >
+            <span>INSURANCE</span>
+          </button>
+        )}
       </div>
     </div>
   )
