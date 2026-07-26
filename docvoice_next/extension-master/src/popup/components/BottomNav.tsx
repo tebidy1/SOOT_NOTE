@@ -1,7 +1,15 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../routes'
-import { useAuthStore } from '../../store/authStore'
-import { authService } from '../../services/authService'
+import ProfileMenu from './ProfileMenu'
+import { useRecordingStore } from '../../store/recordingStore'
+import { useSettingsStore } from '../../store/settingsStore'
+import { audioRecordingService } from '../../services/audioRecordingService'
+import { apiClient } from '../../services/apiClient'
+import TemplateSelectionSheet from './TemplateSelectionSheet'
+import ProcessingOverlay, { NOTE_PROCESSING_STEPS } from './ProcessingOverlay'
+import ListeningModeView from './ListeningModeView'
+import { enqueue as enqueueOfflineAudio } from '../../pwa/offline/audioQueue'
 
 interface BottomNavProps {
   activeRoute: 'home' | 'inbox' | 'record' | 'profile'
@@ -9,104 +17,195 @@ interface BottomNavProps {
 
 export default function BottomNav({ activeRoute }: BottomNavProps) {
   const navigate = useNavigate()
-  const { user } = useAuthStore()
+  const { isRecording, duration } = useRecordingStore()
+  
+  const [showTemplateSheet, setShowTemplateSheet] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [permissionStatus, setPermissionStatus] = useState<'prompt' | 'granted' | 'denied'>('prompt')
 
-  const handleLogout = async () => {
-    await authService.logout()
-    navigate(ROUTES.LOGIN)
+  const isInboxActive = activeRoute === 'home' || activeRoute === 'inbox'
+
+  useEffect(() => {
+    navigator.permissions.query({ name: 'microphone' as PermissionName }).then(result => {
+      setPermissionStatus(result.state as 'prompt' | 'granted' | 'denied')
+      result.onchange = () => {
+        setPermissionStatus(result.state as 'prompt' | 'granted' | 'denied')
+      }
+    }).catch(() => {})
+  }, [])
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
-  const navItems = [
-    {
-      id: 'home',
-      label: 'Home',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
-      onClick: () => navigate(ROUTES.HOME)
-    },
-    {
-      id: 'inbox',
-      label: 'Inbox',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-        </svg>
-      ),
-      onClick: () => navigate(ROUTES.INBOX)
-    },
-    {
-      id: 'record',
-      label: 'Record',
-      icon: (
-        <div className="w-14 h-14 -mt-6 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-          </svg>
-        </div>
-      ),
-      onClick: () => navigate(ROUTES.HOME)
-    },
-    {
-      id: 'profile',
-      label: 'Profile',
-      icon: user ? (
-        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-          {user.name?.charAt(0) || 'U'}
-        </div>
-      ) : (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-      ),
-      onClick: () => {}, // Profile screen excluded per plan
-      showDropdown: true,
-      dropdownItems: [
-        {
-          label: 'Logout',
-          icon: (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-          ),
-          onClick: handleLogout
+  const handleRecordClick = async () => {
+    if (isRecording) {
+      try {
+        await audioRecordingService.stopRecording()
+      } catch (error: any) {
+        if (error?.message !== 'No active recording') console.error('Failed to stop recording:', error)
+      } finally {
+        setShowTemplateSheet(true)
+      }
+    } else {
+      if (permissionStatus === 'denied') {
+        alert('Microphone access is denied. Please allow it in the browser settings.')
+        return
+      }
+      try {
+        await audioRecordingService.startRecording()
+        setPermissionStatus('granted')
+      } catch (error: any) {
+        if (error.name === 'NotAllowedError') {
+          alert('Microphone access is required to record.')
+        } else {
+          console.error('Failed to start recording:', error)
         }
-      ]
+      }
     }
-  ]
+  }
+
+  const handleCancelRecording = () => {
+    audioRecordingService.clearRecording()
+  }
+
+  const handleTemplateSelect = async (template: any) => {
+    setShowTemplateSheet(false)
+    setIsSaving(true)
+    setSaveError(null)
+
+    const store = useRecordingStore.getState()
+    const transcriptText = store.finalTranscript || store.realtimeTranscript
+    const specialty = useSettingsStore.getState().doctorSpecialty
+    const isOnline = typeof navigator === 'undefined' ? true : navigator.onLine
+
+    // ── Offline path: no transcript available (OCI realtime was skipped),
+    // so we queue the raw audio for async transcription on reconnect.
+    if (!isOnline && store.audioBlob) {
+      try {
+        await enqueueOfflineAudio({
+          blob: store.audioBlob,
+          templateId: template?.id ?? null,
+          specialty,
+        })
+        audioRecordingService.clearRecording()
+        setSaveError('تم حفظ التسجيل محلياً. سيُرفع تلقائياً عند عودة الاتصال.')
+      } catch (e) {
+        console.error('Failed to enqueue offline recording:', e)
+        setSaveError('تعذّر حفظ التسجيل محلياً. أعِد المحاولة.')
+      } finally {
+        setIsSaving(false)
+      }
+      return
+    }
+
+    try {
+      const response = await apiClient.saveNote({
+        raw_text: transcriptText || '',
+        patient_name: 'Untitled',
+        summary: null,
+        doctor_specialty: specialty
+      })
+
+      const newNoteId = (response as any).data?.id || (response as any).payload?.id
+
+      if (newNoteId) {
+        audioRecordingService.clearRecording()
+        navigate(ROUTES.NOTE_DETAIL.replace(':noteId', newNoteId), { state: { autoApplyMacroId: template?.id } })
+      } else {
+        setSaveError('Could not save the recording. Please try again.')
+      }
+    } catch (error) {
+      console.error('Failed to save note:', error)
+      setSaveError('Could not save the recording. Please check your connection and try again.')
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
-      <div className="flex items-center justify-around py-3">
-        {navItems.map((item) => (
-          <div key={item.id} className="relative">
-            {item.id === 'record' ? (
+    <>
+      <div className="fixed bottom-0 left-0 right-0 bg-[#E6EDF5]/95 dark:bg-[#0F172A]/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_-10px_30px_rgba(0,0,0,0.3)] h-14 z-50 border-none">
+        <div className="flex items-center justify-between px-8 h-full relative">
+          {/* Inbox — left */}
+          <button
+            onClick={() => navigate(ROUTES.HOME)}
+            aria-label="Inbox"
+            className={`flex justify-center p-2 rounded-lg transition-colors ${
+              isInboxActive
+                ? 'text-blue-500'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
+            }`}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+          </button>
+
+          {/* Record — center, half-floating (half inside the bar, half outside) */}
+          <div className="absolute left-1/2 -translate-x-1/2 -top-[36px] flex flex-col items-center justify-center z-50">
+            <div className="relative flex items-center justify-center">
+
               <button
-                onClick={item.onClick}
-                className="flex flex-col items-center justify-center"
-              >
-                {item.icon}
-              </button>
-            ) : (
-              <button
-                onClick={item.onClick}
-                className={`flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${
-                  activeRoute === item.id
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                onClick={handleRecordClick}
+                aria-label={isRecording ? "Stop Recording" : "Record"}
+                className={`w-[72px] h-[72px] pointer-events-auto border border-slate-300/60 dark:border-none rounded-full flex items-center justify-center transition-all transform relative z-10 ${
+                  isRecording 
+                    ? 'bg-red-600 shadow-[0_10px_25px_rgba(239,68,68,0.5)] text-white hover:bg-red-700 scale-105' 
+                    : 'bg-[#F0F4F8] dark:bg-[#1E293B] shadow-[0_10px_25px_rgba(15,23,42,0.08)] dark:shadow-[0_10px_25px_rgba(0,0,0,0.6)] text-blue-500 dark:text-[#38BDF8] hover:bg-[#E6ECF2] dark:hover:bg-[#334155] hover:scale-105'
                 }`}
               >
-                <div className={`${activeRoute === item.id ? 'text-blue-600' : 'text-gray-500'}`}>
-                  {item.icon}
-                </div>
-                <span className="text-xs mt-1">{item.label}</span>
+                {isRecording ? (
+                  <div className="w-6 h-6 bg-white rounded-sm" />
+                ) : (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                )}
               </button>
-            )}
+            </div>
           </div>
-        ))}
+
+          {/* Settings gear — right (opens ProfileMenu upward) */}
+          <div className="flex justify-center text-gray-400 dark:text-gray-500 p-2">
+            <ProfileMenu variant="gear" openUpward />
+          </div>
+        </div>
       </div>
-    </div>
+
+      {isRecording && (
+        <ListeningModeView onCancel={handleCancelRecording} />
+      )}
+
+      <TemplateSelectionSheet
+        isOpen={showTemplateSheet}
+        onClose={() => setShowTemplateSheet(false)}
+        onSelectTemplate={handleTemplateSelect}
+      />
+
+      {isSaving && (
+        <ProcessingOverlay
+          step="Saving recording..."
+          progress={10}
+          stepsList={NOTE_PROCESSING_STEPS}
+          onCancel={() => setIsSaving(false)}
+        />
+      )}
+
+      {saveError && (
+         <div className="fixed top-4 left-4 right-4 bg-red-100 dark:bg-red-900/40 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl z-[100] shadow-lg flex items-start space-x-2">
+           <div className="flex-1 text-sm font-medium">{saveError}</div>
+           <button onClick={() => setSaveError(null)} className="text-red-500 hover:text-red-700 dark:hover:text-red-200">
+             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+             </svg>
+           </button>
+         </div>
+      )}
+    </>
   )
 }
+

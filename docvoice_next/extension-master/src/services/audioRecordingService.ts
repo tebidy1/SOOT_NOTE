@@ -60,10 +60,16 @@ class AudioRecordingService {
 
       this.mediaRecorder.start(100)
       store.startRecording()
-      
-      ociRealtimeService.startTranscription(this.stream).catch(err => {
-        console.error('Failed to start real-time transcription:', err)
-      })
+
+      // Skip live OCI transcription when offline — it needs a WebSocket to
+      // *.oci.oraclecloud.com. The audio is still captured locally and gets
+      // queued in stopRecording() for async transcription on reconnect.
+      const online = typeof navigator === 'undefined' ? true : navigator.onLine
+      if (online) {
+        ociRealtimeService.startTranscription(this.stream).catch(err => {
+          console.error('Failed to start real-time transcription:', err)
+        })
+      }
 
       this.recordingStartTime = Date.now()
       this.startDurationTimer()
