@@ -149,9 +149,9 @@ class InboxService {
     }
   }
 
-  async applyMacro(noteId: string, macroId: number): Promise<Note | null> {
+  async applyMacro(noteId: string, macroId: number, mode: 'fast' | 'precise' = 'fast'): Promise<Note | null> {
     try {
-      const response = await apiClient.applyMacro(noteId, macroId)
+      const response = await apiClient.applyMacro(noteId, macroId, mode)
       const payload = (response as any).payload || response.data
       const isSuccess = (response as any).code === 200 || response.success
       if (isSuccess && payload) {
@@ -220,6 +220,7 @@ class InboxService {
       outputs: apiNote.outputs ?? [],
       fieldMappings,
       review: apiNote.review ?? null,
+      fieldReview: apiNote.field_review ?? null,
       aiFlags: apiNote.ai_flags ?? [],
       company: apiNote.company ?? undefined,
       user: apiNote.user ?? undefined,

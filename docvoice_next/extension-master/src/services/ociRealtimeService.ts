@@ -1,6 +1,7 @@
 import { apiClient } from './apiClient'
 import { useRecordingStore } from '../store/recordingStore'
 import { useSettingsStore } from '../store/settingsStore'
+import { platform } from '../platform'
 
 const CONNECTION_TIMEOUT_MS = 10000
 const AUTH_TIMEOUT_MS = 10000
@@ -79,8 +80,7 @@ class OciRealtimeService {
     if (!this.storageRestorePromise) {
       this.storageRestorePromise = (async () => {
         try {
-          if (typeof chrome === 'undefined' || !chrome.storage?.local) return
-          const data = await chrome.storage.local.get(this.TOKEN_STORAGE_KEY)
+          const data = await platform.storage.get(this.TOKEN_STORAGE_KEY)
           const saved = data?.[this.TOKEN_STORAGE_KEY]
           if (
             !this.cachedToken &&
@@ -101,8 +101,8 @@ class OciRealtimeService {
 
   private persistToken(): void {
     try {
-      if (typeof chrome === 'undefined' || !chrome.storage?.local || !this.cachedToken) return
-      chrome.storage.local.set({
+      if (!this.cachedToken) return
+      platform.storage.set({
         [this.TOKEN_STORAGE_KEY]: { ...this.cachedToken, fetchedAt: this.tokenFetchedAt }
       })
     } catch { /* non-fatal */ }
@@ -110,8 +110,7 @@ class OciRealtimeService {
 
   private clearPersistedToken(): void {
     try {
-      if (typeof chrome === 'undefined' || !chrome.storage?.local) return
-      chrome.storage.local.remove(this.TOKEN_STORAGE_KEY)
+      platform.storage.remove(this.TOKEN_STORAGE_KEY)
     } catch { /* non-fatal */ }
   }
 
@@ -446,7 +445,7 @@ class OciRealtimeService {
       // Runs on the dedicated audio rendering thread, so UI work (animations,
       // live-transcript re-renders) can never delay or drop mic frames.
       try {
-        const workletUrl = chrome.runtime.getURL('pcm-worklet.js')
+        const workletUrl = platform.assetUrl('pcm-worklet.js')
         await this.audioContext.audioWorklet.addModule(workletUrl)
         this.workletNode = new AudioWorkletNode(this.audioContext, 'pcm-processor', {
           numberOfInputs: 1,

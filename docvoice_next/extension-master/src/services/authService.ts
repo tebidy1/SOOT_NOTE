@@ -2,6 +2,7 @@ import { apiClient } from './apiClient'
 import { useAuthStore } from '../store/authStore'
 import { User, LoginCredentials } from '../types/user'
 import { ApiResponse, LoginResponse } from '../types/api'
+import { platform } from '../platform'
 
 class AuthService {
   async login(credentials: LoginCredentials): Promise<boolean> {
@@ -57,7 +58,7 @@ class AuthService {
 
   async initializeFromStorage(): Promise<void> {
     try {
-      const result = await chrome.storage.local.get(['authToken', 'user'])
+      const result = await platform.storage.get(['authToken', 'user'])
       
       if (result.authToken && result.user) {
         useAuthStore.getState().login(result.user, result.authToken)
@@ -69,7 +70,7 @@ class AuthService {
 
   async saveToChromeStorage(user: User, token: string): Promise<void> {
     try {
-      await chrome.storage.local.set({
+      await platform.storage.set({
         authToken: token,
         user: user
       })
@@ -80,7 +81,7 @@ class AuthService {
 
   async clearChromeStorage(): Promise<void> {
     try {
-      await chrome.storage.local.remove(['authToken', 'user'])
+      await platform.storage.remove(['authToken', 'user'])
     } catch (error) {
       console.error('Failed to clear chrome storage:', error)
     }

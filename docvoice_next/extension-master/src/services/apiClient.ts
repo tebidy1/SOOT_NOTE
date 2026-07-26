@@ -2,8 +2,9 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ApiResponse, LoginResponse, OracleTranscriptionResponse, TranscriptionStatusResponse, InboxResponse } from '../types/api'
 import { CreateNoteData } from '../types/note'
 import { useAuthStore } from '../store/authStore'
+import { platform } from '../platform'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://docapi.sootnote.com/api'
+const API_BASE_URL = 'http://localhost:8002/api'
 
 class ApiClient {
   private client: AxiosInstance
@@ -45,7 +46,7 @@ class ApiClient {
       async (error) => {
         if (error.response?.status === 401) {
           useAuthStore.getState().logout()
-          chrome.storage.local.remove(['authToken', 'user'])
+          platform.storage.remove(['authToken', 'user'])
         }
         return Promise.reject(error)
       }
@@ -164,11 +165,11 @@ class ApiClient {
     })
   }
 
-  async applyMacro(noteId: string, macroId: number): Promise<ApiResponse<any>> {
+  async applyMacro(noteId: string, macroId: number, mode: 'fast' | 'precise' = 'fast'): Promise<ApiResponse<any>> {
     return this.request({
       method: 'POST',
       url: `/inbox-notes/${noteId}/apply-macro`,
-      data: { macro_id: macroId }
+      data: { macro_id: macroId, mode }
     })
   }
 

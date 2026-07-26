@@ -218,26 +218,8 @@ class AudioRecordingService {
     console.log('Recording cleared')
   }
 
-  getSupportedMimeTypes(): string[] {
-    const types = [
-      'audio/webm;codecs=opus',
-      'audio/webm',
-      'audio/ogg;codecs=opus',
-      'audio/mp4',
-      'audio/mpeg'
-    ]
-    
-    return types.filter(type => MediaRecorder.isTypeSupported(type))
-  }
-
   async getMicrophonePermission(): Promise<boolean> {
     return this.requestMicrophonePermission()
-  }
-
-  formatDuration(seconds: number): string {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 }
 
