@@ -61,6 +61,9 @@ class AudioRecordingService {
       this.mediaRecorder.start(100)
       store.startRecording()
 
+      // Light haptic tick on record start where supported (mobile Chrome/Android).
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(15)
+
       // Skip live OCI transcription when offline — it needs a WebSocket to
       // *.oci.oraclecloud.com. The audio is still captured locally and gets
       // queued in stopRecording() for async transcription on reconnect.
@@ -150,7 +153,9 @@ class AudioRecordingService {
         this.mediaRecorder.stop()
         this.stopDurationTimer()
         store.stopRecording()
-        
+
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(15)
+
         console.log('Recording stopped')
       } catch (error) {
         console.error('Failed to stop recording:', error)

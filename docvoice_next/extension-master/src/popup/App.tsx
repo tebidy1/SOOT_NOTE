@@ -8,6 +8,7 @@ import HomeScreen from './screens/HomeScreen'
 import InboxScreen from './screens/InboxScreen'
 import NoteDetailScreen from './screens/NoteDetailScreen'
 import OfflineBanner from '../pwa/components/OfflineBanner'
+import InstallPrompt from '../pwa/components/InstallPrompt'
 
 function App() {
   const { isAuthenticated, isLoading } = useAuthStore()
@@ -36,6 +37,7 @@ function App() {
     <Router>
       <div className="w-full min-h-screen bg-white dark:bg-slateDark-bg text-gray-900 dark:text-slateDark-text">
         <OfflineBanner />
+        <InstallPrompt />
         <Routes>
           <Route path="/login" element={
             isAuthenticated ? <Navigate to="/" /> : <LoginScreen />
