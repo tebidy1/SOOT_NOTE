@@ -5,7 +5,12 @@
   "scripts": {
     "dev": "vite build --mode development --watch",
     "build": "node build.js",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build:pwa": "vite build --config vite.pwa.config.ts",
+    "dev:pwa": "vite --config vite.pwa.config.ts",
+    "preview:pwa": "vite preview --config vite.pwa.config.ts --https"
   },
   "dependencies": {
     "@dotlottie/player-component": "^2.7.12",
@@ -21,11 +26,19 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^14.3.1",
     "@types/chrome": "^0.0.242",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "@vitejs/plugin-react": "^4.0.3",
+    "fake-indexeddb": "^5.0.2",
+    "jsdom": "^24.1.3",
+    "sharp": "^0.33.5",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-pwa": "^0.19.8",
+    "vitest": "^1.6.1"
   }
 }
